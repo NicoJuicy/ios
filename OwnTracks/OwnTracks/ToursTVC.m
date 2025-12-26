@@ -9,8 +9,9 @@
 #import "ToursTVC.h"
 #import "Tours.h"
 #import "OwnTracksAppDelegate.h"
-#import "CreateTourTVC.h"
-#import "ToursStatusCell.h"
+//#import "CreateTourTVC.h"
+//#import "ToursStatusCell.h"
+#import "OwnTracks-Swift.h"
 
 @interface ToursTVC ()
 @property (strong, nonatomic) UIRefreshControl *refreshControl;

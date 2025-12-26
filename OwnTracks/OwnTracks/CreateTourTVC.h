@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface CreateTourTVC : UITableViewController <UITextFieldDelegate>
+@interface CreateTourTVCx : UITableViewController <UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *label;
 @property (weak, nonatomic) IBOutlet UIDatePicker *from;
 @property (weak, nonatomic) IBOutlet UIDatePicker *to;

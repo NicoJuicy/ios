@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES" initialViewController="e04-OU-xZ4">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES" initialViewController="e04-OU-xZ4">
     <device id="retina6_0" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
         <capability name="Stack View standard spacing" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -3670,7 +3670,7 @@
                     <navigationItem key="navigationItem" title="Logs" id="p61-Zk-kOq">
                         <barButtonItem key="rightBarButtonItem" systemItem="action" id="Rzs-wJ-YhA">
                             <connections>
-                                <action selector="actionPressed:" destination="pyP-9X-XNY" id="mFl-xX-pGW"/>
+                                <action selector="actionPressed:" destination="pyP-9X-XNY" id="Zfr-R6-8JI"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -3711,7 +3711,7 @@
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                     <connections>
-                                                        <action selector="labelChanged:" destination="YAo-IX-Jfw" eventType="editingChanged" id="36n-yA-tkE"/>
+                                                        <action selector="labelChanged:" destination="YAo-IX-Jfw" eventType="editingChanged" id="qw0-c3-IgX"/>
                                                     </connections>
                                                 </textField>
                                             </subviews>
@@ -3799,16 +3799,16 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="from" destination="0f5-gd-MxE" id="ndb-kH-eBz"/>
-                        <outlet property="label" destination="guB-Ga-J3e" id="rwd-Mk-x0E"/>
-                        <outlet property="saveButton" destination="hqr-Ep-K4Y" id="sS8-7g-R87"/>
-                        <outlet property="to" destination="sGk-1E-zg5" id="atZ-To-QTE"/>
+                        <outlet property="from" destination="0f5-gd-MxE" id="LPK-fD-lEu"/>
+                        <outlet property="label" destination="guB-Ga-J3e" id="FHt-b7-g6A"/>
+                        <outlet property="saveButton" destination="hqr-Ep-K4Y" id="ga5-Wl-Umi"/>
+                        <outlet property="to" destination="sGk-1E-zg5" id="yZf-Yl-nRn"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bFM-T8-564" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <tapGestureRecognizer id="I60-zN-Eo9">
                     <connections>
-                        <action selector="tappedOutsideText:" destination="YAo-IX-Jfw" id="bNW-TV-RE4"/>
+                        <action selector="tappedOutsideText:" destination="YAo-IX-Jfw" id="zI7-k6-Ued"/>
                     </connections>
                 </tapGestureRecognizer>
                 <exit id="k48-Tx-gaZ" userLabel="Exit" sceneMemberID="exit"/>
@@ -3874,7 +3874,7 @@
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="activity" destination="9n4-Ol-UYc" id="OeQ-eb-v3z"/>
-                                    <outlet property="label" destination="L2M-p0-CtV" id="lFZ-jG-oqr"/>
+                                    <outlet property="label" destination="L2M-p0-CtV" id="yRu-fJ-F5w"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -3944,9 +3944,8 @@
                                             <rect key="frame" x="0.0" y="0.0" width="390" height="340"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Moe-Di-frm">
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Uses the following cocoapods (http://cocoapods.org): CocoaLumberjack, Sodium, and DSJSONSchemaValidation." translatesAutoresizingMaskIntoConstraints="NO" id="Moe-Di-frm">
                                                     <rect key="frame" x="20" y="0.0" width="350" height="340"/>
-                                                    <string key="text">Uses the following cocoapods (http://cocoapods.org): CocoaLumberjack, ABStaticTableViewController, Sodium, and DSJSONSchemaValidation.</string>
                                                     <color key="textColor" systemColor="labelColor"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
