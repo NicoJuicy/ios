@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 @objc(ToursStatusCell)
-class TourStatusCell: UITableViewCell {
+ class ToursStatusCell: UITableViewCell {
     @IBOutlet weak var label: UILabel!
     @IBOutlet weak var activity: UIActivityIndicatorView!
     
