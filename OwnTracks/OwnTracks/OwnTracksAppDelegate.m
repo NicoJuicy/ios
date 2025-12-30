@@ -1353,7 +1353,12 @@ performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completio
             iOS[@"deviceUserInterfaceIdiom"] = @"UIUserInterfaceIdiomVision";
             break;
     }
-
+    
+    iOS[@"noMap"] = [NSNumber numberWithInteger:
+                     [[NSUserDefaults standardUserDefaults] integerForKey:@"noMap"]];
+    iOS[@"noRevgeo"] = [NSNumber numberWithInteger:
+                        [[NSUserDefaults standardUserDefaults] integerForKey:@"noRevgeo"]];
+    
     json[@"iOS"] = iOS;
     
     [self.connection sendData:[self jsonToData:json]

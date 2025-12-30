@@ -30,6 +30,7 @@
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *accuracyButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *actionButton;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *privacyButton;
 
 @property (strong, nonatomic) NSFetchedResultsController *frcFriends;
 @property (strong, nonatomic) NSFetchedResultsController *frcRegions;
@@ -344,6 +345,14 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
                                                    constant:10];
             
             [NSLayoutConstraint activateConstraints:@[topTracking, leadingTracking]];
+            
+            if (@available(iOS 26.0, *)) {
+                if (self.privacyButton) {
+                    self.privacyButton.badge = nil;
+                }
+            } else {
+                // Fallback on earlier versions
+            }
         }
     } else {
         self.mapView.showsUserLocation = TRUE;
@@ -355,6 +364,14 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
         if (self.trackingButton) {
             [self.trackingButton removeFromSuperview];
             self.trackingButton = nil;
+        }
+        
+        if (@available(iOS 26.0, *)) {
+            if (self.privacyButton) {
+                self.privacyButton.badge = [UIBarButtonItemBadge indicatorBadge];
+            }
+        } else {
+            // Fallback on earlier versions
         }
     }
 
