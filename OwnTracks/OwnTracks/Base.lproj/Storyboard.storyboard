@@ -3535,7 +3535,7 @@
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                     <connections>
-                                                        <action selector="editingChanged:" destination="YO7-40-MnA" eventType="editingChanged" id="8dd-bM-IcJ"/>
+                                                        <action selector="editingChanged:" destination="YO7-40-MnA" eventType="editingChanged" id="Xyz-Yz-vGr"/>
                                                     </connections>
                                                 </textField>
                                             </subviews>
@@ -3583,7 +3583,7 @@
                                                     <state key="normal" title="Use Camera"/>
                                                     <buttonConfiguration key="configuration" style="plain" title="Use Camera"/>
                                                     <connections>
-                                                        <action selector="takePhotoPressed:" destination="YO7-40-MnA" eventType="touchUpInside" id="EVo-yo-kNK"/>
+                                                        <action selector="takePhotoPressed:" destination="YO7-40-MnA" eventType="touchUpInside" id="vBd-ks-elk"/>
                                                     </connections>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IL1-c9-0c1">
@@ -3591,7 +3591,7 @@
                                                     <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="15"/>
                                                     <state key="normal" title="Select from Photo Library"/>
                                                     <connections>
-                                                        <action selector="selectPressed:" destination="YO7-40-MnA" eventType="touchUpInside" id="E4t-Kg-Io8"/>
+                                                        <action selector="selectPressed:" destination="YO7-40-MnA" eventType="touchUpInside" id="lQc-ud-Jir"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
@@ -3619,9 +3619,9 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="cardImage" destination="Kso-L5-Uzn" id="gAT-5C-gdf"/>
-                        <outlet property="name" destination="Zgs-5W-R7W" id="6dd-mT-7jn"/>
-                        <outlet property="saveButton" destination="4iQ-gp-JXI" id="FgX-Y1-9gh"/>
+                        <outlet property="cardImage" destination="Kso-L5-Uzn" id="21F-we-Ksa"/>
+                        <outlet property="name" destination="Zgs-5W-R7W" id="gOK-C0-FGy"/>
+                        <outlet property="saveButton" destination="4iQ-gp-JXI" id="a4E-CS-72r"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ytq-rm-KnB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
