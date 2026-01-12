@@ -19,15 +19,21 @@ class CreateCardTVC: UITableViewController, UINavigationControllerDelegate, UIIm
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated);
         let moc = CoreData.sharedInstance().mainMOC;
-        let topic: String? = Settings.theGeneralTopic(inMOC: moc);
-        let myself: Friend? = Friend.existsFriend(withTopic: topic!, in: moc);
+        let topic = Settings.theGeneralTopic(inMOC: moc);
+        let myself = Friend(topic: topic, in: moc);
         
-        if name.text!.isEmpty {
-            name.text = myself?.name ?? myself?.tid;
+        if name.text == nil || name.text!.isEmpty {
+            if myself.name != nil && !myself.name!.isEmpty {
+                name.text = myself.name!
+            } else {
+                name.text = myself.effectiveTid;
+            }
         }
         
         if cardImage.image == nil {
-            cardImage.image = UIImage(data: myself?.image ?? Data());
+            if myself.image != nil {
+                cardImage.image = UIImage(data: myself.image!);
+            }
         }
         
         adjustSaveButton();

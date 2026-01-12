@@ -55,9 +55,9 @@ motionActivities:(nullable NSArray <NSString *> *)motionActivities;
 
 - (void)trackToGPX:(NSOutputStream *)output;
 
-@property (NS_NONATOMIC_IOSONLY, readonly, copy) NSString * _Nonnull name;
+@property (NS_NONATOMIC_IOSONLY, readonly, copy) NSString * _Nullable name;
 @property (NS_NONATOMIC_IOSONLY, readonly, copy) NSString * _Nonnull nameOrTopic;
-@property (NS_NONATOMIC_IOSONLY, readonly, copy) NSData * _Nonnull image;
+@property (NS_NONATOMIC_IOSONLY, readonly, copy) NSData * _Nullable image;
 
 + (NSString *)effectiveTid:(NSString *)tid device:(NSString *)device;
 @property (NS_NONATOMIC_IOSONLY, getter=getEffectiveTid, readonly, copy) NSString * _Nonnull effectiveTid;

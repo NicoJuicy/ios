@@ -609,7 +609,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
 }
 
 + (NSString *)theWillTopicInMOC:(NSManagedObjectContext *)context {
-    // willTopic is not the same as theGeneralTopic
+    // willTopic is now the same as theGeneralTopic
     return [Settings theGeneralTopicInMOC:context];
 }
 
