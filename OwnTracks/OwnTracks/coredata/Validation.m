@@ -8,7 +8,7 @@
 
 #import "Validation.h"
 #import <CocoaLumberjack/CocoaLumberjack.h>
-#import <DSJSONSchemaValidation/DSJSONSchema.h>
+#import "DSJSONSchema.h"
 
 @implementation Validation
 static const DDLogLevel ddLogLevel = DDLogLevelInfo;

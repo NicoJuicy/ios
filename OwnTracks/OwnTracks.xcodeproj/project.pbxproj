@@ -97,6 +97,9 @@
 		84E8A1891BB94782002518AA /* Setting+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E8A17F1BB94782002518AA /* Setting+CoreDataProperties.m */; };
 		84E8A18A1BB94782002518AA /* Friend+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E8A1811BB94782002518AA /* Friend+CoreDataProperties.m */; };
 		84E8A18D1BB94782002518AA /* Region+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E8A1871BB94782002518AA /* Region+CoreDataProperties.m */; };
+		84ED67862F1E95110013A265 /* Clibsodium in Frameworks */ = {isa = PBXBuildFile; productRef = 84ED67852F1E95110013A265 /* Clibsodium */; };
+		84ED67882F1E95110013A265 /* Sodium in Frameworks */ = {isa = PBXBuildFile; productRef = 84ED67872F1E95110013A265 /* Sodium */; };
+		84ED67922F1E9A0E0013A265 /* DSJSONSchemaValidation in Frameworks */ = {isa = PBXBuildFile; productRef = 84ED67912F1E9A0E0013A265 /* DSJSONSchemaValidation */; };
 		84FAEA7225F01DA100DCD479 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84FAEA7125F01DA100DCD479 /* Launch Screen.storyboard */; };
 		84FD93072353950100CCEC3B /* OwnTracksEditTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 84FD93062353950100CCEC3B /* OwnTracksEditTVC.m */; };
 /* End PBXBuildFile section */
@@ -411,8 +414,11 @@
 				84C3F45C2CEF904F004DB332 /* AssetsLibrary.framework in Frameworks */,
 				8411B832189FDB140019D2D6 /* CoreData.framework in Frameworks */,
 				8411B830189FDB140019D2D6 /* UIKit.framework in Frameworks */,
+				84ED67882F1E95110013A265 /* Sodium in Frameworks */,
 				8411B82C189FDB140019D2D6 /* Foundation.framework in Frameworks */,
 				73E486C3060A00AFA424FB27 /* Pods_OwnTracks.framework in Frameworks */,
+				84ED67922F1E9A0E0013A265 /* DSJSONSchemaValidation in Frameworks */,
+				84ED67862F1E95110013A265 /* Clibsodium in Frameworks */,
 				84C3F45E2CF09F9B004DB332 /* PhotosUI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -826,6 +832,10 @@
 				"zh-Hans",
 			);
 			mainGroup = 8411B81F189FDB140019D2D6;
+			packageReferences = (
+				84ED67842F1E95110013A265 /* XCRemoteSwiftPackageReference "swift-sodium" */,
+				84ED67902F1E9A0E0013A265 /* XCRemoteSwiftPackageReference "JSONSchemaValidation" */,
+			);
 			productRefGroup = 8411B829189FDB140019D2D6 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -918,8 +928,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "
-";
+			shellScript = "\n";
 		};
 		E1F1C1838DEABD333F5AC82C /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -929,13 +938,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-OwnTracks/Pods-OwnTracks-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-OwnTracks/Pods-OwnTracks-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1568,6 +1573,43 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		84ED67842F1E95110013A265 /* XCRemoteSwiftPackageReference "swift-sodium" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/jedisct1/swift-sodium.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.10.0;
+			};
+		};
+		84ED67902F1E9A0E0013A265 /* XCRemoteSwiftPackageReference "JSONSchemaValidation" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/dashpay/JSONSchemaValidation.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.7;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		84ED67852F1E95110013A265 /* Clibsodium */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 84ED67842F1E95110013A265 /* XCRemoteSwiftPackageReference "swift-sodium" */;
+			productName = Clibsodium;
+		};
+		84ED67872F1E95110013A265 /* Sodium */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 84ED67842F1E95110013A265 /* XCRemoteSwiftPackageReference "swift-sodium" */;
+			productName = Sodium;
+		};
+		84ED67912F1E9A0E0013A265 /* DSJSONSchemaValidation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 84ED67902F1E9A0E0013A265 /* XCRemoteSwiftPackageReference "JSONSchemaValidation" */;
+			productName = DSJSONSchemaValidation;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		8411B87D189FE35C0019D2D6 /* Model.xcdatamodeld */ = {

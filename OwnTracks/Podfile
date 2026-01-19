@@ -7,8 +7,8 @@ platform :ios, '17.0'
 pod 'mqttc/MinL', :path => '~/mqttc'
 
 pod 'CocoaLumberjack'
-pod 'DSJSONSchemaValidation'
-pod 'Sodium'
+#pod 'DSJSONSchemaValidation'
+#pod 'Sodium'
 end
 
 
