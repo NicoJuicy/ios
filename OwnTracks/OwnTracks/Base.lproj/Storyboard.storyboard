@@ -3497,9 +3497,9 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="Modes" id="nJk-gq-XUi"/>
                     <connections>
-                        <outlet property="httpDescription" destination="rKh-bU-tSn" id="KkB-MB-MXh"/>
-                        <outlet property="mqttDescription" destination="VOr-0S-3k6" id="EOv-h9-sTb"/>
-                        <outlet property="pleaseNote" destination="su4-a5-GZU" id="Hxb-5y-RXR"/>
+                        <outlet property="httpDescription" destination="rKh-bU-tSn" id="8w5-6b-ibU"/>
+                        <outlet property="mqttDescription" destination="VOr-0S-3k6" id="4di-0Y-b3D"/>
+                        <outlet property="pleaseNote" destination="su4-a5-GZU" id="A4T-8u-LYi"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5M7-fK-0Wh" userLabel="First Responder" sceneMemberID="firstResponder"/>
