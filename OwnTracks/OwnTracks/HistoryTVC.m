@@ -3,7 +3,7 @@
 //  OwnTracks
 //
 //  Created by Christoph Krey on 26.08.19.
-//  Copyright © 2019-2025 OwnTracks. All rights reserved.
+//  Copyright © 2019-2026 OwnTracks. All rights reserved.
 //
 
 #import "HistoryTVC.h"
@@ -11,7 +11,7 @@
 #import "CoreData.h"
 #import "Settings.h"
 #import "OwnTracksAppDelegate.h"
-#import <CocoaLumberjack/CocoaLumberjack.h>
+#import "OwnTracksLog.h"
 
 @interface HistoryTVC ()
 
@@ -20,8 +20,6 @@
 @end
 
 @implementation HistoryTVC
-
-static const DDLogLevel ddLogLevel = DDLogLevelInfo;
 
 - (IBAction)trashPressed:(UIBarButtonItem *)sender {
     NSArray *histories = [History allHistoriesInManagedObjectContext:CoreData.sharedInstance.mainMOC];
@@ -154,20 +152,20 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
 
     NSError *error = nil;
     if (![self.fetchedResultsController performFetch:&error]) {
-        DDLogError(@"Unresolved error %@, %@", error, [error userInfo]);
+        OwnTracksLogError("Unresolved error %@, %@", error, [error userInfo]);
     }
 
-    DDLogVerbose(@"[HistoryTVC]fetchedResultsControllser %@", _fetchedResultsController);
+    OwnTracksLogDebug("[HistoryTVC]fetchedResultsControllser %@", _fetchedResultsController);
     return _fetchedResultsController;
 }
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
-    DDLogVerbose(@"[HistoryTVC][controllerWillChangeContent]");
+    OwnTracksLogDebug("[HistoryTVC][controllerWillChangeContent]");
     [self performSelectorOnMainThread:@selector(beginUpdates) withObject:nil waitUntilDone:TRUE];
 }
 
 - (void)beginUpdates {
-    DDLogVerbose(@"[HistoryTVC][beginUpdates]");
+    OwnTracksLogDebug("[HistoryTVC][beginUpdates]");
     [self.tableView beginUpdates];
 }
 
@@ -204,7 +202,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
        atIndexPath:(NSIndexPath *)indexPath
      forChangeType:(NSFetchedResultsChangeType)type
       newIndexPath:(NSIndexPath *)newIndexPath {
-    DDLogVerbose(@"[HistoryTVC][controller didChangeObject] %lu/%lu %lu %lu/%lu",
+    OwnTracksLogDebug("[HistoryTVC][controller didChangeObject] %lu/%lu %lu %lu/%lu",
                  indexPath.section, indexPath.row,
                  (unsigned long)type,
                  newIndexPath.section, newIndexPath.row);
@@ -225,7 +223,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
     NSIndexPath *indexPath = d[@"indexPath"];
     NSIndexPath *newIndexPath = d[@"newIndexPath"];
 
-    DDLogVerbose(@"[HistoryTVC][didChangeObject] %lu/%lu %@ %lu/%lu %lu",
+    OwnTracksLogDebug("[HistoryTVC][didChangeObject] %lu/%lu %@ %lu/%lu %lu",
                  indexPath.section, indexPath.row,
                  type,
                  newIndexPath.section, newIndexPath.row,
@@ -257,12 +255,12 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
 }
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
-    DDLogVerbose(@"[HistoryTVC][controllerDidChangeContent]");
+    OwnTracksLogDebug("[HistoryTVC][controllerDidChangeContent]");
     [self performSelectorOnMainThread:@selector(endUpdates) withObject:nil waitUntilDone:TRUE];
 }
 
 - (void)endUpdates {
-    DDLogVerbose(@"[HistoryTVC][endUpdates]");
+    OwnTracksLogDebug("[HistoryTVC][endUpdates]");
     [self.tableView endUpdates];
 }
 

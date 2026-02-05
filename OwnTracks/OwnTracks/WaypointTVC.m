@@ -3,7 +3,7 @@
 //  OwnTracks
 //
 //  Created by Christoph Krey on 01.10.13.
-//  Copyright © 2013-2025  Christoph Krey. All rights reserved.
+//  Copyright © 2013-2026  Christoph Krey. All rights reserved.
 //
 
 #import "WaypointTVC.h"
@@ -14,7 +14,7 @@
 #import "PersonTVC.h"
 #import "Settings.h"
 #import "CoreData.h"
-#import <CocoaLumberjack/CocoaLumberjack.h>
+#import "OwnTracksLog.h"
 #import <Contacts/Contacts.h>
 
 @interface WaypointTVC ()
@@ -44,7 +44,6 @@
 @end
 
 @implementation WaypointTVC
-static const DDLogLevel ddLogLevel = DDLogLevelInfo;
 
 - (IBAction)setPerson:(UIStoryboardSegue *)segue {
     if ([segue.sourceViewController isKindOfClass:[PersonTVC class]]) {
@@ -156,7 +155,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
                       ofObject:(id)object
                         change:(NSDictionary *)change
                        context:(void *)context {
-    DDLogVerbose(@"revgeo updated");
+    OwnTracksLogDebug("revgeo updated");
     self.UIplace.text = self.waypoint.placemark;
 }
 

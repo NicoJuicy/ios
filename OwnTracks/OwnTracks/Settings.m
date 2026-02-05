@@ -3,14 +3,14 @@
 //  OwnTracks
 //
 //  Created by Christoph Krey on 31.01.14.
-//  Copyright © 2014-2025  Christoph Krey. All rights reserved.
+//  Copyright © 2014-2026  Christoph Krey. All rights reserved.
 //
 
 #import "Settings.h"
 #import "CoreData.h"
 #import "OwnTracking.h"
 #import "LocationManager.h"
-#import <CocoaLumberjack/CocoaLumberjack.h>
+#import "OwnTracksLog.h"
 
 
 @interface SettingsDefaults: NSObject
@@ -19,7 +19,6 @@
 @end
 
 static SettingsDefaults *defaults;
-static const DDLogLevel ddLogLevel = DDLogLevelInfo;
 
 @implementation SettingsDefaults
 + (SettingsDefaults *)theDefaults {
@@ -67,7 +66,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
     if (dictionary && [dictionary isKindOfClass:[NSDictionary class]]) {
         for (NSString *key in dictionary.allKeys) {
             NSObject *object = dictionary[key];
-            DDLogInfo(@"Configuration %@:%@ (%@)", key, object, object.class);
+            OwnTracksLogInfo("Configuration %@:%@ (%@)", key, object, object.class);
         }
         
         NSString *type = dictionary[@"_type"];
@@ -81,7 +80,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
                  mode.intValue == CONNECTION_MODE_HTTP)) {
                     [self setInt:mode.intValue forKey:@"mode" inMOC:context];
                 } else {
-                    DDLogError(@"[Settings] fromDictionary invalid mode");
+                    OwnTracksLogError("[Settings] fromDictionary invalid mode");
                     return [NSError errorWithDomain:@"OwnTracks Settings"
                                                code:1
                                            userInfo:@{@"mode": [NSString stringWithFormat:@"%@", dictionary[@"mode"]]}];
@@ -237,13 +236,13 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
             if (waypoints) [self setWaypoints:waypoints inMOC:context];
             
         } else {
-            DDLogError(@"[Settings] fromDictionary invalid _type");
+            OwnTracksLogError("[Settings] fromDictionary invalid _type");
             return [NSError errorWithDomain:@"OwnTracks Settings"
                                        code:1
                                    userInfo:@{@"_type": [NSString stringWithFormat:@"%@", dictionary[@"_type"]]}];
         }
     } else {
-        DDLogError(@"[Settings] fromDictionary invalid dictionary");
+        OwnTracksLogError("[Settings] fromDictionary invalid dictionary");
         return [NSError errorWithDomain:@"OwnTracks Settings"
                                    code:2
                                userInfo:@{}];
@@ -270,7 +269,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
                                inMOC:(NSManagedObjectContext *)context {
     if (dictionary && [dictionary isKindOfClass:[NSDictionary class]]) {
         for (NSString *key in dictionary.allKeys) {
-            DDLogVerbose(@"Waypoints %@:%@", key, dictionary[key]);
+            OwnTracksLogDebug("Waypoints %@:%@", key, dictionary[key]);
         }
         
         if ([dictionary[@"_type"] isEqualToString:@"waypoints"]) {
@@ -288,25 +287,25 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
 + (void)setWaypoints:(NSArray *)waypoints
                inMOC:(NSManagedObjectContext *)context {
     if (!waypoints || ![waypoints isKindOfClass:[NSArray class]]) {
-        DDLogError(@"[Settings][setWaypoints] invalid waypoints array");
+        OwnTracksLogError("[Settings][setWaypoints] invalid waypoints array");
         return;
     }
     
     for (NSDictionary *waypoint in waypoints) {
         if (![waypoint isKindOfClass:[NSDictionary class]]) {
-            DDLogError(@"[Settings][setWaypoints] waypoints array does contain non dictionary");
+            OwnTracksLogError("[Settings][setWaypoints] waypoints array does contain non dictionary");
             continue;
         }
         
         NSString *type = waypoint[@"_type"];
         if (!type || ![type isKindOfClass:[NSString class]] || ![type isEqualToString:@"waypoint"]) {
-            DDLogError(@"[Settings][setWaypoints] waypoint does not contain _type waypoint");
+            OwnTracksLogError("[Settings][setWaypoints] waypoint does not contain _type waypoint");
             continue;
         }
         
         NSString *desc = waypoint[@"desc"];
         if (!desc || ![desc isKindOfClass:[NSString class]]) {
-            DDLogError(@"[Settings][setWaypoints] waypoint does not contain valid desc");
+            OwnTracksLogError("[Settings][setWaypoints] waypoint does not contain valid desc");
             continue;
         }
 
@@ -318,7 +317,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
         
         NSNumber *tstNumber = waypoint[@"tst"];
         if (!tstNumber || ![tstNumber isKindOfClass:[NSNumber class]]) {
-            DDLogError(@"[Settings][setWaypoints] waypoint does not contain valid tst");
+            OwnTracksLogError("[Settings][setWaypoints] waypoint does not contain valid tst");
             continue;
         }
         
@@ -335,7 +334,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
                         
         for (Region *region in friend.hasRegions) {
             if ([region.getAndFillRid isEqualToString:rid]) {
-                DDLogVerbose(@"[Settings][setWaypoints] removeRegion %@", rid);
+                OwnTracksLogDebug("[Settings][setWaypoints] removeRegion %@", rid);
                 [[OwnTracking sharedInstance] removeRegion:region context:context];
                 break;
             }
@@ -344,7 +343,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
         CLLocationDegrees latDegrees = 0.0;
         NSNumber *lat = waypoint[@"lat"];
         if (lat && ![lat isKindOfClass:[NSNumber class]]) {
-            DDLogError(@"[Settings][setWaypoints] json does not contain valid lat: not processed");
+            OwnTracksLogError("[Settings][setWaypoints] json does not contain valid lat: not processed");
             continue;
         }
         latDegrees = lat.doubleValue;
@@ -352,21 +351,21 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
         CLLocationDegrees lonDegrees = 0.0;
         NSNumber *lon = waypoint[@"lon"];
         if (lon && ![lon isKindOfClass:[NSNumber class]]) {
-            DDLogError(@"[Settings][setWaypoints] json does not contain valid lon: not processed");
+            OwnTracksLogError("[Settings][setWaypoints] json does not contain valid lon: not processed");
             continue;
         }
         lonDegrees = lon.doubleValue;
         
         CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(latDegrees, lonDegrees);
         if (!CLLocationCoordinate2DIsValid(coord)) {
-            DDLogError(@"[Settings][setWaypoints] coord is no valid: not processed");
+            OwnTracksLogError("[Settings][setWaypoints] coord is no valid: not processed");
             continue;
         }
 
         CLLocationDistance radDistance = 0.0;
         NSNumber *rad = waypoint[@"rad"];
         if (rad && ![rad isKindOfClass:[NSNumber class]]) {
-            DDLogError(@"[Settings][setWaypoints] json does not contain valid rad: not processed");
+            OwnTracksLogError("[Settings][setWaypoints] json does not contain valid rad: not processed");
             continue;
         }
         radDistance = rad.doubleValue;
@@ -390,10 +389,10 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
 
     while (friend.hasRegions.count) {
         Region *region = friend.hasRegions.anyObject;
-        DDLogInfo(@"[Settings][clearWaypoints] removeRegion %@", region.rid);
+        OwnTracksLogInfo("[Settings][clearWaypoints] removeRegion %@", region.rid);
         [[OwnTracking sharedInstance] removeRegion:region context:context];
     }
-    DDLogInfo(@"[Settings][clearWaypoints] clearWaypoints");
+    OwnTracksLogInfo("[Settings][clearWaypoints] clearWaypoints");
     return nil;
 }
 
@@ -529,7 +528,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
 + (void)setBool:(BOOL)b
          forKey:(NSString *)key
           inMOC:(NSManagedObjectContext *)context {
-    DDLogVerbose(@"setBoolForKey:%@ = %d", key, b);
+    OwnTracksLogDebug("setBoolForKey:%@ = %d", key, b);
     [self setString:[NSString stringWithFormat:@"%d", b] forKey:key inMOC:context];
 }
 
@@ -537,7 +536,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
                            inMOC:(NSManagedObjectContext *)context {
     NSString *value = [self stringForKey:key inMOC:context];
     if (!value) {
-        DDLogVerbose(@"stringOrZeroForKey %@", key);
+        OwnTracksLogDebug("stringOrZeroForKey %@", key);
         value = @"";
     }
     return value;
@@ -580,7 +579,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
 + (BOOL)boolForKey:(NSString *)key
              inMOC:(NSManagedObjectContext *)context {
     NSString *value = [self stringForKey:key inMOC:context];
-    DDLogVerbose(@"boolForKey:%@ = %@", key, value);
+    OwnTracksLogDebug("boolForKey:%@ = %@", key, value);
     return value.boolValue;
 }
 

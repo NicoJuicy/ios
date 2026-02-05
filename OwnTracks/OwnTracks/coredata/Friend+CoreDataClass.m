@@ -3,7 +3,7 @@
 //  OwnTracks
 //
 //  Created by Christoph Krey on 08.12.16.
-//  Copyright © 2016-2025  OwnTracks. All rights reserved.
+//  Copyright © 2016-2026  OwnTracks. All rights reserved.
 //
 
 #import "Friend+CoreDataClass.h"
@@ -12,12 +12,11 @@
 #import "Settings.h"
 #import "CoreData.h"
 #import <Contacts/Contacts.h>
-#import <CocoaLumberjack/CocoaLumberjack.h>
+#import "OwnTracksLog.h"
 
 #define MAXIMUM_TRACK_POINTS 1000
 
 @implementation Friend
-static const DDLogLevel ddLogLevel = DDLogLevelInfo;
 
 + (Friend * _Nullable)existsFriendWithTopic:(NSString *)topic
            inManagedObjectContext:(NSManagedObjectContext *)context {
@@ -364,7 +363,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
     formatter.formatOptions |= NSISO8601DateFormatWithFractionalSeconds;
 
     for (NSInteger i = self.hasWaypoints.count; i > max; i--) {
-        DDLogVerbose(@"count=%ld i=%ld max=%ld", self.hasWaypoints.count, i, max);
+        OwnTracksLogDebug("count=%ld i=%ld max=%ld", self.hasWaypoints.count, i, max);
         Waypoint *oldestWaypoint = nil;
         for (Waypoint *waypoint in self.hasWaypoints) {
             if (!waypoint.isDeleted) {
@@ -374,7 +373,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
             }
         }
         if (oldestWaypoint) {
-            DDLogVerbose(@"delete i=%ld %@", i, [formatter stringFromDate:oldestWaypoint.tst]);
+            OwnTracksLogDebug("delete i=%ld %@", i, [formatter stringFromDate:oldestWaypoint.tst]);
             [self.managedObjectContext deleteObject:oldestWaypoint];
         }
     }
@@ -405,7 +404,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
 
     for (Waypoint *waypoint in self.hasWaypoints) {
         if (!waypoint.isDeleted && [waypoint.tst compare:oldest] == NSOrderedAscending) {
-            DDLogVerbose(@"delete oldest=%@ > %@",
+            OwnTracksLogDebug("delete oldest=%@ > %@",
                          [formatter stringFromDate:oldest],
                          [formatter stringFromDate:waypoint.tst]);
             [self.managedObjectContext deleteObject:waypoint];

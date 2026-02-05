@@ -3,13 +3,13 @@
 //  OwnTracks
 //
 //  Created by Christoph Krey on 29.10.13.
-//  Copyright © 2013-2025  Christoph Krey. All rights reserved.
+//  Copyright © 2013-2026  Christoph Krey. All rights reserved.
 //
 
 #import "PersonTVC.h"
 #import "Friend+CoreDataClass.h"
 #import <Contacts/Contacts.h>
-#import <CocoaLumberjack/CocoaLumberjack.h>
+#import "OwnTracksLog.h"
 
 
 @interface PersonTVC ()
@@ -17,7 +17,6 @@
 @end
 
 @implementation PersonTVC
-static const DDLogLevel ddLogLevel = DDLogLevelInfo;
 
 - (void)viewWillAppear:(BOOL)animated {
     self.sections = [[NSMutableDictionary alloc] init];
@@ -38,7 +37,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
                            stringFromContact:contact
                            style:CNContactFormatterStyleFullName];
 
-         DDLogVerbose(@"contact %@: %@",
+         OwnTracksLogDebug("contact %@: %@",
                       contact.identifier,
                       name);
 

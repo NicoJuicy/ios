@@ -2848,6 +2848,7 @@
                                                                 <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             </state>
                                                             <connections>
+                                                                <action selector="exportLogsPressed:" destination="G87-RS-wz7" eventType="touchUpInside" id="fIa-2J-zqS"/>
                                                                 <segue destination="pyP-9X-XNY" kind="push" id="LX4-zO-Dsc"/>
                                                             </connections>
                                                         </button>
@@ -3638,7 +3639,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="LogCell" textLabel="THV-Ij-ayz" detailTextLabel="pOi-JI-Qg7" style="IBUITableViewCellStyleSubtitle" id="Qjw-M7-9Wk">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="LogCell" textLabel="THV-Ij-ayz" detailTextLabel="fyS-bw-Ute" style="IBUITableViewCellStyleSubtitle" id="Qjw-M7-9Wk">
                                 <rect key="frame" x="0.0" y="50" width="390" height="51"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Qjw-M7-9Wk" id="KXy-AR-6kc">
@@ -3646,16 +3647,16 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="THV-Ij-ayz">
-                                            <rect key="frame" x="16" y="10" width="25" height="14.333333333333334"/>
+                                            <rect key="frame" x="16" y="8" width="25" height="14.333333333333334"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="0.0"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="pOi-JI-Qg7">
-                                            <rect key="frame" x="15.999999999999996" y="26.333333333333332" width="43.666666666666664" height="14.333333333333334"/>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="fyS-bw-Ute">
+                                            <rect key="frame" x="15.999999999999996" y="24.333333333333336" width="52.666666666666664" height="18"/>
                                             <autoresizingMask key="autoresizingMask"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="0.0"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
@@ -3675,9 +3676,6 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
-                    <connections>
-                        <outlet property="actionButton" destination="Rzs-wJ-YhA" id="6gN-IY-tnm"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fCZ-ov-sFB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -3921,7 +3919,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="390" height="57"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Copyright © 2013-2025 by Christoph Krey, https://owntracks.org" translatesAutoresizingMaskIntoConstraints="NO" id="dZg-CC-7yD">
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Copyright © 2013-2026 by Christoph Krey, https://owntracks.org" translatesAutoresizingMaskIntoConstraints="NO" id="dZg-CC-7yD">
                                                     <rect key="frame" x="20" y="0.0" width="350" height="57"/>
                                                     <color key="textColor" systemColor="labelColor"/>
                                                     <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="14"/>
@@ -3945,7 +3943,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="390" height="340"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Uses the following cocoapods (http://cocoapods.org): CocoaLumberjack, Sodium, and DSJSONSchemaValidation." translatesAutoresizingMaskIntoConstraints="NO" id="Moe-Di-frm">
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Uses the following Swift Packages: Sodium, DSJSONSchemaValidation, and MQTTClient." translatesAutoresizingMaskIntoConstraints="NO" id="Moe-Di-frm">
                                                     <rect key="frame" x="20" y="0.0" width="350" height="340"/>
                                                     <color key="textColor" systemColor="labelColor"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>

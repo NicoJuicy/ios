@@ -3,7 +3,7 @@
 //  OwnTracks
 //
 //  Created by Christoph Krey on 11.09.13.
-//  Copyright © 2013-2025  Christoph Krey. All rights reserved.
+//  Copyright © 2013-2026  Christoph Krey. All rights reserved.
 //
 
 #import "StatusTVC.h"
@@ -13,7 +13,7 @@
 #import "SettingsTVC.h"
 #import "CoreData.h"
 #import "Waypoint+CoreDataClass.h"
-#import <CocoaLumberjack/CocoaLumberjack.h>
+#import "OwnTracksLog.h"
 
 @interface StatusTVC ()
 @property (weak, nonatomic) IBOutlet UITextField *UILocation;
@@ -29,7 +29,6 @@
 @end
 
 @implementation StatusTVC
-static const DDLogLevel ddLogLevel = DDLogLevelInfo;
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -81,7 +80,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
                       ofObject:(id)object
                         change:(NSDictionary *)change
                        context:(void *)context {
-    DDLogVerbose(@"observeValueForKeyPath %@", keyPath);
+    OwnTracksLogDebug("observeValueForKeyPath %@", keyPath);
     [self performSelectorOnMainThread:@selector(updatedStatus) withObject:nil waitUntilDone:NO];
 }
 
@@ -227,6 +226,9 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
                              completionHandler:nil];
 }
 
+- (IBAction)exportLogsPressed:(UIButton *)sender {
+}
+
 - (IBAction)exportTrackPressed:(UIButton *)sender {
     NSError *error;
 
@@ -251,6 +253,10 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
     self.dic.delegate = self;
 
     [self.dic presentOptionsMenuFromRect:self.UIexportTrack.frame inView:self.UIexportTrack animated:TRUE];
+}
+
+- (void)documentInteractionControllerDidDismissOptionsMenu:(UIDocumentInteractionController *)controller {
+    [[NSFileManager defaultManager] removeItemAtURL:controller.URL error:nil];
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView

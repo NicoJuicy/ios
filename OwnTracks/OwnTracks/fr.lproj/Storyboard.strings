@@ -172,8 +172,8 @@
 /* Class = "UITextField"; placeholder = "trackerid"; ObjectID = "dUg-TH-IQ0"; Note = "Don't translate, technical term"; */
 "dUg-TH-IQ0.placeholder" = "trackerid";
 
-/* Class = "UITextView"; text = "Copyright © 2013-2025 by Christoph Krey, https://owntracks.org"; ObjectID = "dZg-CC-7yD"; */
-"dZg-CC-7yD.text" = "Copyright © 2013-2025 by Christoph Krey, https://owntracks.org";
+/* Class = "UITextView"; text = "Copyright © 2013-2026 by Christoph Krey, https://owntracks.org"; ObjectID = "dZg-CC-7yD"; */
+"dZg-CC-7yD.text" = "Copyright © 2013-2026 by Christoph Krey, https://owntracks.org";
 
 /* Class = "UILabel"; text = "ranging"; ObjectID = "DZx-uw-XhQ"; Note = "Don't translate, technical term"; */
 "DZx-uw-XhQ.text" = "ranging";
@@ -375,9 +375,6 @@
 
 /* Class = "UILabel"; text = "Pressure"; ObjectID = "MLp-t9-oef"; */
 "MLp-t9-oef.text" = "Pressure";
-
-/* Class = "UITextView"; text = "Uses the following cocoapods (http://cocoapods.org): CocoaLumberjack, Sodium, and DSJSONSchemaValidation."; ObjectID = "Moe-Di-frm"; */
-"Moe-Di-frm.text" = "Uses the following cocoapods (http://cocoapods.org): CocoaLumberjack, Sodium, and DSJSONSchemaValidation.";
 
 /* Class = "UITabBarItem"; title = "Friends"; ObjectID = "msF-bI-hEJ"; */
 "msF-bI-hEJ.title" = "Amis";

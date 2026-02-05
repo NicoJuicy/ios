@@ -3,11 +3,10 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		73E486C3060A00AFA424FB27 /* Pods_OwnTracks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8900A3EAFD109D20F95E6DD8 /* Pods_OwnTracks.framework */; };
 		84001C141C78982800413E5B /* Queue+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 84001C111C78982800413E5B /* Queue+CoreDataProperties.m */; };
 		8400D9731D83825E00DEA134 /* HTTP.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8400D9721D83825E00DEA134 /* HTTP.plist */; };
 		8405CB602F14EBEF008C2580 /* CreateCardTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8405CB5F2F14EBEF008C2580 /* CreateCardTVC.swift */; };
@@ -79,6 +78,8 @@
 		84B0CDAD239E2EFA00CE9305 /* BackgroundTasks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84B0CDAC239E2EFA00CE9305 /* BackgroundTasks.framework */; };
 		84B7397A1A65629200B103F4 /* LocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B739791A65629200B103F4 /* LocationManager.m */; };
 		84BD03AA25D5301F0077B9B8 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84AE8ADB25C165D600C0B0EE /* MapKit.framework */; };
+		84BDD0CE2F2928C500358CC2 /* MQTTClient in Frameworks */ = {isa = PBXBuildFile; productRef = 84BDD0CD2F2928C500358CC2 /* MQTTClient */; };
+		84BDD0D12F2A815500358CC2 /* OwnTracksLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 84BDD0D02F2A815500358CC2 /* OwnTracksLog.m */; };
 		84C3F4562CEF7490004DB332 /* AttachPhotoTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C3F4552CEF7490004DB332 /* AttachPhotoTVC.m */; };
 		84C3F45C2CEF904F004DB332 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84C3F45B2CEF904F004DB332 /* AssetsLibrary.framework */; };
 		84C3F45D2CF09F91004DB332 /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84C3F4572CEF8911004DB332 /* Photos.framework */; };
@@ -146,9 +147,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		0A2FDE06B0FB716EB485F358 /* Pods_OwnTracksWrist_WatchKit_App.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OwnTracksWrist_WatchKit_App.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		3BB208567F97092FB552528E /* Pods-OwnTracksWrist WatchKit Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OwnTracksWrist WatchKit Extension.release.xcconfig"; path = "Target Support Files/Pods-OwnTracksWrist WatchKit Extension/Pods-OwnTracksWrist WatchKit Extension.release.xcconfig"; sourceTree = "<group>"; };
-		794B1518CFE4BFD07F305FFB /* Pods-OwnTracks.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OwnTracks.debug.xcconfig"; path = "Target Support Files/Pods-OwnTracks/Pods-OwnTracks.debug.xcconfig"; sourceTree = "<group>"; };
 		84001C0D1C78729200413E5B /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
 		84001C0F1C78976100413E5B /* Model 9.0.2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 9.0.2.xcdatamodel"; sourceTree = "<group>"; };
 		84001C101C78982800413E5B /* Queue+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Queue+CoreDataProperties.h"; sourceTree = "<group>"; };
@@ -315,6 +313,8 @@
 		84BA0A172DE6F25400AFACA9 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		84BA0A192DE6F25400AFACA9 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		84BA0A1A2DE6F25400AFACA9 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		84BDD0CF2F2A815500358CC2 /* OwnTracksLog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OwnTracksLog.h; sourceTree = "<group>"; };
+		84BDD0D02F2A815500358CC2 /* OwnTracksLog.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OwnTracksLog.m; sourceTree = "<group>"; };
 		84BE75912771EADF006CBDCF /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		84BE75932771EAE0006CBDCF /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		84BE75962771EBA2006CBDCF /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -382,16 +382,11 @@
 		84FAEA7125F01DA100DCD479 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		84FD93052353950100CCEC3B /* OwnTracksEditTVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OwnTracksEditTVC.h; sourceTree = "<group>"; };
 		84FD93062353950100CCEC3B /* OwnTracksEditTVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OwnTracksEditTVC.m; sourceTree = "<group>"; };
-		8900A3EAFD109D20F95E6DD8 /* Pods_OwnTracks.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OwnTracks.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		96DD60728B6E7C01CD032AF5 /* Pods-OwnTracksWrist WatchKit App.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OwnTracksWrist WatchKit App.release.xcconfig"; path = "Target Support Files/Pods-OwnTracksWrist WatchKit App/Pods-OwnTracksWrist WatchKit App.release.xcconfig"; sourceTree = "<group>"; };
-		9DBE9F76099A512C36F126BC /* Pods-OwnTracks.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OwnTracks.release.xcconfig"; path = "Target Support Files/Pods-OwnTracks/Pods-OwnTracks.release.xcconfig"; sourceTree = "<group>"; };
 		B1AC89F92E2FDF3400E0E194 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Storyboard.strings"; sourceTree = "<group>"; };
 		B1AC89FA2E2FDF3500E0E194 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Intents.strings"; sourceTree = "<group>"; };
 		B1AC89FB2E2FDF3700E0E194 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		B1AC89FD2E2FDF3900E0E194 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		B1AC89FE2E2FDF3900E0E194 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
-		BA827F68D1E69AEA6BCC7251 /* Pods-OwnTracksWrist WatchKit Extension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OwnTracksWrist WatchKit Extension.debug.xcconfig"; path = "Target Support Files/Pods-OwnTracksWrist WatchKit Extension/Pods-OwnTracksWrist WatchKit Extension.debug.xcconfig"; sourceTree = "<group>"; };
-		BB060471B4BDB6B94FD6C4A2 /* Pods-OwnTracksWrist WatchKit App.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OwnTracksWrist WatchKit App.debug.xcconfig"; path = "Target Support Files/Pods-OwnTracksWrist WatchKit App/Pods-OwnTracksWrist WatchKit App.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -416,8 +411,8 @@
 				8411B830189FDB140019D2D6 /* UIKit.framework in Frameworks */,
 				84ED67882F1E95110013A265 /* Sodium in Frameworks */,
 				8411B82C189FDB140019D2D6 /* Foundation.framework in Frameworks */,
-				73E486C3060A00AFA424FB27 /* Pods_OwnTracks.framework in Frameworks */,
 				84ED67922F1E9A0E0013A265 /* DSJSONSchemaValidation in Frameworks */,
+				84BDD0CE2F2928C500358CC2 /* MQTTClient in Frameworks */,
 				84ED67862F1E95110013A265 /* Clibsodium in Frameworks */,
 				84C3F45E2CF09F9B004DB332 /* PhotosUI.framework in Frameworks */,
 			);
@@ -440,19 +435,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		4148677DEE4BDFE13E9AF63F /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				794B1518CFE4BFD07F305FFB /* Pods-OwnTracks.debug.xcconfig */,
-				9DBE9F76099A512C36F126BC /* Pods-OwnTracks.release.xcconfig */,
-				BA827F68D1E69AEA6BCC7251 /* Pods-OwnTracksWrist WatchKit Extension.debug.xcconfig */,
-				3BB208567F97092FB552528E /* Pods-OwnTracksWrist WatchKit Extension.release.xcconfig */,
-				BB060471B4BDB6B94FD6C4A2 /* Pods-OwnTracksWrist WatchKit App.debug.xcconfig */,
-				96DD60728B6E7C01CD032AF5 /* Pods-OwnTracksWrist WatchKit App.release.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
 		8411B81F189FDB140019D2D6 = {
 			isa = PBXGroup;
 			children = (
@@ -461,7 +443,6 @@
 				8456D0A32B55749E003A45D4 /* OwnTracksTests */,
 				8411B82A189FDB140019D2D6 /* Frameworks */,
 				8411B829189FDB140019D2D6 /* Products */,
-				4148677DEE4BDFE13E9AF63F /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -507,8 +488,6 @@
 				8411B831189FDB140019D2D6 /* CoreData.framework */,
 				8411B849189FDB140019D2D6 /* XCTest.framework */,
 				84D3072E1ACD644500FACB9E /* NotificationCenter.framework */,
-				8900A3EAFD109D20F95E6DD8 /* Pods_OwnTracks.framework */,
-				0A2FDE06B0FB716EB485F358 /* Pods_OwnTracksWrist_WatchKit_App.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -520,6 +499,8 @@
 				8411B867189FE1ED0019D2D6 /* coredata */,
 				8411B83C189FDB140019D2D6 /* OwnTracksAppDelegate.h */,
 				8411B83D189FDB140019D2D6 /* OwnTracksAppDelegate.m */,
+				84BDD0CF2F2A815500358CC2 /* OwnTracksLog.h */,
+				84BDD0D02F2A815500358CC2 /* OwnTracksLog.m */,
 				847444381DA4BC9600975BE4 /* ConnType.h */,
 				847444391DA4BC9600975BE4 /* ConnType.m */,
 				846FFA431B402A1F001482A6 /* OwnTracking.h */,
@@ -714,14 +695,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8411B85A189FDB140019D2D6 /* Build configuration list for PBXNativeTarget "OwnTracks" */;
 			buildPhases = (
-				601E55213B519673A2446482 /* [CP] Check Pods Manifest.lock */,
 				8411B824189FDB140019D2D6 /* Sources */,
 				8411B825189FDB140019D2D6 /* Frameworks */,
 				8411B826189FDB140019D2D6 /* Resources */,
 				844E826B1AB8061500516D1A /* Embed Foundation Extensions */,
 				8466B31E2397F58500537795 /* ShellScript */,
 				84100AD923AE8D8800FC2361 /* Embed Watch Content */,
-				E1F1C1838DEABD333F5AC82C /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -835,6 +814,7 @@
 			packageReferences = (
 				84ED67842F1E95110013A265 /* XCRemoteSwiftPackageReference "swift-sodium" */,
 				84ED67902F1E9A0E0013A265 /* XCRemoteSwiftPackageReference "JSONSchemaValidation" */,
+				84BDD0CC2F2928C500358CC2 /* XCLocalSwiftPackageReference "../../../MQTTClient" */,
 			);
 			productRefGroup = 8411B829189FDB140019D2D6 /* Products */;
 			projectDirPath = "";
@@ -890,28 +870,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		601E55213B519673A2446482 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-OwnTracks-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
 		8466B31E2397F58500537795 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -928,24 +886,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\n";
-		};
-		E1F1C1838DEABD333F5AC82C /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-OwnTracks/Pods-OwnTracks-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-OwnTracks/Pods-OwnTracks-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-OwnTracks/Pods-OwnTracks-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
+			shellScript = "
+";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -977,6 +919,7 @@
 				8474443A1DA4BC9600975BE4 /* ConnType.m in Sources */,
 				8411B90E189FEC070019D2D6 /* FriendsTVC.m in Sources */,
 				842E6ED620BEF031001928FA /* Queue+CoreDataClass.m in Sources */,
+				84BDD0D12F2A815500358CC2 /* OwnTracksLog.m in Sources */,
 				849551F92EF4317300675342 /* LogsTVC.swift in Sources */,
 				84FD93072353950100CCEC3B /* OwnTracksEditTVC.m in Sources */,
 				84C3F4562CEF7490004DB332 /* AttachPhotoTVC.m in Sources */,
@@ -1262,7 +1205,6 @@
 		};
 		8411B85B189FDB140019D2D6 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 794B1518CFE4BFD07F305FFB /* Pods-OwnTracks.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -1270,11 +1212,10 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = OwnTracks/OwnTracks.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 26.2.0;
 				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = NO;
+				DEVELOPMENT_TEAM = C652JFWU23;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_BITCODE = NO;
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
@@ -1307,7 +1248,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
@@ -1322,7 +1262,6 @@
 		};
 		8411B85C189FDB140019D2D6 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9DBE9F76099A512C36F126BC /* Pods-OwnTracks.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -1330,11 +1269,10 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = OwnTracks/OwnTracks.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 26.2.0;
 				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = NO;
+				DEVELOPMENT_TEAM = C652JFWU23;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_BITCODE = NO;
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
@@ -1368,7 +1306,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
@@ -1391,11 +1328,10 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = OwnTracksIntents/OwnTracksIntents.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 26.2.0;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = C652JFWU23;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -1412,6 +1348,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = org.mqttitude.MQTTitude.OwnTracksIntents;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -1430,12 +1367,11 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = OwnTracksIntents/OwnTracksIntents.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 26.2.0;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = C652JFWU23;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -1452,6 +1388,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = org.mqttitude.MQTTitude.OwnTracksIntents;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -1469,10 +1406,12 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 26.2.0;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = C652JFWU23;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
@@ -1485,6 +1424,8 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = org.mqttitude.OwnTracksTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -1506,10 +1447,12 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = C652JFWU23;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
@@ -1522,6 +1465,8 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = org.mqttitude.OwnTracksTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -1574,6 +1519,13 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		84BDD0CC2F2928C500358CC2 /* XCLocalSwiftPackageReference "../../../MQTTClient" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../../MQTTClient;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCRemoteSwiftPackageReference section */
 		84ED67842F1E95110013A265 /* XCRemoteSwiftPackageReference "swift-sodium" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -1594,6 +1546,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		84BDD0CD2F2928C500358CC2 /* MQTTClient */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MQTTClient;
+		};
 		84ED67852F1E95110013A265 /* Clibsodium */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 84ED67842F1E95110013A265 /* XCRemoteSwiftPackageReference "swift-sodium" */;

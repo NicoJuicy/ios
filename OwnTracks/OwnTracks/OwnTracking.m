@@ -3,7 +3,7 @@
 //  OwnTracks
 //
 //  Created by Christoph Krey on 28.06.15.
-//  Copyright © 2015-2025  OwnTracks. All rights reserved.
+//  Copyright © 2015-2026  OwnTracks. All rights reserved.
 //
 
 #import "OwnTracking.h"
@@ -15,12 +15,11 @@
 #import "ConnType.h"
 #import "NSNumber+decimals.h"
 #import "Validation.h"
-#import <CocoaLumberjack/CocoaLumberjack.h>
+#import "OwnTracksLog.h"
 #import <UserNotifications/UserNotifications.h>
 #import <UserNotifications/UNUserNotificationCenter.h>
 
 @implementation OwnTracking
-static const DDLogLevel ddLogLevel = DDLogLevelInfo;
 static OwnTracking *theInstance = nil;
 
 + (OwnTracking *)sharedInstance {
@@ -35,7 +34,7 @@ static OwnTracking *theInstance = nil;
               retained:(BOOL)retained
                context:(NSManagedObjectContext *)context {
     
-    DDLogVerbose(@"[OwnTracking] processMessage %@ %@",
+    OwnTracksLogDebug("[OwnTracking] processMessage %@ %@",
                  topic,
                  [[NSString alloc] initWithData:data
                                        encoding:NSUTF8StringEncoding]);
@@ -78,13 +77,13 @@ static OwnTracking *theInstance = nil;
                         [self processFace:friend dictionary:dictionary];
                     }];
                 } else {
-                    DDLogVerbose(@"[OwnTracking] unhandled record type for own device _type:%@", dictionary[@"_type"]);
+                    OwnTracksLogDebug("[OwnTracking] unhandled record type for own device _type:%@", dictionary[@"_type"]);
                 }
             } else {
-                DDLogError(@"[OwnTracking] JSON object without _type as String received for own device");
+                OwnTracksLogError("[OwnTracking] JSON object without _type as String received for own device");
             }
         } else {
-            DDLogError(@"[OwnTracking] no JSON dictionary received for own device");
+            OwnTracksLogError("[OwnTracking] no JSON dictionary received for own device");
         }
     } else /* not own device */ {
         if (data && data.length == 0) { // data.length == 0 -> delete friend
@@ -93,7 +92,7 @@ static OwnTracking *theInstance = nil;
                 [context deleteObject:friend];
             }
             [CoreData.sharedInstance sync:context];
-            DDLogInfo(@"[OwnTracking] deleted friend %@",
+            OwnTracksLogInfo("[OwnTracking] deleted friend %@",
                       device);
         } else {
             if (dictionary && [dictionary isKindOfClass:[NSDictionary class]]) {
@@ -112,18 +111,18 @@ static OwnTracking *theInstance = nil;
                         [self processFace:friend dictionary:dictionary];
                         
                     } else if ([type isEqualToString:@"lwt"]) {
-                        DDLogInfo(@"[OwnTracking] received lwt for friend %@",
+                        OwnTracksLogInfo("[OwnTracking] received lwt for friend %@",
                                   device);
                         // ignore
                         
                     } else {
-                        DDLogVerbose(@"[OwnTracking] unhandled record type for other device _type:%@", type);
+                        OwnTracksLogDebug("[OwnTracking] unhandled record type for other device _type:%@", type);
                     }
                 } else {
-                    DDLogError(@"[OwnTracking] JSON object without _type as String received for other device");
+                    OwnTracksLogError("[OwnTracking] JSON object without _type as String received for other device");
                 }
             } else {
-                DDLogError(@"[OwnTracking] no JSON dictionary received for other device");
+                OwnTracksLogError("[OwnTracking] no JSON dictionary received for other device");
             }
         }
     }
@@ -135,44 +134,44 @@ static OwnTracking *theInstance = nil;
     if (dictionary && [dictionary isKindOfClass:[NSDictionary class]]) {
         NSNumber *tst = dictionary[@"tst"];
         if (!tst || ![tst isKindOfClass:[NSNumber class]]) {
-            DDLogError(@"[OwnTracking processLocation] json does not contain valid tst: not processed");
+            OwnTracksLogError("[OwnTracking processLocation] json does not contain valid tst: not processed");
             return;
         }
         NSDate *timestamp = [NSDate dateWithTimeIntervalSince1970:tst.doubleValue];
         if (friend.lastLocation && [friend.lastLocation compare:timestamp] != NSOrderedAscending) {
-            DDLogInfo(@"[OwnTracking] skipped location for friend %@ @%@",
+            OwnTracksLogInfo("[OwnTracking] skipped location for friend %@ @%@",
                       friend.topic, timestamp);
             return;
         }
 
         NSNumber *lat = dictionary[@"lat"];
         if (!lat || ![lat isKindOfClass:[NSNumber class]]) {
-            DDLogError(@"[OwnTracking processLocation] json does not contain valid lat: not processed");
+            OwnTracksLogError("[OwnTracking processLocation] json does not contain valid lat: not processed");
             return;
         }
         CLLocationDegrees latDegrees = lat.doubleValue;
 
         NSNumber *lon = dictionary[@"lon"];
         if (!lon || ![lon isKindOfClass:[NSNumber class]]) {
-            DDLogError(@"[OwnTracking processLocation] json does not contain valid lon: not processed");
+            OwnTracksLogError("[OwnTracking processLocation] json does not contain valid lon: not processed");
             return;
         }
         CLLocationDegrees lonDegrees = lon.doubleValue;
         
         if (lat.doubleValue == 0.0 && lon.doubleValue == 0.0) {
-            DDLogError(@"[OwnTracking processLocation] coord is 0.0,0.0: not processed");
+            OwnTracksLogError("[OwnTracking processLocation] coord is 0.0,0.0: not processed");
             return;
         }
 
         CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(latDegrees, lonDegrees);
         if (!CLLocationCoordinate2DIsValid(coord)) {
-            DDLogError(@"[OwnTracking processLocation] coord is no valid: not processed");
+            OwnTracksLogError("[OwnTracking processLocation] coord is no valid: not processed");
             return;
         }
         
         NSNumber *vel = dictionary[@"vel"];
         if (vel && ![vel isKindOfClass:[NSNumber class]]) {
-            DDLogError(@"[OwnTracking processLocation] json does contain invalid vel: not processed");
+            OwnTracksLogError("[OwnTracking processLocation] json does contain invalid vel: not processed");
             return;
         }
         CLLocationSpeed speed = -1;
@@ -185,7 +184,7 @@ static OwnTracking *theInstance = nil;
         
         NSNumber *batt = dictionary[@"batt"];
         if (batt && ![batt isKindOfClass:[NSNumber class]]) {
-            DDLogError(@"[OwnTracking processLocation] json does contain invalid batt: not processed");
+            OwnTracksLogError("[OwnTracking processLocation] json does contain invalid batt: not processed");
             return;
         }
         NSNumber *batteryLevel = [NSNumber numberWithFloat:-1.0];
@@ -198,7 +197,7 @@ static OwnTracking *theInstance = nil;
         
         NSNumber *alt = dictionary[@"alt"];
         if (alt && ![alt isKindOfClass:[NSNumber class]]) {
-            DDLogError(@"[OwnTracking processLocation] json does contain invalid alt: not processed");
+            OwnTracksLogError("[OwnTracking processLocation] json does contain invalid alt: not processed");
             return;
         }
         CLLocationDistance altDistance = 0;
@@ -208,7 +207,7 @@ static OwnTracking *theInstance = nil;
 
         NSNumber *acc = dictionary[@"acc"];
         if (acc && ![acc isKindOfClass:[NSNumber class]]) {
-            DDLogError(@"[OwnTracking processLocation] json does contain invalid acc: not processed");
+            OwnTracksLogError("[OwnTracking processLocation] json does contain invalid acc: not processed");
             return;
         }
         CLLocationAccuracy accAccuracy = 0;
@@ -218,7 +217,7 @@ static OwnTracking *theInstance = nil;
 
         NSNumber *vac = dictionary[@"vac"];
         if (vac && ![vac isKindOfClass:[NSNumber class]]) {
-            DDLogError(@"[OwnTracking processLocation] json does contain invalid vac: not processed");
+            OwnTracksLogError("[OwnTracking processLocation] json does contain invalid vac: not processed");
             return;
         }
         CLLocationAccuracy vacAccuracy = 0;
@@ -228,7 +227,7 @@ static OwnTracking *theInstance = nil;
 
         NSNumber *cog = dictionary[@"cog"];
         if (cog && ![cog isKindOfClass:[NSNumber class]]) {
-            DDLogError(@"[OwnTracking processLocation] json does contain invalid cog: not processed");
+            OwnTracksLogError("[OwnTracking processLocation] json does contain invalid cog: not processed");
             return;
         }
         CLLocationDirection cogDirection = 0;
@@ -248,7 +247,7 @@ static OwnTracking *theInstance = nil;
         NSDate *createdAt = timestamp;
         NSNumber *created_at = dictionary[@"created_at"];
         if (created_at && ![created_at isKindOfClass:[NSNumber class]]) {
-            DDLogError(@"[OwnTracking processLocation] json does not contain valid created_at: not processed");
+            OwnTracksLogError("[OwnTracking processLocation] json does not contain valid created_at: not processed");
             return;
         }
         if (created_at) {
@@ -257,33 +256,33 @@ static OwnTracking *theInstance = nil;
         
         NSString *tid = dictionary[@"tid"];
         if (tid && ![tid isKindOfClass:[NSString class]]) {
-            DDLogError(@"[OwnTracking processLocation] json does not contain valid tid: not processed");
+            OwnTracksLogError("[OwnTracking processLocation] json does not contain valid tid: not processed");
             return;
         }
         friend.tid = tid;
         
         NSString *t = dictionary[@"t"];
         if (t && ![t isKindOfClass:[NSString class]]) {
-            DDLogError(@"[OwnTracking processLocation] json does not contain valid t: not processed");
+            OwnTracksLogError("[OwnTracking processLocation] json does not contain valid t: not processed");
             return;
         }
 
         NSString *poi = dictionary[@"poi"];
         if (poi && ![poi isKindOfClass:[NSString class]]) {
-            DDLogError(@"[OwnTracking processLocation] json does not contain valid poi: not processed");
+            OwnTracksLogError("[OwnTracking processLocation] json does not contain valid poi: not processed");
             return;
         }
 
         NSString *tag = dictionary[@"tag"];
         if (tag && ![tag isKindOfClass:[NSString class]]) {
-            DDLogError(@"[OwnTracking processLocation] json does not contain valid tag: not processed");
+            OwnTracksLogError("[OwnTracking processLocation] json does not contain valid tag: not processed");
             return;
         }
 
         NSData *image = nil;
         NSString *imageBase64 = dictionary[@"image"];
         if (imageBase64 && ![imageBase64 isKindOfClass:[NSString class]]) {
-            DDLogError(@"[OwnTracking processLocation] json does not contain valid imageBase64: not processed");
+            OwnTracksLogError("[OwnTracking processLocation] json does not contain valid imageBase64: not processed");
             return;
         }
         
@@ -293,61 +292,61 @@ static OwnTracking *theInstance = nil;
 
         NSString *imageName = dictionary[@"imagename"];
         if (imageName && ![imageName isKindOfClass:[NSString class]]) {
-            DDLogError(@"[OwnTracking processLocation] json does not contain valid imageName: not processed");
+            OwnTracksLogError("[OwnTracking processLocation] json does not contain valid imageName: not processed");
             return;
         }
         
         NSArray <NSString *> *inRegions = dictionary[@"inregions"];
         if (inRegions && ![inRegions isKindOfClass:[NSArray class]]) {
-            DDLogError(@"[OwnTracking processLocation] json does not contain valid inRegions: not processed");
+            OwnTracksLogError("[OwnTracking processLocation] json does not contain valid inRegions: not processed");
             return;
         }
 
         NSArray <NSString *> *inRids = dictionary[@"inrids"];
         if (inRegions && ![inRegions isKindOfClass:[NSArray class]]) {
-            DDLogError(@"[OwnTracking processLocation] json does not contain valid inRegions: not processed");
+            OwnTracksLogError("[OwnTracking processLocation] json does not contain valid inRegions: not processed");
             return;
         }
 
         NSString *ssid = dictionary[@"ssid"];
         if (ssid && ![ssid isKindOfClass:[NSString class]]) {
-            DDLogError(@"[OwnTracking processLocation] json does not contain valid ssid: not processed");
+            OwnTracksLogError("[OwnTracking processLocation] json does not contain valid ssid: not processed");
             return;
         }
         
         NSString *bssid = dictionary[@"bssid"];
         if (bssid && ![bssid isKindOfClass:[NSString class]]) {
-            DDLogError(@"[OwnTracking processLocation] json does not contain valid bssid: not processed");
+            OwnTracksLogError("[OwnTracking processLocation] json does not contain valid bssid: not processed");
             return;
         }
         
         NSString *conn = dictionary[@"conn"];
         if (conn && ![conn isKindOfClass:[NSString class]]) {
-            DDLogError(@"[OwnTracking processLocation] json does not contain valid conn: not processed");
+            OwnTracksLogError("[OwnTracking processLocation] json does not contain valid conn: not processed");
             return;
         }
         
         NSNumber *m = dictionary[@"m"];
         if (m && ![m isKindOfClass:[NSNumber class]]) {
-            DDLogError(@"[OwnTracking processLocation] json does contain invalid m: not processed");
+            OwnTracksLogError("[OwnTracking processLocation] json does contain invalid m: not processed");
             return;
         }
 
         NSNumber *bs = dictionary[@"bs"];
         if (bs && ![bs isKindOfClass:[NSNumber class]]) {
-            DDLogError(@"[OwnTracking processLocation] json does contain invalid bs: not processed");
+            OwnTracksLogError("[OwnTracking processLocation] json does contain invalid bs: not processed");
             return;
         }
         
         NSNumber *p = dictionary[@"p"];
         if (p && ![p isKindOfClass:[NSNumber class]]) {
-            DDLogError(@"[OwnTracking processLocation] json does contain invalid p: not processed");
+            OwnTracksLogError("[OwnTracking processLocation] json does contain invalid p: not processed");
             return;
         }
 
         NSArray <NSString *> *motionActivities = dictionary[@"motionactivities"];
         if (inRegions && ![inRegions isKindOfClass:[NSArray class]]) {
-            DDLogError(@"[OwnTracking processLocation] json does not contain valid motionactivities: not processed");
+            OwnTracksLogError("[OwnTracking processLocation] json does not contain valid motionactivities: not processed");
             return;
         }
 
@@ -370,10 +369,10 @@ static OwnTracking *theInstance = nil;
                  motionActivities:motionActivities];
         int positions = [Settings intForKey:@"positions_preference" inMOC:friend.managedObjectContext];
         NSInteger remainingPositions = [friend limitWaypointsToMaximum:positions];
-        DDLogInfo(@"[OwnTracking] processed location for friend %@ @%@ (%ld)",
+        OwnTracksLogInfo("[OwnTracking] processed location for friend %@ @%@ (%ld)",
                   friend.topic, timestamp, remainingPositions);
     } else {
-        DDLogError(@"[OwnTracking processLocation] json is no dictionary");
+        OwnTracksLogError("[OwnTracking processLocation] json is no dictionary");
     }
 }
 
@@ -381,32 +380,32 @@ static OwnTracking *theInstance = nil;
     if (dictionary && [dictionary isKindOfClass:[NSDictionary class]]) {
         NSNumber *tst = dictionary[@"tst"];
         if (!tst || ![tst isKindOfClass:[NSNumber class]]) {
-            DDLogError(@"[OwnTracking processTransitionMessage] json does not contain valid tst: not processed");
+            OwnTracksLogError("[OwnTracking processTransitionMessage] json does not contain valid tst: not processed");
             return;
         }
         NSDate *timestamp = [NSDate dateWithTimeIntervalSince1970:tst.doubleValue];
         
         NSString *t = dictionary[@"t"];
         if (t && ![t isKindOfClass:[NSString class]]) {
-            DDLogError(@"[OwnTracking processTransitionMessage] json does not contain valid t: not processed");
+            OwnTracksLogError("[OwnTracking processTransitionMessage] json does not contain valid t: not processed");
             return;
         }
 
         NSString *tid = dictionary[@"tid"];
         if (tid && ![tid isKindOfClass:[NSString class]]) {
-            DDLogError(@"[OwnTracking processTransitionMessage] json does not contain valid tid: not processed");
+            OwnTracksLogError("[OwnTracking processTransitionMessage] json does not contain valid tid: not processed");
             return;
         }
 
         NSString *event = dictionary[@"event"];
         if (!event || ![event isKindOfClass:[NSString class]]) {
-            DDLogError(@"[OwnTracking processTransitionMessage] json does not contain valid event: not processed");
+            OwnTracksLogError("[OwnTracking processTransitionMessage] json does not contain valid event: not processed");
             return;
         }
 
         NSString *desc = dictionary[@"desc"];
         if (desc && ![desc isKindOfClass:[NSString class]]) {
-            DDLogError(@"[OwnTracking processTransitionMessage] json does not contain valid desc: not processed");
+            OwnTracksLogError("[OwnTracking processTransitionMessage] json does not contain valid desc: not processed");
             return;
         }
 
@@ -471,11 +470,11 @@ static OwnTracking *theInstance = nil;
                                 message:notificationMessage
                            dismissAfter:2.0
             ];
-            DDLogInfo(@"[OwnTracking] processed transition for friend %@",
+            OwnTracksLogInfo("[OwnTracking] processed transition for friend %@",
                       notificationMessage);
         }
     } else {
-        DDLogError(@"[OwnTracking processTransitionMessage] json is no dictionary");
+        OwnTracksLogError("[OwnTracking processTransitionMessage] json is no dictionary");
     }
 }
 
@@ -484,14 +483,14 @@ static OwnTracking *theInstance = nil;
         if (dictionary && [dictionary isKindOfClass:[NSDictionary class]]) {
             NSString *name = dictionary[@"name"];
             if (name && ![name isKindOfClass:[NSString class]]) {
-                DDLogError(@"[OwnTracking processFace] json does not contain valid name: not processed");
+                OwnTracksLogError("[OwnTracking processFace] json does not contain valid name: not processed");
                 return;
             }
             friend.cardName = name;
 
             NSString *face = dictionary[@"face"];
             if (face && ![face isKindOfClass:[NSString class]]) {
-                DDLogError(@"[OwnTracking processFace] json does not contain valid face: not processed");
+                OwnTracksLogError("[OwnTracking processFace] json does not contain valid face: not processed");
                 return;
             }
 
@@ -499,21 +498,21 @@ static OwnTracking *theInstance = nil;
                 NSData *imageData = [[NSData alloc] initWithBase64EncodedString:face options:0];
                 friend.cardImage = imageData;
                 if (!imageData) {
-                    DDLogError(@"[OwnTracking processFace] face could not be base64 decoded");
+                    OwnTracksLogError("[OwnTracking processFace] face could not be base64 decoded");
                 }
             } else {
                 friend.cardImage = nil;
             }
 
-            DDLogInfo(@"[OwnTracking] processed card for friend %@",
+            OwnTracksLogInfo("[OwnTracking] processed card for friend %@",
                       friend.topic);
             [CoreData.sharedInstance sync:friend.managedObjectContext];
 
         } else {
-            DDLogError(@"[OwnTracking processFace] json is no dictionary");
+            OwnTracksLogError("[OwnTracking processFace] json is no dictionary");
         }
     } else {
-        DDLogError(@"[OwnTracking processFace] no friend");
+        OwnTracksLogError("[OwnTracking processFace] no friend");
     }
 }
 
@@ -545,7 +544,7 @@ static OwnTracking *theInstance = nil;
 }
 
 - (void)removeRegion:(Region *)region context:(NSManagedObjectContext *)context {
-    DDLogInfo(@"[OwnTracking] removeRegion %@", region.name);
+    OwnTracksLogInfo("[OwnTracking] removeRegion %@", region.name);
     [[LocationManager sharedInstance] stopRegion:region.CLregion];
     [context deleteObject:region];
     [[CoreData sharedInstance] sync:context];

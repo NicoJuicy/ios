@@ -3,7 +3,7 @@
 //  OwnTracks
 //
 //  Created by Christoph Krey on 17.08.13.
-//  Copyright © 2013-2025  Christoph Krey. All rights reserved.
+//  Copyright © 2013-2026  Christoph Krey. All rights reserved.
 //
 
 #import "ViewController.h"
@@ -22,7 +22,7 @@
 
 #import "OwnTracksChangeMonitoringIntent.h"
 
-#import <CocoaLumberjack/CocoaLumberjack.h>
+#import "OwnTracksLog.h"
 
 #define OSM TRUE
 
@@ -54,7 +54,6 @@
 
 
 @implementation ViewController
-static const DDLogLevel ddLogLevel = DDLogLevelInfo;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -65,7 +64,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
     
     self.mapView.showsScale = FALSE;
         
-    DDLogInfo(@"[ViewController] viewDidLoad mapView region %g %g %g %g",
+    OwnTracksLogInfo("[ViewController] viewDidLoad mapView region %g %g %g %g",
               self.mapView.region.center.latitude,
               self.mapView.region.center.longitude,
               self.mapView.region.span.latitudeDelta,
@@ -653,7 +652,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
  annotationView:(MKAnnotationView *)view
 didChangeDragState:(MKAnnotationViewDragState)newState
    fromOldState:(MKAnnotationViewDragState)oldState {
-    DDLogVerbose(@"didChangeDragState %lu", (unsigned long)newState);
+    OwnTracksLogDebug("didChangeDragState %lu", (unsigned long)newState);
     if (newState == MKAnnotationViewDragStateNone) {
         NSArray *annotations = mapView.annotations;
         [mapView removeAnnotations:annotations];
@@ -847,7 +846,7 @@ calloutAccessoryControlTapped:(UIControl *)control {
     if (frc) {
         NSError *error;
         [frc performFetch:&error];
-        if (error) DDLogError(@"[%@ %@] %@ (%@)", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [error localizedDescription], [error localizedFailureReason]);
+        if (error) OwnTracksLogError("[%@ %@] %@ (%@)", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [error localizedDescription], [error localizedFailureReason]);
     }
 }
 
@@ -1100,7 +1099,7 @@ calloutAccessoryControlTapped:(UIControl *)control {
                                                       inMOC:CoreData.sharedInstance.mainMOC];
     CLLocation *location = self.mapView.userLocation.location;
 
-    DDLogVerbose(@"[ViewController] sendNow %dm %d %@ %@ %@ %@",
+    OwnTracksLogDebug("[ViewController] sendNow %dm %d %@ %@ %@ %@",
                  ignoreInaccurateLocations, validIds, location, poi, image, imageName);
 
     if (!validIds) {

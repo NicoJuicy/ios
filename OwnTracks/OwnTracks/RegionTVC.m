@@ -3,7 +3,7 @@
 //  OwnTracks
 //
 //  Created by Christoph Krey on 01.10.13.
-//  Copyright © 2013-2025  Christoph Krey. All rights reserved.
+//  Copyright © 2013-2026  Christoph Krey. All rights reserved.
 //
 
 #import "RegionTVC.h"
@@ -11,7 +11,7 @@
 #import "OwnTracksAppDelegate.h"
 #import "Settings.h"
 #import "CoreData.h"
-#import <CocoaLumberjack/CocoaLumberjack.h>
+#import "OwnTracksLog.h"
 
 @interface RegionTVC ()
 @property (weak, nonatomic) IBOutlet UITextField *UIname;
@@ -28,7 +28,6 @@
 @end
 
 @implementation RegionTVC
-static const DDLogLevel ddLogLevel = DDLogLevelInfo;
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -62,20 +61,20 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
         self.region.radius = @((self.UIradius.text).doubleValue);
         
         self.region.uuid = self.UIuuid.text;
-        DDLogVerbose(@"UImajor %@", self.UImajor.text);
-        DDLogVerbose(@"UImajor intValue %d", [self.UImajor.text intValue]);
-        DDLogVerbose(@"UImajor NSNumber %@", @(self.UImajor.text.intValue));
+        OwnTracksLogDebug("UImajor %@", self.UImajor.text);
+        OwnTracksLogDebug("UImajor intValue %d", [self.UImajor.text intValue]);
+        OwnTracksLogDebug("UImajor NSNumber %@", @(self.UImajor.text.intValue));
         self.region.major = @((self.UImajor.text).intValue);
         self.region.minor = @((self.UIminor.text).intValue);
         
         OwnTracksAppDelegate *ad = (OwnTracksAppDelegate *)[UIApplication sharedApplication].delegate;
         [ad sendRegion:self.region];
         if (self.oldRegion) {
-            DDLogVerbose(@"stopMonitoringForRegion %@", self.oldRegion.identifier);
+            OwnTracksLogDebug("stopMonitoringForRegion %@", self.oldRegion.identifier);
             [[LocationManager sharedInstance] stopRegion:self.oldRegion];
         }
         if (self.region.CLregion) {
-            DDLogVerbose(@"startMonitoringForRegion %@", self.region.name);
+            OwnTracksLogDebug("startMonitoringForRegion %@", self.region.name);
             [[LocationManager sharedInstance] startRegion:self.region.CLregion];
         }
     }
@@ -97,9 +96,9 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
     
     self.UIuuid.text = self.region.uuid;
     self.UIuuid.enabled = [self.editing boolValue];
-    DDLogVerbose(@"UImajor NSNumber %@", self.region.major);
-    DDLogVerbose(@"UImajor unsignedIntValue %u", [self.region.major unsignedIntValue]);
-    DDLogVerbose(@"UImajor NSString %@", [NSString stringWithFormat:@"%u", [self.region.major unsignedIntValue]]);
+    OwnTracksLogDebug("UImajor NSNumber %@", self.region.major);
+    OwnTracksLogDebug("UImajor unsignedIntValue %u", [self.region.major unsignedIntValue]);
+    OwnTracksLogDebug("UImajor NSString %@", [NSString stringWithFormat:@"%u", [self.region.major unsignedIntValue]]);
     self.UImajor.text = [NSString stringWithFormat:@"%u", (self.region.major).unsignedShortValue];
     self.UImajor.enabled = [self.editing boolValue];
 

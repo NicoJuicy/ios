@@ -10,9 +10,7 @@
 #import "CoreData.h"
 #import "Settings.h"
 #import "OwnTracksAppDelegate.h"
-#import <CocoaLumberjack/CocoaLumberjack.h>
-
-static const DDLogLevel ddLogLevel = DDLogLevelInfo;
+#import "OwnTracksLog.h"
 
 @implementation Tour
 - (instancetype)initFromDictionary:(NSDictionary *)dictionary {
@@ -22,7 +20,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
         if (label && [label isKindOfClass:[NSString class]]){
             self.label = label;
         } else {
-            DDLogError(@"[Tours] initFromDictionary invalid label");
+            OwnTracksLogError("[Tours] initFromDictionary invalid label");
             return nil;
         }
 
@@ -30,7 +28,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
         if (label && [label isKindOfClass:[NSString class]]){
             self.uuid = uuidString;
         } else {
-            DDLogError(@"[Tours] initFromDictionary invalid uuid");
+            OwnTracksLogError("[Tours] initFromDictionary invalid uuid");
             return nil;
         }
 
@@ -38,7 +36,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
         if (label && [label isKindOfClass:[NSString class]]){
             self.url = urlString;
         } else {
-            DDLogError(@"[Tours] initFromDictionary invalid url");
+            OwnTracksLogError("[Tours] initFromDictionary invalid url");
             return nil;
         }
 
@@ -48,11 +46,11 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
         if (fromString && [fromString isKindOfClass:[NSString class]]) {
             self.from = [formatter dateFromString:fromString];
             if (!self.from) {
-                DDLogError(@"[Tours] initFromDictionary invalid from dateformat");
+                OwnTracksLogError("[Tours] initFromDictionary invalid from dateformat");
                 return nil;
             }
         } else {
-            DDLogError(@"[Tours] initFromDictionary invalid from");
+            OwnTracksLogError("[Tours] initFromDictionary invalid from");
             return nil;
         }
         
@@ -60,17 +58,17 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
         if (fromString && [fromString isKindOfClass:[NSString class]]) {
             self.to = [formatter dateFromString:toString];
             if (!self.to) {
-                DDLogError(@"[Tours] initFromDictionary invalid to dateformat");
+                OwnTracksLogError("[Tours] initFromDictionary invalid to dateformat");
                 return nil;
             }
         } else {
-            DDLogError(@"[Tours] initFromDictionary invalid to");
+            OwnTracksLogError("[Tours] initFromDictionary invalid to");
             return nil;
         }
 
         return self;
     } else {
-        DDLogError(@"[Tours] initFromDictionary invalid dictionary");
+        OwnTracksLogError("[Tours] initFromDictionary invalid dictionary");
         return nil;
     }
 }
@@ -289,20 +287,20 @@ static Tours *theInstance = nil;
                                                         url:tour.url
                                 ];
                             } else {
-                                DDLogError(@"[Tours] processResponse invalid tour");
+                                OwnTracksLogError("[Tours] processResponse invalid tour");
                                 return FALSE;
                             }
                         } else {
-                            DDLogError(@"[Tours] processResponse invalid tour dictionary");
+                            OwnTracksLogError("[Tours] processResponse invalid tour dictionary");
                             return FALSE;
                         }
                     } else {
-                        DDLogError(@"[Tours] processResponse response status not 200 %@", status);
+                        OwnTracksLogError("[Tours] processResponse response status not 200 %@", status);
                         return FALSE;
                     }
                     return TRUE;
                 } else {
-                    DDLogError(@"[Tours] processResponse request not tour or tours %@", request);
+                    OwnTracksLogError("[Tours] processResponse request not tour or tours %@", request);
                     return FALSE;
 
                 }
@@ -310,15 +308,15 @@ static Tours *theInstance = nil;
                 self.response = [dictionary mutableCopy];
                 return TRUE;
             } else {
-                DDLogError(@"[Tours] processResponse request not tour or tours %@", request);
+                OwnTracksLogError("[Tours] processResponse request not tour or tours %@", request);
                 return FALSE;
             }
         } else {
-            DDLogError(@"[Tours] processResponse request invalid");
+            OwnTracksLogError("[Tours] processResponse request invalid");
             return FALSE;
         }
     } else {
-        DDLogError(@"[Tours] processResponse invalid dictionary");
+        OwnTracksLogError("[Tours] processResponse invalid dictionary");
         return FALSE;
     }
 }

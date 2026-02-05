@@ -3,7 +3,7 @@
 //  OwnTracks
 //
 //  Created by Christoph Krey on 29.09.13.
-//  Copyright © 2013-2025  Christoph Krey. All rights reserved.
+//  Copyright © 2013-2026  Christoph Krey. All rights reserved.
 //
 
 #import "OwnTracksAppDelegate.h"
@@ -17,7 +17,7 @@
 #import "CoreData.h"
 #import "FriendAnnotationV.h"
 #import "OwnTracking.h"
-#import <CocoaLumberjack/CocoaLumberjack.h>
+#import "OwnTracksLog.h"
 #import <Contacts/Contacts.h>
 
 @interface FriendsTVC ()
@@ -25,7 +25,6 @@
 @end
 
 @implementation FriendsTVC
-static const DDLogLevel ddLogLevel = DDLogLevelInfo;
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
@@ -58,7 +57,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
                 if (![[NSUserDefaults standardUserDefaults]
                       boolForKey:@"contactsAuthorization"]) {
                     
-                    DDLogVerbose(@"CNAuthorizationStatus: CNAuthorizationStatusRestricted");
+                    OwnTracksLogDebug("CNAuthorizationStatus: CNAuthorizationStatusRestricted");
                     UIAlertController *ac =
                     [UIAlertController
                      alertControllerWithTitle:NSLocalizedString(@"Addressbook Access",
@@ -85,7 +84,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
                 if (![[NSUserDefaults standardUserDefaults]
                       boolForKey:@"contactsAuthorization"]) {
                     
-                    DDLogVerbose(@"CNAuthorizationStatus: CNAuthorizationStatusDenied");
+                    OwnTracksLogDebug("CNAuthorizationStatus: CNAuthorizationStatusDenied");
                     UIAlertController *ac =
                     [UIAlertController
                      alertControllerWithTitle:NSLocalizedString(@"Addressbook Access",
@@ -109,7 +108,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
             }
                 
             case CNAuthorizationStatusAuthorized:
-                DDLogVerbose(@"CNAuthorizationStatus: CNAuthorizationStatusAuthorized");
+                OwnTracksLogDebug("CNAuthorizationStatus: CNAuthorizationStatusAuthorized");
                 break;
                 
             case CNAuthorizationStatusNotDetermined:
@@ -118,14 +117,14 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
                  setBool:FALSE
                  forKey:@"contactsAuthorization"];
                 
-                DDLogVerbose(@"CNAuthorizationStatus: CNAuthorizationStatusNotDetermined");
+                OwnTracksLogDebug("CNAuthorizationStatus: CNAuthorizationStatusNotDetermined");
                 CNContactStore *contactStore = [[CNContactStore alloc] init];
                 [contactStore requestAccessForEntityType:CNEntityTypeContacts
                                        completionHandler:^(BOOL granted, NSError * _Nullable error) {
                     if (granted) {
-                        DDLogVerbose(@"requestAccessForEntityType granted");
+                        OwnTracksLogDebug("requestAccessForEntityType granted");
                     } else {
-                        DDLogVerbose(@"requestAccessForEntityType denied %@", error);
+                        OwnTracksLogDebug("requestAccessForEntityType denied %@", error);
                     }
                 }];
                 break;
@@ -154,7 +153,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
 
 - (void)setBadge:(NSNumber *)number {
     unsigned long inQueue = number.unsignedLongValue;
-    DDLogVerbose(@"inQueue %lu", inQueue);
+    OwnTracksLogDebug("inQueue %lu", inQueue);
     if (inQueue > 0) {
         (self.navigationController.tabBarItem).badgeValue = [NSString stringWithFormat:@"%lu", inQueue];
     } else {
@@ -287,7 +286,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
     
     NSError *error = nil;
     if (![self.fetchedResultsController performFetch:&error]) {
-        DDLogError(@"Unresolved error %@, %@", error, [error userInfo]);
+        OwnTracksLogError("Unresolved error %@, %@", error, [error userInfo]);
     }
     
     return _fetchedResultsController;
@@ -307,7 +306,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
      forChangeType:(NSFetchedResultsChangeType)type {
     NSDictionary *d = @{@"type": @(type),
                         @"sectionIndex": @(sectionIndex)};
-    DDLogVerbose(@"[FriensTVC] didChangeSection %@", d);
+    OwnTracksLogDebug("[FriensTVC] didChangeSection %@", d);
     [self performSelectorOnMainThread:@selector(didChangeSection:) withObject:d waitUntilDone:TRUE];
 }
 
@@ -343,7 +342,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (newIndexPath) {
         d[@"newIndexPath"] = newIndexPath;
     }
-    DDLogVerbose(@"[FriendsTVC] didChangeObject %@", d);
+    OwnTracksLogDebug("[FriendsTVC] didChangeObject %@", d);
     [self performSelectorOnMainThread:@selector(didChangeObject:) withObject:d waitUntilDone:TRUE];
 }
 
@@ -402,7 +401,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
         if (waypoint.placemark) {
             friendTableViewCell.address.text = waypoint.placemark;
         } else {
-            DDLogVerbose(@"[FriendsTVC] configureCell resolving %@", waypoint);
+            OwnTracksLogDebug("[FriendsTVC] configureCell resolving %@", waypoint);
             friendTableViewCell.address.text = NSLocalizedString(@"resolving...",
                                                                  @"temporary display while resolving address");
             [friendTableViewCell deferredReverseGeoCode:waypoint];

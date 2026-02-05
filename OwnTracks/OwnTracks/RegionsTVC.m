@@ -3,7 +3,7 @@
 //  OwnTracks
 //
 //  Created by Christoph Krey on 29.09.13.
-//  Copyright © 2013-2025  Christoph Krey. All rights reserved.
+//  Copyright © 2013-2026  Christoph Krey. All rights reserved.
 //
 
 #import "RegionsTVC.h"
@@ -14,14 +14,13 @@
 #import "Settings.h"
 #import "OwnTracksAppDelegate.h"
 #import "OwnTracking.h"
-#import <CocoaLumberjack/CocoaLumberjack.h>
+#import "OwnTracksLog.h"
 
 @interface RegionsTVC ()
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @end
 
 @implementation RegionsTVC
-static const DDLogLevel ddLogLevel = DDLogLevelInfo;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -193,20 +192,20 @@ canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
     
     NSError *error = nil;
     if (![self.fetchedResultsController performFetch:&error]) {
-        DDLogError(@"Unresolved error %@, %@", error, [error userInfo]);
+        OwnTracksLogError("Unresolved error %@, %@", error, [error userInfo]);
     }
     
-    DDLogVerbose(@"fetchedResultsControllser %@", _fetchedResultsController);
+    OwnTracksLogDebug("fetchedResultsControllser %@", _fetchedResultsController);
     return _fetchedResultsController;
 }
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
-    DDLogVerbose(@"[RegionsTVC][controllerWillChangeContent]");
+    OwnTracksLogDebug("[RegionsTVC][controllerWillChangeContent]");
     [self performSelectorOnMainThread:@selector(beginUpdates) withObject:nil waitUntilDone:TRUE];
 }
 
 - (void)beginUpdates {
-    DDLogVerbose(@"[RegionsTVC][beginUpdates]");
+    OwnTracksLogDebug("[RegionsTVC][beginUpdates]");
     [self.tableView beginUpdates];
 }
 
@@ -243,7 +242,7 @@ canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
        atIndexPath:(NSIndexPath *)indexPath
      forChangeType:(NSFetchedResultsChangeType)type
       newIndexPath:(NSIndexPath *)newIndexPath {
-    DDLogVerbose(@"[RegionsTVC][controller didChangeObject] %lu/%lu %lu %lu/%lu",
+    OwnTracksLogDebug("[RegionsTVC][controller didChangeObject] %lu/%lu %lu %lu/%lu",
                  indexPath.section, indexPath.row,
                  (unsigned long)type,
                  newIndexPath.section, newIndexPath.row);
@@ -264,7 +263,7 @@ canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
     NSIndexPath *indexPath = d[@"indexPath"];
     NSIndexPath *newIndexPath = d[@"newIndexPath"];
 
-    DDLogVerbose(@"[RegionsTVC][didChangeObject] %lu/%lu %@ %lu/%lu %lu",
+    OwnTracksLogDebug("[RegionsTVC][didChangeObject] %lu/%lu %@ %lu/%lu %lu",
                  indexPath.section, indexPath.row,
                  type,
                  newIndexPath.section, newIndexPath.row,
@@ -296,12 +295,12 @@ canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
-    DDLogVerbose(@"[RegionsTVC][controllerDidChangeContent]");
+    OwnTracksLogDebug("[RegionsTVC][controllerDidChangeContent]");
     [self performSelectorOnMainThread:@selector(endUpdates) withObject:nil waitUntilDone:TRUE];
 }
 
 - (void)endUpdates {
-    DDLogVerbose(@"[RegionsTVC][endUpdates]");
+    OwnTracksLogDebug("[RegionsTVC][endUpdates]");
     [self.tableView endUpdates];
 }
 

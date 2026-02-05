@@ -3,14 +3,13 @@
 //  OwnTracks
 //
 //  Created by Christoph Krey on 15.09.13.
-//  Copyright © 2013-2025  Christoph Krey. All rights reserved.
+//  Copyright © 2013-2026  Christoph Krey. All rights reserved.
 //
 
 #import "FriendAnnotationV.h"
-#import <CocoaLumberjack/CocoaLumberjack.h>
+#import "OwnTracksLog.h"
 
 @implementation FriendAnnotationV
-static const DDLogLevel ddLogLevel = DDLogLevelInfo;
 
 #define CIRCLE_SIZE 40.0
 #define FENCE_WIDTH 5.0
@@ -24,13 +23,13 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
  */
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
-    DDLogVerbose(@"FriendAnnotationView initWithFrame ddLogLevel %lu", (unsigned long)ddLogLevel);
+    OwnTracksLogDebug("FriendAnnotationView initWithFrame");
     [self internalInit];
     return self;
 }
 
 - (instancetype)initWithAnnotation:(id<MKAnnotation>)annotation reuseIdentifier:(NSString *)reuseIdentifier {
-    DDLogVerbose(@"FriendAnnotationView initWithAnnotation reuseIdentifer %@", reuseIdentifier);
+    OwnTracksLogDebug("FriendAnnotationView initWithAnnotation reuseIdentifer %@", reuseIdentifier);
     self = [super initWithAnnotation:annotation reuseIdentifier:reuseIdentifier];
     [self internalInit];
     return self;
@@ -142,7 +141,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
 }
 
 - (void)setDragState:(MKAnnotationViewDragState)newDragState animated:(BOOL)animated {
-    DDLogVerbose(@"newDragState %lu", (unsigned long)newDragState);
+    OwnTracksLogDebug("newDragState %lu", (unsigned long)newDragState);
     switch (newDragState) {
         case MKAnnotationViewDragStateStarting:
         case MKAnnotationViewDragStateDragging:
@@ -158,12 +157,12 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
 }
 
 - (void)setSelected:(BOOL)selected {
-    DDLogVerbose(@"selected %lu", (unsigned long)selected);
+    OwnTracksLogDebug("selected %lu", (unsigned long)selected);
     super.selected = selected;
 }
 
 - (void)prepareForReuse {
-    DDLogVerbose(@"prepareForReuse");
+    OwnTracksLogDebug("prepareForReuse");
     [super prepareForReuse];
 }
 @end

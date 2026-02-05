@@ -3,7 +3,7 @@
 //  OwnTracks
 //
 //  Created by Christoph Krey on 11.09.13.
-//  Copyright © 2013-2025  Christoph Krey. All rights reserved.
+//  Copyright © 2013-2026  Christoph Krey. All rights reserved.
 //
 
 #import "SettingsTVC.h"
@@ -14,7 +14,7 @@
 #import "Friend+CoreDataClass.h"
 #import "CoreData.h"
 #import "OwnTracking.h"
-#import <CocoaLumberjack/CocoaLumberjack.h>
+#import "OwnTracksLog.h"
 
 @interface SettingsTVC ()
 
@@ -83,8 +83,6 @@
 @end
 
 @implementation SettingsTVC
-
-static const DDLogLevel ddLogLevel = DDLogLevelInfo;
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -385,7 +383,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
                 [Settings setInt:CONNECTION_MODE_HTTP
                           forKey:@"mode"
                            inMOC:CoreData.sharedInstance.mainMOC];
-                DDLogVerbose(@"[Settings] mode set to %d", CONNECTION_MODE_HTTP);
+                OwnTracksLogDebug("[Settings] mode set to %d", CONNECTION_MODE_HTTP);
 
                 break;
             case 0:
@@ -393,7 +391,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
                 [Settings setInt:CONNECTION_MODE_MQTT
                           forKey:@"mode"
                            inMOC:CoreData.sharedInstance.mainMOC];
-                DDLogVerbose(@"[Settings] mode set to %d", CONNECTION_MODE_MQTT);
+                OwnTracksLogDebug("[Settings] mode set to %d", CONNECTION_MODE_MQTT);
                 break;
         }
     }
@@ -405,7 +403,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
                       ofObject:(id)object
                         change:(NSDictionary *)change
                        context:(void *)context {
-    DDLogVerbose(@"observeValueForKeyPath %@", keyPath);
+    OwnTracksLogDebug("observeValueForKeyPath %@", keyPath);
 
     if ([keyPath isEqualToString:@"configLoad"]) {
         [self performSelectorOnMainThread:@selector(updated) withObject:nil waitUntilDone:NO];
@@ -565,7 +563,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
         int mode =
         [Settings intForKey:@"mode"
                       inMOC:CoreData.sharedInstance.mainMOC];
-        DDLogVerbose(@"[Settings] mode is %d", mode);
+        OwnTracksLogDebug("[Settings] mode is %d", mode);
         switch (mode) {
             case CONNECTION_MODE_HTTP:
                 self.UImodeSwitch.selectedSegmentIndex = 1;
