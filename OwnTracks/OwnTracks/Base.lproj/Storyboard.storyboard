@@ -2848,8 +2848,7 @@
                                                                 <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             </state>
                                                             <connections>
-                                                                <action selector="exportLogsPressed:" destination="G87-RS-wz7" eventType="touchUpInside" id="fIa-2J-zqS"/>
-                                                                <segue destination="pyP-9X-XNY" kind="push" id="LX4-zO-Dsc"/>
+                                                                <action selector="exportLogsPressed:" destination="G87-RS-wz7" eventType="touchUpInside" id="5LG-df-Ps1"/>
                                                             </connections>
                                                         </button>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="evM-XZ-F0H">
@@ -2861,7 +2860,7 @@
                                                                 <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             </state>
                                                             <connections>
-                                                                <action selector="sendDebugStatusPressed:" destination="G87-RS-wz7" eventType="touchUpInside" id="77M-ZS-Rwx"/>
+                                                                <action selector="sendDebugStatusPressed:" destination="G87-RS-wz7" eventType="touchUpInside" id="Bep-6A-WKR"/>
                                                             </connections>
                                                         </button>
                                                     </subviews>
@@ -2909,7 +2908,7 @@
                                                         <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     </state>
                                                     <connections>
-                                                        <action selector="documentationPressed:" destination="G87-RS-wz7" eventType="touchUpInside" id="Lt8-9I-efF"/>
+                                                        <action selector="documentationPressed:" destination="G87-RS-wz7" eventType="touchUpInside" id="vZ3-Vz-sDm"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
@@ -2945,7 +2944,7 @@
                                                                 <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             </state>
                                                             <connections>
-                                                                <action selector="webPressed:" destination="G87-RS-wz7" eventType="touchUpInside" id="euf-ZA-4xy"/>
+                                                                <action selector="webPressed:" destination="G87-RS-wz7" eventType="touchUpInside" id="H1w-0U-WKB"/>
                                                             </connections>
                                                         </button>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6ms-eE-0jF">
@@ -2958,7 +2957,7 @@
                                                                 <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             </state>
                                                             <connections>
-                                                                <action selector="githubPressed:" destination="G87-RS-wz7" eventType="touchUpInside" id="PcZ-Ls-pXr"/>
+                                                                <action selector="githubPressed:" destination="G87-RS-wz7" eventType="touchUpInside" id="HAk-7U-KDt"/>
                                                             </connections>
                                                         </button>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YlH-Kr-wOD">
@@ -2971,7 +2970,7 @@
                                                                 <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             </state>
                                                             <connections>
-                                                                <action selector="mastodonPressed:" destination="G87-RS-wz7" eventType="touchUpInside" id="lcG-LE-Dpa"/>
+                                                                <action selector="mastodonPressed:" destination="G87-RS-wz7" eventType="touchUpInside" id="5Sz-gG-hdg"/>
                                                             </connections>
                                                         </button>
                                                     </subviews>
@@ -3168,7 +3167,7 @@
                                                         <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     </state>
                                                     <connections>
-                                                        <action selector="exportTrackPressed:" destination="G87-RS-wz7" eventType="touchUpInside" id="Kcd-UZ-8hV"/>
+                                                        <action selector="exportTrackPressed:" destination="G87-RS-wz7" eventType="touchUpInside" id="mJ9-aY-sQk"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
@@ -3196,14 +3195,14 @@
                     <navigationItem key="navigationItem" title="Status Info" id="hFq-9F-EAc"/>
                     <size key="freeformSize" width="375" height="1200"/>
                     <connections>
-                        <outlet property="UILocation" destination="RfS-uy-gRR" id="ina-wQ-yni"/>
-                        <outlet property="UIVersion" destination="hdf-7C-N25" id="5uy-A8-Zxj"/>
-                        <outlet property="UIexportTrack" destination="Cex-Jr-Uiu" id="oEb-WO-xTs"/>
-                        <outlet property="UImotionActivities" destination="XWR-N3-qLa" id="2h5-90-QQs"/>
-                        <outlet property="UIparameters" destination="HQZ-wy-aC5" id="3Ux-zx-AFR"/>
-                        <outlet property="UIpressure" destination="7pX-Ha-So4" id="Ucb-ud-kck"/>
-                        <outlet property="UIstatusField" destination="src-OY-ZUR" id="Ixx-Lk-Xlk"/>
-                        <outlet property="UItrackpoints" destination="MLm-qe-ecm" id="lAt-ec-1zB"/>
+                        <outlet property="coordinates" destination="RfS-uy-gRR" id="Gtr-hu-z6U"/>
+                        <outlet property="exportTrackButton" destination="Cex-Jr-Uiu" id="rqc-p7-dz9"/>
+                        <outlet property="motionActivities" destination="XWR-N3-qLa" id="niq-M1-Tag"/>
+                        <outlet property="parameters" destination="HQZ-wy-aC5" id="E4r-kc-73d"/>
+                        <outlet property="pressure" destination="7pX-Ha-So4" id="6eZ-nX-PgR"/>
+                        <outlet property="status" destination="src-OY-ZUR" id="R2p-dh-dlp"/>
+                        <outlet property="trackPoints" destination="MLm-qe-ecm" id="j8e-rV-Fc4"/>
+                        <outlet property="version" destination="hdf-7C-N25" id="LOR-4k-mJR"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="h3l-fk-p93" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -3629,57 +3628,6 @@
                 <exit id="3c1-46-ZSi" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="5066.666666666667" y="1601.7857142857142"/>
-        </scene>
-        <!--Logs-->
-        <scene sceneID="SDv-YO-gQV">
-            <objects>
-                <tableViewController id="pyP-9X-XNY" customClass="LogsTVC" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="jOd-0J-7oQ">
-                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="LogCell" textLabel="THV-Ij-ayz" detailTextLabel="fyS-bw-Ute" style="IBUITableViewCellStyleSubtitle" id="Qjw-M7-9Wk">
-                                <rect key="frame" x="0.0" y="50" width="390" height="51"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Qjw-M7-9Wk" id="KXy-AR-6kc">
-                                    <rect key="frame" x="0.0" y="0.0" width="390" height="51"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="THV-Ij-ayz">
-                                            <rect key="frame" x="16" y="8" width="25" height="14.333333333333334"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="0.0"/>
-                                            <nil key="textColor"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="fyS-bw-Ute">
-                                            <rect key="frame" x="15.999999999999996" y="24.333333333333336" width="52.666666666666664" height="18"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                            <nil key="textColor"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                    </subviews>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="pyP-9X-XNY" id="8h3-qH-sBg"/>
-                            <outlet property="delegate" destination="pyP-9X-XNY" id="Thb-ht-rht"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" title="Logs" id="p61-Zk-kOq">
-                        <barButtonItem key="rightBarButtonItem" systemItem="action" id="Rzs-wJ-YhA">
-                            <connections>
-                                <action selector="actionPressed:" destination="pyP-9X-XNY" id="Zfr-R6-8JI"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="fCZ-ov-sFB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="5807" y="2237"/>
         </scene>
         <!--Create Tour-->
         <scene sceneID="SiL-yz-wjq">

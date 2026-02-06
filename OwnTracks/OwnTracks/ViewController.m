@@ -7,7 +7,6 @@
 //
 
 #import "ViewController.h"
-#import "StatusTVC.h"
 #import "FriendAnnotationV.h"
 #import "PhotoAnnotationV.h"
 #import "FriendsTVC.h"
