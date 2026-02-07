@@ -33,7 +33,9 @@ class StatusTVC: UITableViewController, UIDocumentInteractionControllerDelegate 
     @IBOutlet weak var pressure: UITextField!
     @IBOutlet weak var motionActivities: UITextField!
     @IBOutlet weak var trackPoints: UITextField!
+    @IBOutlet weak var exportLogsActivity: UIActivityIndicatorView!
     @IBOutlet weak var exportTrackButton: UIButton!
+    @IBOutlet weak var exportTrackActivity: UIActivityIndicatorView!
     var dic: UIDocumentInteractionController?
     
     override func viewWillAppear(_ animated: Bool) {
@@ -184,6 +186,10 @@ class StatusTVC: UITableViewController, UIDocumentInteractionControllerDelegate 
     }
     
     @IBAction func exportTrackPressed(_ sender: UIButton) {
+        exportLogsActivity.isHidden = false;
+        exportTrackActivity.startAnimating();
+        RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.1));
+
         do {
             let directoryURL = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true);
             let fileURL = directoryURL.appendingPathComponent("track.gpx");
@@ -201,9 +207,14 @@ class StatusTVC: UITableViewController, UIDocumentInteractionControllerDelegate 
             dic?.presentOptionsMenu(from: self.exportTrackButton.frame, in: self.exportTrackButton, animated: true);
         } catch {
         }
+        exportTrackActivity.stopAnimating();
     }
     
     @IBAction func exportLogsPressed(_ sender: UIButton) {
+        exportLogsActivity.isHidden = false;
+        exportLogsActivity.startAnimating();
+        RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.1));
+
         let store: OSLogStore?;
         do {
             store = try OSLogStore(scope: .currentProcessIdentifier);
@@ -253,6 +264,7 @@ class StatusTVC: UITableViewController, UIDocumentInteractionControllerDelegate 
 
         } catch {
         }
+        exportLogsActivity.stopAnimating();
     }
     
     func documentInteractionControllerDidEndPreview(_ controller: UIDocumentInteractionController) {

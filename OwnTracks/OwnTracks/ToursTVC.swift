@@ -29,10 +29,12 @@ class ToursTVC: OwnTracksEditTVC {
     }
     
     @IBAction func refreshPressed(_ sender: UIBarButtonItem) {
+        refreshControl?.beginRefreshing();
         Tours.sharedInstance().refresh();
     }
     
     @objc func refresh() -> () {
+        refreshControl?.beginRefreshing();
         Tours.sharedInstance().refresh();
     }
     
