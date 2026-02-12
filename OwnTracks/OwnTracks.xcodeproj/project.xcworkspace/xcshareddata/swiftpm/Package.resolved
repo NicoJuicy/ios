@@ -1,5 +1,5 @@
 {
-  "originHash" : "2140bde9cf306de1a9d22bf161ad52f3b55bec6ca62c80ef10a85a2a802bd255",
+  "originHash" : "e8e93c9b07d1c8ef3f46e9ac91b289e890c43815de22102d58b226b601ede21c",
   "pins" : [
     {
       "identity" : "jsonschemavalidation",
@@ -8,6 +8,15 @@
       "state" : {
         "revision" : "3b752520a969288702e987f3c9bfb3601aa2d720",
         "version" : "2.0.7"
+      }
+    },
+    {
+      "identity" : "mqttclient",
+      "kind" : "remoteSourceControl",
+      "location" : "git@github.com:ckrey/MQTTClient.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "67bf783154447ec8f1c69db8f1fcfa57fe0b1248"
       }
     },
     {

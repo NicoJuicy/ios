@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -30,6 +30,7 @@
 		8411B90F189FEC070019D2D6 /* RegionsTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8411B905189FEC070019D2D6 /* RegionsTVC.m */; };
 		8411B910189FEC070019D2D6 /* PersonTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8411B907189FEC070019D2D6 /* PersonTVC.m */; };
 		8411B912189FEC070019D2D6 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8411B90B189FEC070019D2D6 /* ViewController.m */; };
+		841C22342F3DD7E70005F530 /* MQTTClient in Frameworks */ = {isa = PBXBuildFile; productRef = 841C22332F3DD7E70005F530 /* MQTTClient */; };
 		841D3523209C5DDF0084FCD0 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 841D3522209C5DDF0084FCD0 /* UserNotifications.framework */; };
 		841D3525209C74E70084FCD0 /* Contacts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 841D3524209C74E60084FCD0 /* Contacts.framework */; };
 		8422AF681AF825C7008932A2 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8422AF671AF825C7008932A2 /* SystemConfiguration.framework */; };
@@ -77,7 +78,6 @@
 		84B0CDAD239E2EFA00CE9305 /* BackgroundTasks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84B0CDAC239E2EFA00CE9305 /* BackgroundTasks.framework */; };
 		84B7397A1A65629200B103F4 /* LocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B739791A65629200B103F4 /* LocationManager.m */; };
 		84BD03AA25D5301F0077B9B8 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84AE8ADB25C165D600C0B0EE /* MapKit.framework */; };
-		84BDD0CE2F2928C500358CC2 /* MQTTClient in Frameworks */ = {isa = PBXBuildFile; productRef = 84BDD0CD2F2928C500358CC2 /* MQTTClient */; };
 		84BDD0D12F2A815500358CC2 /* OwnTracksLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 84BDD0D02F2A815500358CC2 /* OwnTracksLog.m */; };
 		84C3F4562CEF7490004DB332 /* AttachPhotoTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C3F4552CEF7490004DB332 /* AttachPhotoTVC.m */; };
 		84C3F45C2CEF904F004DB332 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84C3F45B2CEF904F004DB332 /* AssetsLibrary.framework */; };
@@ -409,8 +409,8 @@
 				84ED67882F1E95110013A265 /* Sodium in Frameworks */,
 				8411B82C189FDB140019D2D6 /* Foundation.framework in Frameworks */,
 				84ED67922F1E9A0E0013A265 /* DSJSONSchemaValidation in Frameworks */,
-				84BDD0CE2F2928C500358CC2 /* MQTTClient in Frameworks */,
 				84ED67862F1E95110013A265 /* Clibsodium in Frameworks */,
+				841C22342F3DD7E70005F530 /* MQTTClient in Frameworks */,
 				84C3F45E2CF09F9B004DB332 /* PhotosUI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -809,7 +809,7 @@
 			packageReferences = (
 				84ED67842F1E95110013A265 /* XCRemoteSwiftPackageReference "swift-sodium" */,
 				84ED67902F1E9A0E0013A265 /* XCRemoteSwiftPackageReference "JSONSchemaValidation" */,
-				84BDD0CC2F2928C500358CC2 /* XCLocalSwiftPackageReference "../../../MQTTClient" */,
+				841C22322F3DD6A00005F530 /* XCRemoteSwiftPackageReference "MQTTClient" */,
 			);
 			productRefGroup = 8411B829189FDB140019D2D6 /* Products */;
 			projectDirPath = "";
@@ -1513,14 +1513,15 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCLocalSwiftPackageReference section */
-		84BDD0CC2F2928C500358CC2 /* XCLocalSwiftPackageReference "../../../MQTTClient" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = ../../../MQTTClient;
-		};
-/* End XCLocalSwiftPackageReference section */
-
 /* Begin XCRemoteSwiftPackageReference section */
+		841C22322F3DD6A00005F530 /* XCRemoteSwiftPackageReference "MQTTClient" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "git@github.com:ckrey/MQTTClient.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		84ED67842F1E95110013A265 /* XCRemoteSwiftPackageReference "swift-sodium" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/jedisct1/swift-sodium.git";
@@ -1540,8 +1541,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		84BDD0CD2F2928C500358CC2 /* MQTTClient */ = {
+		841C22332F3DD7E70005F530 /* MQTTClient */ = {
 			isa = XCSwiftPackageProductDependency;
+			package = 841C22322F3DD6A00005F530 /* XCRemoteSwiftPackageReference "MQTTClient" */;
 			productName = MQTTClient;
 		};
 		84ED67852F1E95110013A265 /* Clibsodium */ = {
