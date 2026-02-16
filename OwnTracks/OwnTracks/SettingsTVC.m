@@ -7,7 +7,6 @@
 //
 
 #import "SettingsTVC.h"
-#import "CertificatesTVC.h"
 #import "TabBarController.h"
 #import "OwnTracksAppDelegate.h"
 #import "Settings.h"
@@ -15,6 +14,7 @@
 #import "CoreData.h"
 #import "OwnTracking.h"
 #import "OwnTracksLog.h"
+#import "Owntracks-Swift.h"
 
 @interface SettingsTVC ()
 

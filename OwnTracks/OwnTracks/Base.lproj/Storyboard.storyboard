@@ -2842,7 +2842,7 @@
                                                         <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lgu-bk-jV0">
                                                             <rect key="frame" x="86.333333333333329" y="0.0" width="73.999999999999986" height="30"/>
                                                             <subviews>
-                                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="YK3-2R-9wa">
+                                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="YK3-2R-9wa">
                                                                     <rect key="frame" x="0.0" y="0.0" width="20" height="30"/>
                                                                 </activityIndicatorView>
                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b91-ur-Ooi">
@@ -3178,7 +3178,7 @@
                                                         <action selector="exportTrackPressed:" destination="G87-RS-wz7" eventType="touchUpInside" id="mJ9-aY-sQk"/>
                                                     </connections>
                                                 </button>
-                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="5WX-bu-cLG">
+                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="5WX-bu-cLG">
                                                     <rect key="frame" x="248" y="12" width="20" height="20"/>
                                                 </activityIndicatorView>
                                             </subviews>

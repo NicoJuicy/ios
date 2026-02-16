@@ -208,6 +208,7 @@ class StatusTVC: UITableViewController, UIDocumentInteractionControllerDelegate 
         } catch {
         }
         exportTrackActivity.stopAnimating();
+        exportTrackActivity.isHidden = true;
     }
     
     @IBAction func exportLogsPressed(_ sender: UIButton) {
@@ -265,6 +266,7 @@ class StatusTVC: UITableViewController, UIDocumentInteractionControllerDelegate 
         } catch {
         }
         exportLogsActivity.stopAnimating();
+        exportLogsActivity.isHidden = true;
     }
     
     func documentInteractionControllerDidEndPreview(_ controller: UIDocumentInteractionController) {
