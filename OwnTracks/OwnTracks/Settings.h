@@ -9,8 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "Setting+CoreDataClass.h"
 
-#define SETTINGS_PROTOCOL @"mqttProtocolLevel"
-
 typedef NS_ENUM(int, ConnectionMode) {
     CONNECTION_MODE_MQTT = 0,
     CONNECTION_MODE_HTTP = 3
@@ -71,6 +69,9 @@ typedef NS_ENUM(int, ConnectionMode) {
 + (BOOL)theWillRetainFlagInMOC:(NSManagedObjectContext * _Nonnull)context;
 
 + (int)theMaximumHistoryInMOC:(NSManagedObjectContext * _Nonnull)context;
+
++ (ConnectionMode)theModeInMOC:(NSManagedObjectContext * _Nonnull)context;
++ (void)setMode:(ConnectionMode)mode inMOC:(NSManagedObjectContext * _Nonnull)context;
 
 + (NSString * _Nullable)theOSMTemplate:(NSManagedObjectContext * _Nonnull)context;
 + (void)setOSMTemplate:(NSString * _Nullable)osmTemplate inMOC:(NSManagedObjectContext * _Nonnull)context;

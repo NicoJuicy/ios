@@ -337,13 +337,13 @@ willPerformHTTPRedirection:(NSHTTPURLResponse *)redirectResponse
 - (UInt16)sendData:(NSData *)data
              topic:(NSString *)topic
         topicAlias:(NSNumber *)topicAlias
-               qos:(NSInteger)qos
+               qos:(MQTTQosLevel)qos
             retain:(BOOL)retainFlag {
-    OwnTracksLogInfo("[Connection] sendData(%ld):%@ %@ q%ld r%d",
+    OwnTracksLogInfo("[Connection] sendData(%ld):%@ %@ q%d r%d",
               data.length,
               topic,
               [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding],
-              (long)qos,
+              qos,
               retainFlag);
 
     if (self.url) {

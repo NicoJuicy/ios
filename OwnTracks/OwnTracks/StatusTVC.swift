@@ -186,7 +186,7 @@ class StatusTVC: UITableViewController, UIDocumentInteractionControllerDelegate 
     }
     
     @IBAction func exportTrackPressed(_ sender: UIButton) {
-        exportLogsActivity.isHidden = false;
+        exportTrackActivity.isHidden = false;
         exportTrackActivity.startAnimating();
         RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.1));
 

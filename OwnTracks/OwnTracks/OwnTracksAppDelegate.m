@@ -1929,7 +1929,7 @@ performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completio
                               port:[Settings intForKey:@"port_preference" inMOC:moc]
                                 ws:[Settings boolForKey:@"ws_preference" inMOC:moc]
                                tls:[Settings boolForKey:@"tls_preference" inMOC:moc]
-                   protocolVersion:[Settings intForKey:SETTINGS_PROTOCOL inMOC:moc]
+                   protocolVersion:[Settings intForKey:@"mqttProtocolLevel" inMOC:moc]
                          keepalive:[Settings intForKey:@"keepalive_preference" inMOC:moc]
                              clean:[Settings intForKey:@"clean_preference" inMOC:moc]
                              force:force

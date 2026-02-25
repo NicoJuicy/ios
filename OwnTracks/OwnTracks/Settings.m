@@ -136,7 +136,7 @@ static SettingsDefaults *defaults;
             if (object) [self setString:object forKey:@"port_preference" inMOC:context];
 
             object = dictionary[@"mqttProtocolLevel"];
-            if (object) [self setString:object forKey:SETTINGS_PROTOCOL inMOC:context];
+            if (object) [self setString:object forKey:@"mqttProtocolLevel" inMOC:context];
 
             object = dictionary[@"ignoreStaleLocations"];
             if (object) [self setString:object forKey:@"ignorestalelocations_preference" inMOC:context];
@@ -457,7 +457,7 @@ static SettingsDefaults *defaults;
             dict[@"subQos"] =               @([Settings intForKey:@"subscriptionqos_preference" inMOC:context]);
             dict[@"pubQos"] =               @([Settings intForKey:@"qos_preference" inMOC:context]);
             dict[@"port"] =                 @([Settings intForKey:@"port_preference" inMOC:context]);
-            dict[@"mqttProtocolLevel"] =    @([Settings intForKey:SETTINGS_PROTOCOL inMOC:context]);
+            dict[@"mqttProtocolLevel"] =    @([Settings intForKey:@"mqttProtocolLevel" inMOC:context]);
             dict[@"keepalive"] =            @([Settings intForKey:@"keepalive_preference" inMOC:context]);
 
             dict[@"pubRetain"] =            @([Settings boolForKey:@"retain_preference" inMOC:context]);
@@ -762,6 +762,15 @@ static SettingsDefaults *defaults;
 
 + (int)theMaximumHistoryInMOC:(NSManagedObjectContext *)context {
     return [self intForKey:@"maxhistory_preference" inMOC:context];
+}
+
++ (ConnectionMode)theModeInMOC:(NSManagedObjectContext *)context {
+    return [self intForKey:@"mode" inMOC:context];
+}
+
++ (void)setMode:(ConnectionMode)mode inMOC:(NSManagedObjectContext *)context {
+    [self setInt:mode forKey:@"mode" inMOC:context];
+    OwnTracksLogDebug("[Settings] (connection)mode set to %d", mode);
 }
 
 + (NSString *)theOSMTemplate:(NSManagedObjectContext *)context {

@@ -46,7 +46,7 @@
                                                       object:nil
                                                        queue:[NSOperationQueue mainQueue]
                                                   usingBlock:^(NSNotification *note){
-        self.fetchedResultsController = nil;
+        [self.tableView reloadData];
     }];
     
     BOOL locked = [Settings theLockedInMOC:CoreData.sharedInstance.mainMOC];

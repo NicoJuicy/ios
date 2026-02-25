@@ -540,9 +540,6 @@
     }
 
     if (self.UIPassword) {
-    }
-
-    if (self.UIPassword) {
         self.UIPassword.text =
         [Settings stringForKey:@"pass_preference"
                          inMOC:CoreData.sharedInstance.mainMOC];
@@ -695,16 +692,16 @@
                        inMOC:CoreData.sharedInstance.mainMOC];
         self.UIextendedData.enabled = !locked;
     }
-    if (self.self.UIlocked) {
-        self.self.UIlocked.on =
+    if (self.UIlocked) {
+        self.UIlocked.on =
         [Settings theLockedInMOC:CoreData.sharedInstance.mainMOC];
-        self.self.UIlocked.enabled = false;
+        self.UIlocked.enabled = false;
     }
-    if (self.self.UIsub) {
-        self.self.UIsub.on =
+    if (self.UIsub) {
+        self.UIsub.on =
         [Settings boolForKey:@"sub_preference"
                        inMOC:CoreData.sharedInstance.mainMOC];
-        self.self.UIsub.enabled = !locked;
+        self.UIsub.enabled = !locked;
     }
     if (self.UIcmd) {
         self.UIcmd.on =
@@ -712,11 +709,11 @@
                        inMOC:CoreData.sharedInstance.mainMOC];
         self.UIcmd.enabled = !locked;
     }
-    if (self.self.UIpubRetain) {
-        self.self.UIpubRetain.on =
+    if (self.UIpubRetain) {
+        self.UIpubRetain.on =
         [Settings boolForKey:@"retain_preference"
                        inMOC:CoreData.sharedInstance.mainMOC];
-        self.self.UIpubRetain.enabled = !locked;
+        self.UIpubRetain.enabled = !locked;
     }
 
     if (self.UIcleanSession) {
@@ -1103,10 +1100,6 @@
     [self updateValues];
     [self updated];
 }
-- (IBAction)willTopicChanged:(UITextField *)sender {
-    [self updateValues];
-    [self updated];
-}
 - (IBAction)ignoreStaleLocationsChanged:(UITextField *)sender {
     [self updateValues];
     [self updated];
@@ -1143,10 +1136,6 @@
     [self updated];
 }
 - (IBAction)pubQosChanged:(UITextField *)sender {
-    [self updateValues];
-    [self updated];
-}
-- (IBAction)willQosChanged:(UITextField *)sender {
     [self updateValues];
     [self updated];
 }

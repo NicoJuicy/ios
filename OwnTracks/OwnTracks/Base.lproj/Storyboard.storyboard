@@ -200,7 +200,7 @@
                                                         <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     </state>
                                                     <connections>
-                                                        <action selector="exportWaypointsPressed:" destination="nAk-La-kdM" eventType="touchUpInside" id="jOc-Qa-4Kh"/>
+                                                        <action selector="exportWaypointsPressed:" destination="nAk-La-kdM" eventType="touchUpInside" id="yhB-CC-DTI"/>
                                                     </connections>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ysB-cv-35Y">
@@ -209,7 +209,7 @@
                                                         <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     </state>
                                                     <connections>
-                                                        <action selector="exportPressed:" destination="nAk-La-kdM" eventType="touchUpInside" id="Uol-Qq-TZI"/>
+                                                        <action selector="exportPressed:" destination="nAk-La-kdM" eventType="touchUpInside" id="Y5r-h5-UtV"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
@@ -1729,7 +1729,7 @@
                         <outlet property="UIlocatorInterval" destination="oBs-Zn-P4m" id="nSr-EY-45T"/>
                         <outlet property="UIlocked" destination="4ax-HA-qtg" id="60f-uY-1b3"/>
                         <outlet property="UImaxHistory" destination="yny-2e-dpz" id="obf-PG-Kl9"/>
-                        <outlet property="UImodeSwitch" destination="7W2-Mn-fUG" id="uaQ-ND-n48"/>
+                        <outlet property="UImodeSwitch" destination="7W2-Mn-fUG" id="ppm-Fa-VS6"/>
                         <outlet property="UImonitoring" destination="LEn-Jc-PvC" id="0Kk-d4-lOg"/>
                         <outlet property="UIpositions" destination="lTh-wG-5YG" id="k8v-n7-Sl3"/>
                         <outlet property="UIproto" destination="pn1-hA-OmO" id="Uz2-cH-yn6"/>
@@ -2842,7 +2842,7 @@
                                                         <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lgu-bk-jV0">
                                                             <rect key="frame" x="86.333333333333329" y="0.0" width="73.999999999999986" height="30"/>
                                                             <subviews>
-                                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="YK3-2R-9wa">
+                                                                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="YK3-2R-9wa">
                                                                     <rect key="frame" x="0.0" y="0.0" width="20" height="30"/>
                                                                 </activityIndicatorView>
                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b91-ur-Ooi">
@@ -3178,7 +3178,7 @@
                                                         <action selector="exportTrackPressed:" destination="G87-RS-wz7" eventType="touchUpInside" id="mJ9-aY-sQk"/>
                                                     </connections>
                                                 </button>
-                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="5WX-bu-cLG">
+                                                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="5WX-bu-cLG">
                                                     <rect key="frame" x="248" y="12" width="20" height="20"/>
                                                 </activityIndicatorView>
                                             </subviews>

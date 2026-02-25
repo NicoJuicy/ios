@@ -74,7 +74,7 @@ allowUntrustedCertificates:(BOOL)allowUntrustedCertificates
 - (UInt16)sendData:(NSData * _Nullable)data
              topic:(NSString * _Nonnull)topic
         topicAlias:(NSNumber * _Nullable)topicAlias
-               qos:(NSInteger)qos
+               qos:(MQTTQosLevel)qos
             retain:(BOOL)retainFlag;
 - (void)disconnect;
 - (void)reset;
