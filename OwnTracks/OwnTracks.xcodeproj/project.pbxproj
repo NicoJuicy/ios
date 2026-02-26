@@ -14,6 +14,9 @@
 		8408CA4425F00FB400354FF3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 84F9622525F008EC007A391A /* InfoPlist.strings */; };
 		840CA94F2F4DF83C00FD30C1 /* SettingsTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840CA94E2F4DF83C00FD30C1 /* SettingsTVC.swift */; };
 		840CA9512F50377300FD30C1 /* HistoryTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840CA9502F50377300FD30C1 /* HistoryTVC.swift */; };
+		840CA9532F507F6B00FD30C1 /* OwnTracksEditFetchTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840CA9522F507F6B00FD30C1 /* OwnTracksEditFetchTVC.swift */; };
+		840CA9572F50986C00FD30C1 /* RegionsTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840CA9562F50986C00FD30C1 /* RegionsTVC.swift */; };
+		840CA9592F50BA6500FD30C1 /* RegionTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840CA9542F50982600FD30C1 /* RegionTVC.swift */; };
 		8411B82C189FDB140019D2D6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8411B82B189FDB140019D2D6 /* Foundation.framework */; };
 		8411B82E189FDB140019D2D6 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8411B82D189FDB140019D2D6 /* CoreGraphics.framework */; };
 		8411B830189FDB140019D2D6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8411B82F189FDB140019D2D6 /* UIKit.framework */; };
@@ -29,7 +32,6 @@
 		8411B90C189FEC070019D2D6 /* WaypointTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8411B8FF189FEC070019D2D6 /* WaypointTVC.m */; };
 		8411B90D189FEC070019D2D6 /* FriendAnnotationV.m in Sources */ = {isa = PBXBuildFile; fileRef = 8411B901189FEC070019D2D6 /* FriendAnnotationV.m */; };
 		8411B90E189FEC070019D2D6 /* FriendsTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8411B903189FEC070019D2D6 /* FriendsTVC.m */; };
-		8411B90F189FEC070019D2D6 /* RegionsTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8411B905189FEC070019D2D6 /* RegionsTVC.m */; };
 		8411B910189FEC070019D2D6 /* PersonTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8411B907189FEC070019D2D6 /* PersonTVC.m */; };
 		8411B912189FEC070019D2D6 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8411B90B189FEC070019D2D6 /* ViewController.m */; };
 		841C22342F3DD7E70005F530 /* MQTTClient in Frameworks */ = {isa = PBXBuildFile; productRef = 841C22332F3DD7E70005F530 /* MQTTClient */; };
@@ -54,7 +56,6 @@
 		845AA1BD1B4846AF00945856 /* OwnTracks-320.png in Resources */ = {isa = PBXBuildFile; fileRef = 845AA1BA1B4846AF00945856 /* OwnTracks-320.png */; };
 		846B38E92785B50B003E4852 /* elgolfo1.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 846B38E82785B50B003E4852 /* elgolfo1.gpx */; };
 		846FFA4F1B40C13C001482A6 /* NavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 846FFA4E1B40C13C001482A6 /* NavigationController.m */; };
-		846FFA581B419687001482A6 /* RegionTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 846FFA571B419687001482A6 /* RegionTVC.m */; };
 		846FFA5E1B420938001482A6 /* FriendTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 846FFA5D1B420938001482A6 /* FriendTableViewCell.m */; };
 		8470352923D5E6B10041AAFB /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8470352823D5E6B10041AAFB /* SystemConfiguration.framework */; };
 		8474443A1DA4BC9600975BE4 /* ConnType.m in Sources */ = {isa = PBXBuildFile; fileRef = 847444391DA4BC9600975BE4 /* ConnType.m */; };
@@ -157,6 +158,9 @@
 		840BBDD318E4274200DC113C /* Model 6.2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 6.2.xcdatamodel"; sourceTree = "<group>"; };
 		840CA94E2F4DF83C00FD30C1 /* SettingsTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTVC.swift; sourceTree = "<group>"; };
 		840CA9502F50377300FD30C1 /* HistoryTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryTVC.swift; sourceTree = "<group>"; };
+		840CA9522F507F6B00FD30C1 /* OwnTracksEditFetchTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnTracksEditFetchTVC.swift; sourceTree = "<group>"; };
+		840CA9542F50982600FD30C1 /* RegionTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionTVC.swift; sourceTree = "<group>"; };
+		840CA9562F50986C00FD30C1 /* RegionsTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionsTVC.swift; sourceTree = "<group>"; };
 		8411B828189FDB140019D2D6 /* OwnTracks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OwnTracks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8411B82B189FDB140019D2D6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		8411B82D189FDB140019D2D6 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -184,8 +188,6 @@
 		8411B901189FEC070019D2D6 /* FriendAnnotationV.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendAnnotationV.m; sourceTree = "<group>"; };
 		8411B902189FEC070019D2D6 /* FriendsTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendsTVC.h; sourceTree = "<group>"; };
 		8411B903189FEC070019D2D6 /* FriendsTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendsTVC.m; sourceTree = "<group>"; };
-		8411B904189FEC070019D2D6 /* RegionsTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegionsTVC.h; sourceTree = "<group>"; };
-		8411B905189FEC070019D2D6 /* RegionsTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegionsTVC.m; sourceTree = "<group>"; };
 		8411B906189FEC070019D2D6 /* PersonTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonTVC.h; sourceTree = "<group>"; };
 		8411B907189FEC070019D2D6 /* PersonTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonTVC.m; sourceTree = "<group>"; };
 		8411B90A189FEC070019D2D6 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
@@ -235,8 +237,6 @@
 		846FFA431B402A1F001482A6 /* OwnTracking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OwnTracking.h; sourceTree = "<group>"; };
 		846FFA4D1B40C13C001482A6 /* NavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigationController.h; sourceTree = "<group>"; };
 		846FFA4E1B40C13C001482A6 /* NavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NavigationController.m; sourceTree = "<group>"; };
-		846FFA561B419687001482A6 /* RegionTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegionTVC.h; sourceTree = "<group>"; };
-		846FFA571B419687001482A6 /* RegionTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegionTVC.m; sourceTree = "<group>"; };
 		846FFA5C1B420938001482A6 /* FriendTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendTableViewCell.h; sourceTree = "<group>"; };
 		846FFA5D1B420938001482A6 /* FriendTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendTableViewCell.m; sourceTree = "<group>"; };
 		8470352823D5E6B10041AAFB /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/SystemConfiguration.framework; sourceTree = DEVELOPER_DIR; };
@@ -622,6 +622,7 @@
 				849197F12D0084F300072AF6 /* PhotoAnnotationV.m */,
 				84FD93052353950100CCEC3B /* OwnTracksEditTVC.h */,
 				84FD93062353950100CCEC3B /* OwnTracksEditTVC.m */,
+				840CA9522F507F6B00FD30C1 /* OwnTracksEditFetchTVC.swift */,
 				840CA9502F50377300FD30C1 /* HistoryTVC.swift */,
 				84A1737A1B428F0600CCB7D0 /* Friends */,
 				84A1737B1B428F3600CCB7D0 /* Regions */,
@@ -653,10 +654,8 @@
 		84A1737B1B428F3600CCB7D0 /* Regions */ = {
 			isa = PBXGroup;
 			children = (
-				846FFA561B419687001482A6 /* RegionTVC.h */,
-				846FFA571B419687001482A6 /* RegionTVC.m */,
-				8411B904189FEC070019D2D6 /* RegionsTVC.h */,
-				8411B905189FEC070019D2D6 /* RegionsTVC.m */,
+				840CA9542F50982600FD30C1 /* RegionTVC.swift */,
+				840CA9562F50986C00FD30C1 /* RegionsTVC.swift */,
 			);
 			name = Regions;
 			sourceTree = "<group>";
@@ -891,7 +890,6 @@
 				84DE749824A9E1C600C0DA68 /* Intents.intentdefinition in Sources */,
 				849551F72EF42D4300675342 /* ToursStatusCell.swift in Sources */,
 				8411B910189FEC070019D2D6 /* PersonTVC.m in Sources */,
-				846FFA581B419687001482A6 /* RegionTVC.m in Sources */,
 				8411B912189FEC070019D2D6 /* ViewController.m in Sources */,
 				84930A2C1B3755AF00810C3A /* TabBarController.m in Sources */,
 				84E40204231413D400F1D6E6 /* History+CoreDataClass.m in Sources */,
@@ -902,6 +900,7 @@
 				8411B87F189FE35C0019D2D6 /* Model.xcdatamodeld in Sources */,
 				840CA94F2F4DF83C00FD30C1 /* SettingsTVC.swift in Sources */,
 				84E8A1891BB94782002518AA /* Setting+CoreDataProperties.m in Sources */,
+				840CA9592F50BA6500FD30C1 /* RegionTVC.swift in Sources */,
 				8411B90D189FEC070019D2D6 /* FriendAnnotationV.m in Sources */,
 				84DD1CFC2F431FBA00BB15C2 /* CertificatesTVC.swift in Sources */,
 				8405CB602F14EBEF008C2580 /* CreateCardTVC.swift in Sources */,
@@ -911,13 +910,14 @@
 				84BDD0D12F2A815500358CC2 /* OwnTracksLog.m in Sources */,
 				84FD93072353950100CCEC3B /* OwnTracksEditTVC.m in Sources */,
 				84C3F4562CEF7490004DB332 /* AttachPhotoTVC.m in Sources */,
-				8411B90F189FEC070019D2D6 /* RegionsTVC.m in Sources */,
 				849197F22D0084F300072AF6 /* PhotoAnnotationV.m in Sources */,
 				8411B88B189FE79B0019D2D6 /* CoreData.m in Sources */,
 				84E8A18A1BB94782002518AA /* Friend+CoreDataProperties.m in Sources */,
 				84D6B47D25C844A500B2AC07 /* NSNumber+decimals.m in Sources */,
 				846FFA4F1B40C13C001482A6 /* NavigationController.m in Sources */,
 				842E6ED720BEF031001928FA /* Waypoint+CoreDataClass.m in Sources */,
+				840CA9532F507F6B00FD30C1 /* OwnTracksEditFetchTVC.swift in Sources */,
+				840CA9572F50986C00FD30C1 /* RegionsTVC.swift in Sources */,
 				842E6ED520BEF031001928FA /* Setting+CoreDataClass.m in Sources */,
 				8411B83E189FDB140019D2D6 /* OwnTracksAppDelegate.m in Sources */,
 				84B7397A1A65629200B103F4 /* LocationManager.m in Sources */,

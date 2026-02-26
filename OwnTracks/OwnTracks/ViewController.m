@@ -512,8 +512,8 @@
                 [segue.destinationViewController performSelector:@selector(setRegion:) withObject:region];
             }
         }
-        if ([segue.destinationViewController respondsToSelector:@selector(setEditing:)]) {
-            [segue.destinationViewController performSelector:@selector(setEditing:) withObject:@(FALSE)];
+        if ([segue.destinationViewController respondsToSelector:@selector(setEditAllowed:)]) {
+            [segue.destinationViewController performSelector:@selector(setEditAllowed:) withObject:@(FALSE)];
         }
     }
 }
