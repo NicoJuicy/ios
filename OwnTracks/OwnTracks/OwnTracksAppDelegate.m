@@ -886,8 +886,7 @@ performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completio
                     [self.connection sendData:[self jsonToData:json]
                                         topic:[[Settings theGeneralTopicInMOC:moc] stringByAppendingString:@"/event"]
                                    topicAlias:@(2)
-                                          qos:[Settings intForKey:@"qos_preference"
-                                                            inMOC:moc]
+                                          qos:[Settings theQosInMOC:moc]
                                        retain:NO];
                     if ([region isKindOfClass:[CLBeaconRegion class]]) {
                         if ((anyRegion.radius).doubleValue < 0) {
@@ -990,8 +989,7 @@ performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completio
         [self.connection sendData:[self jsonToData:json]
                             topic:[[Settings theGeneralTopicInMOC:CoreData.sharedInstance.mainMOC] stringByAppendingString:@"/beacon"]
                        topicAlias:@(3)
-                              qos:[Settings intForKey:@"qos_preference"
-                                                inMOC:CoreData.sharedInstance.mainMOC]
+                              qos:[Settings theQosInMOC:CoreData.sharedInstance.mainMOC]
                            retain:NO];
     }
 }
@@ -1225,8 +1223,7 @@ performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completio
     [self.connection sendData:[self jsonToData:json]
                         topic:[[Settings theGeneralTopicInMOC:CoreData.sharedInstance.mainMOC] stringByAppendingString:@"/dump"]
                    topicAlias:@(4)
-                          qos:[Settings intForKey:@"qos_preference"
-                                            inMOC:CoreData.sharedInstance.mainMOC]
+                          qos:[Settings theQosInMOC:CoreData.sharedInstance.mainMOC]
                        retain:NO];
 }
 
@@ -1348,8 +1345,7 @@ performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completio
     [self.connection sendData:[self jsonToData:json]
                         topic:[[Settings theGeneralTopicInMOC:CoreData.sharedInstance.mainMOC] stringByAppendingString:@"/status"]
                    topicAlias:@(8)
-                          qos:[Settings intForKey:@"qos_preference"
-                                            inMOC:CoreData.sharedInstance.mainMOC]
+                          qos:[Settings theQosInMOC:CoreData.sharedInstance.mainMOC]
                        retain:NO];
 }
 
@@ -1396,8 +1392,7 @@ performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completio
     [self.connection sendData:[self jsonToData:json]
                         topic:[[Settings theGeneralTopicInMOC:CoreData.sharedInstance.mainMOC] stringByAppendingString:@"/waypoints"]
                    topicAlias:@(5)
-                          qos:[Settings intForKey:@"qos_preference"
-                                            inMOC:CoreData.sharedInstance.mainMOC]
+                          qos:[Settings theQosInMOC:CoreData.sharedInstance.mainMOC]
                        retain:NO];
 }
 
@@ -1464,12 +1459,10 @@ performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completio
             }
             
             NSManagedObjectContext *moc = CoreData.sharedInstance.mainMOC;
-            MQTTQosLevel qos = [Settings intForKey:@"qos_preference"
-                                             inMOC:moc];
             [self.connection sendData:[self jsonToData:json]
-                                topic:[[Settings theGeneralTopicInMOC:CoreData.sharedInstance.mainMOC] stringByAppendingString:@"/step"]
+                                topic:[[Settings theGeneralTopicInMOC:moc] stringByAppendingString:@"/step"]
                            topicAlias:@(6)
-                                  qos:qos
+                                  qos:[Settings theQosInMOC:moc]
                                retain:NO];
         });
     }];
@@ -1710,8 +1703,7 @@ performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completio
             [self.connection sendData:data
                                 topic:[Settings theGeneralTopicInMOC:moc]
                            topicAlias:@(1)
-                                  qos:[Settings intForKey:@"qos_preference"
-                                                    inMOC:moc]
+                                  qos:[Settings theQosInMOC:moc]
                                retain:[Settings boolForKey:@"retain_preference"
                                                      inMOC:moc]];
         } else {
@@ -1832,13 +1824,10 @@ performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completio
 
 - (void)sendEmpty:(NSString *)topic {
     OwnTracksLogInfo("[OwnTracksAppDelegate] sendEmpty");
-    NSManagedObjectContext *moc = CoreData.sharedInstance.mainMOC;
-    MQTTQosLevel qos = [Settings intForKey:@"qos_preference"
-                                     inMOC:moc];
     [self.connection sendData:nil
                         topic:topic
                    topicAlias:nil
-                          qos:qos
+                          qos:[Settings theQosInMOC:CoreData.sharedInstance.mainMOC]
                        retain:YES];
 }
 
@@ -1847,14 +1836,12 @@ performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completio
     NSManagedObjectContext *moc = CoreData.sharedInstance.mainMOC;
     
     if ([Settings validIdsInMOC:moc]) {
-        MQTTQosLevel qos = [Settings intForKey:@"qos_preference"
-                                         inMOC:moc];
         NSMutableDictionary *json = [[[OwnTracking sharedInstance] regionAsJSON:region] mutableCopy];
         NSData *data = [self jsonToData:json];
         [self.connection sendData:data
                             topic:[[Settings theGeneralTopicInMOC:moc] stringByAppendingString:@"/waypoint"]
                        topicAlias:@(7)
-                              qos:qos
+                              qos:[Settings theQosInMOC:moc]
                            retain:NO];
     }
 }

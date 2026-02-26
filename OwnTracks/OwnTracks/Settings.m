@@ -455,7 +455,7 @@ static SettingsDefaults *defaults;
             dict[@"passphrase"] =           [Settings stringOrZeroForKey:@"passphrase" inMOC:context];
             
             dict[@"subQos"] =               @([Settings intForKey:@"subscriptionqos_preference" inMOC:context]);
-            dict[@"pubQos"] =               @([Settings intForKey:@"qos_preference" inMOC:context]);
+            dict[@"pubQos"] =               @([Settings theQosInMOC:context]);
             dict[@"port"] =                 @([Settings intForKey:@"port_preference" inMOC:context]);
             dict[@"mqttProtocolLevel"] =    @([Settings intForKey:@"mqttProtocolLevel" inMOC:context]);
             dict[@"keepalive"] =            @([Settings intForKey:@"keepalive_preference" inMOC:context]);
@@ -612,11 +612,6 @@ static SettingsDefaults *defaults;
     return [Settings theGeneralTopicInMOC:context];
 }
 
-+ (NSInteger)theWillQosInMOC:(NSManagedObjectContext *)context {
-    // willQos is now the same as pubQos
-    return [Settings intForKey:@"qos_preference" inMOC:context];
-}
-
 + (BOOL)theWillRetainFlagInMOC:(NSManagedObjectContext *)context {
     // willRetainFlag is now always false
     return FALSE;
@@ -771,6 +766,21 @@ static SettingsDefaults *defaults;
 + (void)setMode:(ConnectionMode)mode inMOC:(NSManagedObjectContext *)context {
     [self setInt:mode forKey:@"mode" inMOC:context];
     OwnTracksLogDebug("[Settings] (connection)mode set to %d", mode);
+}
+
+// QosLevel
++ (MQTTQosLevel)theQosInMOC:(NSManagedObjectContext *)context {
+    MQTTQosLevel qos = [self intForKey:@"qos_preference" inMOC:context];
+    return qos;
+}
+
++ (void)setQos:(MQTTQosLevel)qos inMOC:(NSManagedObjectContext *)context {
+    [self setInt:qos forKey:@"qos_preference" inMOC:context];
+}
+
++ (MQTTQosLevel)theWillQosInMOC:(NSManagedObjectContext *)context {
+    // willQos is now the same as pubQos
+    return [Settings theQosInMOC:context];
 }
 
 + (NSString *)theOSMTemplate:(NSManagedObjectContext *)context {

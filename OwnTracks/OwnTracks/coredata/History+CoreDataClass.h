@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSString *)timestampText;
 
-+ (NSArray *)allHistoriesInManagedObjectContext:(NSManagedObjectContext *)context;
++ (NSArray<History *> *)allHistoriesInManagedObjectContext:(NSManagedObjectContext *)context;
 
 @end
 

@@ -10,5 +10,6 @@
 #import "Tours.h"
 #import "Connection.h"
 #import "Waypoint+CoreDataClass.h"
+#import "History+CoreDataClass.h"
 #import "Settings.h"
 #import "MQTTMessage.h"

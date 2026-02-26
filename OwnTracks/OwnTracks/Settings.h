@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Setting+CoreDataClass.h"
+#import "MQTTMessage.h"
 
 typedef NS_ENUM(int, ConnectionMode) {
     CONNECTION_MODE_MQTT = 0,
@@ -65,13 +66,16 @@ typedef NS_ENUM(int, ConnectionMode) {
 + (BOOL)theMqttUsePasswordInMOC:(NSManagedObjectContext * _Nonnull)context;
 + (BOOL)theMqttAuthInMOC:(NSManagedObjectContext * _Nonnull)context;
 + (BOOL)theLockedInMOC:(NSManagedObjectContext * _Nonnull)context;
-+ (NSInteger)theWillQosInMOC:(NSManagedObjectContext * _Nonnull)context;
 + (BOOL)theWillRetainFlagInMOC:(NSManagedObjectContext * _Nonnull)context;
 
 + (int)theMaximumHistoryInMOC:(NSManagedObjectContext * _Nonnull)context;
 
 + (ConnectionMode)theModeInMOC:(NSManagedObjectContext * _Nonnull)context;
 + (void)setMode:(ConnectionMode)mode inMOC:(NSManagedObjectContext * _Nonnull)context;
+
++ (MQTTQosLevel)theQosInMOC:(NSManagedObjectContext * _Nonnull)context;
++ (void)setQos:(MQTTQosLevel)qos inMOC:(NSManagedObjectContext * _Nonnull)context;
++ (MQTTQosLevel)theWillQosInMOC:(NSManagedObjectContext * _Nonnull)context;
 
 + (NSString * _Nullable)theOSMTemplate:(NSManagedObjectContext * _Nonnull)context;
 + (void)setOSMTemplate:(NSString * _Nullable)osmTemplate inMOC:(NSManagedObjectContext * _Nonnull)context;

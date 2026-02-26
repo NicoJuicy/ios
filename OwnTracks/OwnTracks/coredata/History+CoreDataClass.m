@@ -48,7 +48,7 @@
                                           timeStyle:NSDateFormatterMediumStyle];
 }
 
-+ (NSArray *)allHistoriesInManagedObjectContext:(NSManagedObjectContext *)context {
++ (NSArray<History *> *)allHistoriesInManagedObjectContext:(NSManagedObjectContext *)context {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"History"];
     request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:YES]];
 

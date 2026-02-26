@@ -572,7 +572,7 @@ class SettingsTVC: UITableViewController, UIDocumentInteractionControllerDelegat
         }
 
         if UIpubQos != nil {
-            UIpubQos.text = Settings.string(forKey: "qos_preference", inMOC: moc) as String?;
+            UIpubQos.text = "\(Settings.theQos(inMOC: moc).rawValue)";
             UIpubQos.isEnabled = !locked;
         }
 
@@ -802,14 +802,12 @@ class SettingsTVC: UITableViewController, UIDocumentInteractionControllerDelegat
                                 } catch {
                                 }
                                 if jsonData != nil  && ad.connection != nil {
-                                    let qos = MQTTQosLevel(rawValue:UInt8(Settings.int(forKey: "qos_preference", inMOC: moc))) ?? .atMostOnce;
                                     ad.connection!.send(jsonData,
                                                         topic: Settings.theGeneralTopic(inMOC: moc),
                                                         topicAlias: NSNumber(value: 0),
-                                                        qos: qos,
+                                                        qos: Settings.theQos(inMOC: moc),
                                                         retain: true);
                                     
-                            
                                     NavigationController.alert(NSLocalizedString("Card",
                                                                                  comment: "Header of an alert message regarding a card"),
                                                                message: NSLocalizedString("set and sent to backend",
