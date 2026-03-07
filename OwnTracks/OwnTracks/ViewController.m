@@ -10,7 +10,6 @@
 #import "FriendAnnotationV.h"
 #import "PhotoAnnotationV.h"
 #import "FriendsTVC.h"
-#import "RegionsTVC.h"
 #import "WaypointTVC.h"
 #import "CoreData.h"
 #import "Friend+CoreDataClass.h"
@@ -22,6 +21,7 @@
 #import "OwnTracksChangeMonitoringIntent.h"
 
 #import "OwnTracksLog.h"
+#import "OwnTracks-Swift.h"
 
 #define OSM TRUE
 
