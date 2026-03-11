@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -50,7 +50,6 @@
 		843B91721C8A14BF00DBD306 /* Storyboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 843B91741C8A14BF00DBD306 /* Storyboard.storyboard */; };
 		845273D324A8736000C44340 /* Intents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 849B359924A7578000BEC1BB /* Intents.framework */; };
 		845299E71DFA004000A4DC21 /* Friend+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 845299E01DFA004000A4DC21 /* Friend+CoreDataClass.m */; };
-		845537C72DB6BEBB00FE7758 /* OwnTracksStorageTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 845537C62DB6BEBB00FE7758 /* OwnTracksStorageTests.m */; };
 		8456D0A52B55749E003A45D4 /* OwnTracksTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8456D0A42B55749E003A45D4 /* OwnTracksTests.m */; };
 		845AA1BC1B4846AF00945856 /* OwnTracks-64.png in Resources */ = {isa = PBXBuildFile; fileRef = 845AA1B91B4846AF00945856 /* OwnTracks-64.png */; };
 		845AA1BD1B4846AF00945856 /* OwnTracks-320.png in Resources */ = {isa = PBXBuildFile; fileRef = 845AA1BA1B4846AF00945856 /* OwnTracks-320.png */; };
@@ -114,6 +113,13 @@
 			remoteInfo = OwnTracksIntents;
 		};
 		8456D0A62B55749E003A45D4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8411B820189FDB140019D2D6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8411B827189FDB140019D2D6;
+			remoteInfo = OwnTracks;
+		};
+		84BC863F2F5EAD0900F26105 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8411B820189FDB140019D2D6 /* Project object */;
 			proxyType = 1;
@@ -225,7 +231,6 @@
 		845299DA1DF9FD6200A4DC21 /* Model 9.5.0.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 9.5.0.xcdatamodel"; sourceTree = "<group>"; };
 		845299DF1DFA004000A4DC21 /* Friend+CoreDataClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Friend+CoreDataClass.h"; sourceTree = "<group>"; };
 		845299E01DFA004000A4DC21 /* Friend+CoreDataClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Friend+CoreDataClass.m"; sourceTree = "<group>"; };
-		845537C62DB6BEBB00FE7758 /* OwnTracksStorageTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OwnTracksStorageTests.m; path = Pods/OwnTracksStorageTests.m; sourceTree = SOURCE_ROOT; };
 		8456D0A22B55749E003A45D4 /* OwnTracksTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OwnTracksTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8456D0A42B55749E003A45D4 /* OwnTracksTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OwnTracksTests.m; sourceTree = "<group>"; };
 		84595203253DF78200807097 /* Model 13.4.0.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 13.4.0.xcdatamodel"; sourceTree = "<group>"; };
@@ -310,6 +315,7 @@
 		84BA0A172DE6F25400AFACA9 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		84BA0A192DE6F25400AFACA9 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		84BA0A1A2DE6F25400AFACA9 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		84BC86392F5EAD0900F26105 /* OwnTracksUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OwnTracksUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		84BDD0CF2F2A815500358CC2 /* OwnTracksLog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OwnTracksLog.h; sourceTree = "<group>"; };
 		84BDD0D02F2A815500358CC2 /* OwnTracksLog.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OwnTracksLog.m; sourceTree = "<group>"; };
 		84BE75912771EADF006CBDCF /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -383,6 +389,10 @@
 		B1AC89FE2E2FDF3900E0E194 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		84BC863A2F5EAD0900F26105 /* OwnTracksUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = OwnTracksUITests; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
 		8411B825189FDB140019D2D6 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
@@ -426,6 +436,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		84BC86362F5EAD0900F26105 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -435,6 +452,7 @@
 				8411B833189FDB140019D2D6 /* OwnTracks */,
 				843A57A824A9A4D600A5441B /* OwnTracksIntents */,
 				8456D0A32B55749E003A45D4 /* OwnTracksTests */,
+				84BC863A2F5EAD0900F26105 /* OwnTracksUITests */,
 				8411B82A189FDB140019D2D6 /* Frameworks */,
 				8411B829189FDB140019D2D6 /* Products */,
 			);
@@ -446,6 +464,7 @@
 				8411B828189FDB140019D2D6 /* OwnTracks.app */,
 				843A57A724A9A4D600A5441B /* OwnTracksIntents.appex */,
 				8456D0A22B55749E003A45D4 /* OwnTracksTests.xctest */,
+				84BC86392F5EAD0900F26105 /* OwnTracksUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -599,7 +618,6 @@
 		8456D0A32B55749E003A45D4 /* OwnTracksTests */ = {
 			isa = PBXGroup;
 			children = (
-				845537C62DB6BEBB00FE7758 /* OwnTracksStorageTests.m */,
 				8456D0A42B55749E003A45D4 /* OwnTracksTests.m */,
 				8483A9BB2B9E0C6E00774E8B /* OwnTracksPressureTests.m */,
 				84DC826E2E0757CE0045CD05 /* OwnTracksBatteryTests.m */,
@@ -735,6 +753,29 @@
 			productReference = 8456D0A22B55749E003A45D4 /* OwnTracksTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		84BC86382F5EAD0900F26105 /* OwnTracksUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 84BC86432F5EAD0900F26105 /* Build configuration list for PBXNativeTarget "OwnTracksUITests" */;
+			buildPhases = (
+				84BC86352F5EAD0900F26105 /* Sources */,
+				84BC86362F5EAD0900F26105 /* Frameworks */,
+				84BC86372F5EAD0900F26105 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				84BC86402F5EAD0900F26105 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				84BC863A2F5EAD0900F26105 /* OwnTracksUITests */,
+			);
+			name = OwnTracksUITests;
+			packageProductDependencies = (
+			);
+			productName = OwnTracksUITests;
+			productReference = 84BC86392F5EAD0900F26105 /* OwnTracksUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -777,6 +818,10 @@
 						CreatedOnToolsVersion = 15.2;
 						TestTargetID = 8411B827189FDB140019D2D6;
 					};
+					84BC86382F5EAD0900F26105 = {
+						CreatedOnToolsVersion = 26.3;
+						TestTargetID = 8411B827189FDB140019D2D6;
+					};
 				};
 			};
 			buildConfigurationList = 8411B823189FDB140019D2D6 /* Build configuration list for PBXProject "OwnTracks" */;
@@ -811,6 +856,7 @@
 				8411B827189FDB140019D2D6 /* OwnTracks */,
 				843A57A624A9A4D600A5441B /* OwnTracksIntents */,
 				8456D0A12B55749E003A45D4 /* OwnTracksTests */,
+				84BC86382F5EAD0900F26105 /* OwnTracksUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -849,6 +895,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		8456D0A02B55749E003A45D4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		84BC86372F5EAD0900F26105 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -952,8 +1005,14 @@
 				8483A9BC2B9E0C6E00774E8B /* OwnTracksPressureTests.m in Sources */,
 				84DC826F2E0757CE0045CD05 /* OwnTracksBatteryTests.m in Sources */,
 				8456D0A52B55749E003A45D4 /* OwnTracksTests.m in Sources */,
-				845537C72DB6BEBB00FE7758 /* OwnTracksStorageTests.m in Sources */,
 				8483A9BA2B9E0BE400774E8B /* NSNumber+decimals.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		84BC86352F5EAD0900F26105 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -970,6 +1029,11 @@
 			isa = PBXTargetDependency;
 			target = 8411B827189FDB140019D2D6 /* OwnTracks */;
 			targetProxy = 8456D0A62B55749E003A45D4 /* PBXContainerItemProxy */;
+		};
+		84BC86402F5EAD0900F26105 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8411B827189FDB140019D2D6 /* OwnTracks */;
+			targetProxy = 84BC863F2F5EAD0900F26105 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1466,6 +1530,69 @@
 			};
 			name = Release;
 		};
+		84BC86412F5EAD0900F26105 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = C652JFWU23;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.mqttitude.OwnTracksUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = OwnTracks;
+			};
+			name = Debug;
+		};
+		84BC86422F5EAD0900F26105 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = C652JFWU23;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.mqttitude.OwnTracksUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = OwnTracks;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1501,6 +1628,15 @@
 			buildConfigurations = (
 				8456D0A92B55749E003A45D4 /* Debug */,
 				8456D0AA2B55749E003A45D4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		84BC86432F5EAD0900F26105 /* Build configuration list for PBXNativeTarget "OwnTracksUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				84BC86412F5EAD0900F26105 /* Debug */,
+				84BC86422F5EAD0900F26105 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

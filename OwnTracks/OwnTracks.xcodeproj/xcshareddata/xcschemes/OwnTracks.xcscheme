@@ -39,6 +39,17 @@
                ReferencedContainer = "container:OwnTracks.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "84BC86382F5EAD0900F26105"
+               BuildableName = "OwnTracksUITests.xctest"
+               BlueprintName = "OwnTracksUITests"
+               ReferencedContainer = "container:OwnTracks.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
