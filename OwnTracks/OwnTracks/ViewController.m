@@ -8,7 +8,6 @@
 
 #import "ViewController.h"
 #import "FriendAnnotationV.h"
-#import "PhotoAnnotationV.h"
 #import "FriendsTVC.h"
 #import "WaypointTVC.h"
 #import "CoreData.h"

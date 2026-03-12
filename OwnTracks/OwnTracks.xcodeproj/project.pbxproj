@@ -65,7 +65,6 @@
 		8483A9BA2B9E0BE400774E8B /* NSNumber+decimals.m in Sources */ = {isa = PBXBuildFile; fileRef = 84D6B47C25C844A500B2AC07 /* NSNumber+decimals.m */; };
 		8483A9BC2B9E0C6E00774E8B /* OwnTracksPressureTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8483A9BB2B9E0C6E00774E8B /* OwnTracksPressureTests.m */; };
 		8488CFDF25A45CC3000AFEE2 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8488CFDE25A45CC3000AFEE2 /* Security.framework */; };
-		849197F22D0084F300072AF6 /* PhotoAnnotationV.m in Sources */ = {isa = PBXBuildFile; fileRef = 849197F12D0084F300072AF6 /* PhotoAnnotationV.m */; };
 		8492603F2B0235D700F6DC13 /* message.json in Resources */ = {isa = PBXBuildFile; fileRef = 8492603E2B0235D700F6DC13 /* message.json */; };
 		849260422B0247C200F6DC13 /* Validation.m in Sources */ = {isa = PBXBuildFile; fileRef = 849260412B0247C200F6DC13 /* Validation.m */; };
 		849260442B0373E300F6DC13 /* encryption.json in Resources */ = {isa = PBXBuildFile; fileRef = 849260432B0373E300F6DC13 /* encryption.json */; };
@@ -92,6 +91,7 @@
 		84DE749824A9E1C600C0DA68 /* Intents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 84DE749B24A9E1C600C0DA68 /* Intents.intentdefinition */; };
 		84DE749924A9E1C600C0DA68 /* Intents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 84DE749B24A9E1C600C0DA68 /* Intents.intentdefinition */; };
 		84E2C4511EC34B3B00BC02CE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 841D1A221C8AF70900DC5765 /* Localizable.strings */; };
+		84E3AE8E2F62BBC8009335B6 /* PhotoAnnotationV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E3AE8D2F62BBC8009335B6 /* PhotoAnnotationV.swift */; };
 		84E40204231413D400F1D6E6 /* History+CoreDataClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E40202231413D400F1D6E6 /* History+CoreDataClass.m */; };
 		84E40205231413D400F1D6E6 /* History+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E40203231413D400F1D6E6 /* History+CoreDataProperties.m */; };
 		84E8A1891BB94782002518AA /* Setting+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E8A17F1BB94782002518AA /* Setting+CoreDataProperties.m */; };
@@ -268,8 +268,6 @@
 		848F372A2CA56D98008D68FE /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Intents.strings; sourceTree = "<group>"; };
 		848F372C2CA56DC5008D68FE /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Intents.strings; sourceTree = "<group>"; };
 		849197EE2CFF732900072AF6 /* Model 18.1.0.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 18.1.0.xcdatamodel"; sourceTree = "<group>"; };
-		849197F02D0084F300072AF6 /* PhotoAnnotationV.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotoAnnotationV.h; sourceTree = "<group>"; };
-		849197F12D0084F300072AF6 /* PhotoAnnotationV.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotoAnnotationV.m; sourceTree = "<group>"; };
 		8492603E2B0235D700F6DC13 /* message.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = message.json; sourceTree = "<group>"; };
 		849260402B0247C200F6DC13 /* Validation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Validation.h; path = coredata/Validation.h; sourceTree = "<group>"; };
 		849260412B0247C200F6DC13 /* Validation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = Validation.m; path = coredata/Validation.m; sourceTree = "<group>"; };
@@ -359,6 +357,7 @@
 		84DD1CFB2F431FBA00BB15C2 /* CertificatesTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificatesTVC.swift; sourceTree = "<group>"; };
 		84DE749724A9A68B00C0DA68 /* OwnTracksIntents.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OwnTracksIntents.entitlements; sourceTree = "<group>"; };
 		84DE749A24A9E1C600C0DA68 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; name = Base; path = Base.lproj/Intents.intentdefinition; sourceTree = "<group>"; };
+		84E3AE8D2F62BBC8009335B6 /* PhotoAnnotationV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAnnotationV.swift; sourceTree = "<group>"; };
 		84E40200231413D400F1D6E6 /* History+CoreDataProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "History+CoreDataProperties.h"; sourceTree = "<group>"; };
 		84E40201231413D400F1D6E6 /* History+CoreDataClass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "History+CoreDataClass.h"; sourceTree = "<group>"; };
 		84E40202231413D400F1D6E6 /* History+CoreDataClass.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "History+CoreDataClass.m"; sourceTree = "<group>"; };
@@ -636,8 +635,7 @@
 				8411B90B189FEC070019D2D6 /* ViewController.m */,
 				84C3F4542CEF7490004DB332 /* AttachPhotoTVC.h */,
 				84C3F4552CEF7490004DB332 /* AttachPhotoTVC.m */,
-				849197F02D0084F300072AF6 /* PhotoAnnotationV.h */,
-				849197F12D0084F300072AF6 /* PhotoAnnotationV.m */,
+				84E3AE8D2F62BBC8009335B6 /* PhotoAnnotationV.swift */,
 				84FD93052353950100CCEC3B /* OwnTracksEditTVC.h */,
 				84FD93062353950100CCEC3B /* OwnTracksEditTVC.m */,
 				840CA9522F507F6B00FD30C1 /* OwnTracksEditFetchTVC.swift */,
@@ -963,7 +961,6 @@
 				84BDD0D12F2A815500358CC2 /* OwnTracksLog.m in Sources */,
 				84FD93072353950100CCEC3B /* OwnTracksEditTVC.m in Sources */,
 				84C3F4562CEF7490004DB332 /* AttachPhotoTVC.m in Sources */,
-				849197F22D0084F300072AF6 /* PhotoAnnotationV.m in Sources */,
 				8411B88B189FE79B0019D2D6 /* CoreData.m in Sources */,
 				84E8A18A1BB94782002518AA /* Friend+CoreDataProperties.m in Sources */,
 				84D6B47D25C844A500B2AC07 /* NSNumber+decimals.m in Sources */,
@@ -975,6 +972,7 @@
 				8411B83E189FDB140019D2D6 /* OwnTracksAppDelegate.m in Sources */,
 				84B7397A1A65629200B103F4 /* LocationManager.m in Sources */,
 				847667B32DF9B8C7001AD950 /* Waypoint+CoreDataProperties.m in Sources */,
+				84E3AE8E2F62BBC8009335B6 /* PhotoAnnotationV.swift in Sources */,
 				849260422B0247C200F6DC13 /* Validation.m in Sources */,
 				840CA9512F50377300FD30C1 /* HistoryTVC.swift in Sources */,
 				84AFD40B2434486200F1E922 /* OwnTracking.m in Sources */,
