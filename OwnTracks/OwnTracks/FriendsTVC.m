@@ -10,15 +10,16 @@
 #import "Settings.h"
 #import "FriendsTVC.h"
 #import "WaypointTVC.h"
-#import "PersonTVC.h"
 #import "Friend+CoreDataClass.h"
 #import "FriendTableViewCell.h"
 #import "Waypoint+CoreDataClass.h"
 #import "CoreData.h"
-#import "FriendAnnotationV.h"
 #import "OwnTracking.h"
 #import "OwnTracksLog.h"
 #import <Contacts/Contacts.h>
+
+#import "OwnTracks-Swift.h"
+
 
 @interface FriendsTVC ()
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
@@ -428,7 +429,7 @@ forRowAtIndexPath:(NSIndexPath *)indexPath {
                                                                             timeStyle:NSDateFormatterNoStyle];
     }
     
-    friendTableViewCell.image.image = [friendAnnotationView getImage];
+    friendTableViewCell.friendImage.image = [friendAnnotationView getImage];
 }
 
 @end

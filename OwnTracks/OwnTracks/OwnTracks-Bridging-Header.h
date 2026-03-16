@@ -13,6 +13,7 @@
 #import "Waypoint+CoreDataClass.h"
 #import "Region+CoreDataClass.h"
 #import "History+CoreDataClass.h"
+#import "Friend+CoreDataClass.h"
 #import "Settings.h"
 #import "OwnTracking.h"
 #import "MQTTMessage.h"

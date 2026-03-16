@@ -1861,7 +1861,7 @@
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="address" destination="apt-Il-Ih4" id="CLe-8h-enO"/>
-                                    <outlet property="image" destination="YUt-r0-356" id="FDT-eU-Kps"/>
+                                    <outlet property="friendImage" destination="YUt-r0-356" id="uvg-lZ-zDz"/>
                                     <outlet property="name" destination="K3J-wU-omB" id="04U-ps-JrV"/>
                                     <outlet property="timestamp" destination="6AN-cF-srI" id="SsF-Cg-jvu"/>
                                     <segue destination="m9c-8c-Xj9" kind="push" identifier="showWaypointFromFriends" trigger="accessoryAction" id="KLh-ve-vhU"/>

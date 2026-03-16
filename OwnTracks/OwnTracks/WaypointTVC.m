@@ -11,11 +11,11 @@
 #import "Waypoint+CoreDataClass.h"
 #import "OwnTracksAppDelegate.h"
 #import "LocationManager.h"
-#import "PersonTVC.h"
 #import "Settings.h"
 #import "CoreData.h"
 #import "OwnTracksLog.h"
 #import <Contacts/Contacts.h>
+#import "OwnTracks-Swift.h"
 
 @interface WaypointTVC ()
 @property (weak, nonatomic) IBOutlet UITextField *UIcoordinate;
