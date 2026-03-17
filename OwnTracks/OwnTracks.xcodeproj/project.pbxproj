@@ -30,7 +30,6 @@
 		8411B891189FE9CE0019D2D6 /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 8411B890189FE9CE0019D2D6 /* Settings.m */; };
 		8411B8E1189FEB790019D2D6 /* Location.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 8411B8AE189FEB790019D2D6 /* Location.gpx */; };
 		8411B90C189FEC070019D2D6 /* WaypointTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8411B8FF189FEC070019D2D6 /* WaypointTVC.m */; };
-		8411B90E189FEC070019D2D6 /* FriendsTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8411B903189FEC070019D2D6 /* FriendsTVC.m */; };
 		8411B912189FEC070019D2D6 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8411B90B189FEC070019D2D6 /* ViewController.m */; };
 		841C22342F3DD7E70005F530 /* MQTTClient in Frameworks */ = {isa = PBXBuildFile; productRef = 841C22332F3DD7E70005F530 /* MQTTClient */; };
 		841D3523209C5DDF0084FCD0 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 841D3522209C5DDF0084FCD0 /* UserNotifications.framework */; };
@@ -52,6 +51,8 @@
 		845AA1BC1B4846AF00945856 /* OwnTracks-64.png in Resources */ = {isa = PBXBuildFile; fileRef = 845AA1B91B4846AF00945856 /* OwnTracks-64.png */; };
 		845AA1BD1B4846AF00945856 /* OwnTracks-320.png in Resources */ = {isa = PBXBuildFile; fileRef = 845AA1BA1B4846AF00945856 /* OwnTracks-320.png */; };
 		846B38E92785B50B003E4852 /* elgolfo1.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 846B38E82785B50B003E4852 /* elgolfo1.gpx */; };
+		846EFA342F6813550088232B /* FriendsTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846EFA332F6813550088232B /* FriendsTVC.swift */; };
+		846EFA352F682A4E0088232B /* FriendTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846EFA2C2F680B0C0088232B /* FriendTableViewCell.swift */; };
 		846FFA4F1B40C13C001482A6 /* NavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 846FFA4E1B40C13C001482A6 /* NavigationController.m */; };
 		8470352923D5E6B10041AAFB /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8470352823D5E6B10041AAFB /* SystemConfiguration.framework */; };
 		8474443A1DA4BC9600975BE4 /* ConnType.m in Sources */ = {isa = PBXBuildFile; fileRef = 847444391DA4BC9600975BE4 /* ConnType.m */; };
@@ -189,8 +190,6 @@
 		8411B8AE189FEB790019D2D6 /* Location.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = Location.gpx; path = assets/Location.gpx; sourceTree = "<group>"; };
 		8411B8FE189FEC070019D2D6 /* WaypointTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WaypointTVC.h; sourceTree = "<group>"; };
 		8411B8FF189FEC070019D2D6 /* WaypointTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WaypointTVC.m; sourceTree = "<group>"; };
-		8411B902189FEC070019D2D6 /* FriendsTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendsTVC.h; sourceTree = "<group>"; };
-		8411B903189FEC070019D2D6 /* FriendsTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendsTVC.m; sourceTree = "<group>"; };
 		8411B90A189FEC070019D2D6 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		8411B90B189FEC070019D2D6 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		84195B201ABCBC9400A9FA97 /* Model 7.5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 7.5.xcdatamodel"; sourceTree = "<group>"; };
@@ -234,6 +233,7 @@
 		84635BCA2E30F93400B72E62 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Intents.strings; sourceTree = "<group>"; };
 		846B38E82785B50B003E4852 /* elgolfo1.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = elgolfo1.gpx; sourceTree = "<group>"; };
 		846EFA2C2F680B0C0088232B /* FriendTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendTableViewCell.swift; sourceTree = "<group>"; };
+		846EFA332F6813550088232B /* FriendsTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsTVC.swift; sourceTree = "<group>"; };
 		846FFA1B1B4023BE001482A6 /* Model 8.2.0.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 8.2.0.xcdatamodel"; sourceTree = "<group>"; };
 		846FFA431B402A1F001482A6 /* OwnTracking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OwnTracking.h; sourceTree = "<group>"; };
 		846FFA4D1B40C13C001482A6 /* NavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigationController.h; sourceTree = "<group>"; };
@@ -651,8 +651,7 @@
 			children = (
 				8411B8FE189FEC070019D2D6 /* WaypointTVC.h */,
 				8411B8FF189FEC070019D2D6 /* WaypointTVC.m */,
-				8411B902189FEC070019D2D6 /* FriendsTVC.h */,
-				8411B903189FEC070019D2D6 /* FriendsTVC.m */,
+				846EFA332F6813550088232B /* FriendsTVC.swift */,
 				846EFA2C2F680B0C0088232B /* FriendTableViewCell.swift */,
 				84E03DBB2F655996006756BE /* PersonTVC.swift */,
 				84E3AE8F2F62CB58009335B6 /* FriendAnnotationV.swift */,
@@ -934,6 +933,7 @@
 				84DE749824A9E1C600C0DA68 /* Intents.intentdefinition in Sources */,
 				849551F72EF42D4300675342 /* ToursStatusCell.swift in Sources */,
 				8411B912189FEC070019D2D6 /* ViewController.m in Sources */,
+				846EFA352F682A4E0088232B /* FriendTableViewCell.swift in Sources */,
 				84930A2C1B3755AF00810C3A /* TabBarController.m in Sources */,
 				84E40204231413D400F1D6E6 /* History+CoreDataClass.m in Sources */,
 				8405CB622F153DD9008C2580 /* ModesTVC.swift in Sources */,
@@ -946,7 +946,6 @@
 				84DD1CFC2F431FBA00BB15C2 /* CertificatesTVC.swift in Sources */,
 				8405CB602F14EBEF008C2580 /* CreateCardTVC.swift in Sources */,
 				8474443A1DA4BC9600975BE4 /* ConnType.m in Sources */,
-				8411B90E189FEC070019D2D6 /* FriendsTVC.m in Sources */,
 				842E6ED620BEF031001928FA /* Queue+CoreDataClass.m in Sources */,
 				84BDD0D12F2A815500358CC2 /* OwnTracksLog.m in Sources */,
 				84FD93072353950100CCEC3B /* OwnTracksEditTVC.m in Sources */,
@@ -966,6 +965,7 @@
 				84E3AE8E2F62BBC8009335B6 /* PhotoAnnotationV.swift in Sources */,
 				849260422B0247C200F6DC13 /* Validation.m in Sources */,
 				840CA9512F50377300FD30C1 /* HistoryTVC.swift in Sources */,
+				846EFA342F6813550088232B /* FriendsTVC.swift in Sources */,
 				84AFD40B2434486200F1E922 /* OwnTracking.m in Sources */,
 				8411B891189FE9CE0019D2D6 /* Settings.m in Sources */,
 				845299E71DFA004000A4DC21 /* Friend+CoreDataClass.m in Sources */,

@@ -7,7 +7,6 @@
 //
 
 #import "ViewController.h"
-#import "FriendsTVC.h"
 #import "WaypointTVC.h"
 #import "CoreData.h"
 #import "Friend+CoreDataClass.h"

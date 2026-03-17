@@ -17,3 +17,4 @@
 #import "Settings.h"
 #import "OwnTracking.h"
 #import "MQTTMessage.h"
+#import "WaypointTVC.h"

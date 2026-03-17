@@ -1808,7 +1808,7 @@
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="K3J-wU-omB">
                                             <rect key="frame" x="60" y="8" width="263.66666666666669" height="21"/>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="21" id="5Ep-qZ-pZI"/>
+                                                <constraint firstAttribute="height" constant="21" id="7v1-pt-6R0"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="17"/>
                                             <nil key="textColor"/>
@@ -1832,7 +1832,7 @@
                                             </attributedString>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="topRight" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="11:30 PM" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="7" translatesAutoresizingMaskIntoConstraints="NO" id="6AN-cF-srI">
-                                            <rect key="frame" x="8" y="65" width="44" height="15"/>
+                                            <rect key="frame" x="8" y="53" width="44" height="15"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="15" id="PnW-n5-pwk"/>
                                             </constraints>
@@ -1845,14 +1845,15 @@
                                         </label>
                                     </subviews>
                                     <constraints>
+                                        <constraint firstItem="6AN-cF-srI" firstAttribute="top" secondItem="YUt-r0-356" secondAttribute="bottom" constant="1" id="3zm-hn-f2Z"/>
                                         <constraint firstAttribute="trailing" secondItem="K3J-wU-omB" secondAttribute="trailing" constant="8" id="6Nf-vC-krN"/>
                                         <constraint firstItem="K3J-wU-omB" firstAttribute="leading" secondItem="YUt-r0-356" secondAttribute="trailing" constant="8" id="B70-TF-7io"/>
                                         <constraint firstItem="apt-Il-Ih4" firstAttribute="top" secondItem="K3J-wU-omB" secondAttribute="bottom" id="BbX-Pb-Tu4"/>
-                                        <constraint firstAttribute="bottom" secondItem="apt-Il-Ih4" secondAttribute="bottom" constant="8" id="Fv0-gD-BtS"/>
+                                        <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="apt-Il-Ih4" secondAttribute="bottom" constant="8" id="Fv0-gD-BtS"/>
                                         <constraint firstAttribute="trailing" secondItem="apt-Il-Ih4" secondAttribute="trailing" constant="8" id="Iwc-sy-TMz"/>
                                         <constraint firstItem="YUt-r0-356" firstAttribute="leading" secondItem="1Ab-Ik-bdn" secondAttribute="leading" constant="8" id="Sln-cW-gB4"/>
                                         <constraint firstItem="6AN-cF-srI" firstAttribute="leading" secondItem="1Ab-Ik-bdn" secondAttribute="leading" constant="8" id="dL7-Ch-bZ7"/>
-                                        <constraint firstAttribute="bottom" secondItem="6AN-cF-srI" secondAttribute="bottom" constant="8" id="daw-Uo-vHM"/>
+                                        <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="6AN-cF-srI" secondAttribute="bottom" constant="8" id="daw-Uo-vHM"/>
                                         <constraint firstItem="K3J-wU-omB" firstAttribute="top" secondItem="1Ab-Ik-bdn" secondAttribute="top" constant="8" id="dep-rY-xKU"/>
                                         <constraint firstItem="apt-Il-Ih4" firstAttribute="leading" secondItem="YUt-r0-356" secondAttribute="trailing" constant="8" id="iy0-W6-KBp"/>
                                         <constraint firstItem="YUt-r0-356" firstAttribute="top" secondItem="1Ab-Ik-bdn" secondAttribute="top" constant="8" id="k69-Bp-cpH"/>
@@ -4482,7 +4483,7 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="DVT-lO-AyD"/>
-        <segue reference="Hb0-uO-VBI"/>
+        <segue reference="KLh-ve-vhU"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="Friends" width="33" height="33"/>
