@@ -38,7 +38,17 @@ class HistoryTVC: OwnTracksEditFetchTVC {
                 empty();
                 return 0;
             } else {
-                nonempty();
+                var numberOfObjects: Int = 0;
+                
+                for section in frc!.sections!.indices {
+                    let sectionInfo = frc!.sections![section];
+                    numberOfObjects += sectionInfo.numberOfObjects;
+                }
+                if numberOfObjects > 0 {
+                    nonempty();
+                } else {
+                    empty();
+                }
                 return frc!.sections!.count;
             }
         } else {
@@ -46,7 +56,7 @@ class HistoryTVC: OwnTracksEditFetchTVC {
             return 0;
         }
     }
-    
+
     override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
         return frc?.sectionIndexTitles;
     }

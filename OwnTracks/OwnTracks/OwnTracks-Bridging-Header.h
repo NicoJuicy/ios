@@ -7,7 +7,6 @@
 #import "NavigationController.h"
 #import "ViewController.h"
 #import "CoreData.h"
-#import "OwnTracksEditTVC.h"
 #import "Tours.h"
 #import "Connection.h"
 #import "Waypoint+CoreDataClass.h"

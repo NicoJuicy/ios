@@ -53,6 +53,7 @@
 		846EFA342F6813550088232B /* FriendsTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846EFA332F6813550088232B /* FriendsTVC.swift */; };
 		846EFA352F682A4E0088232B /* FriendTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846EFA2C2F680B0C0088232B /* FriendTableViewCell.swift */; };
 		846EFA372F69B9E20088232B /* WaypointTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846EFA362F69B9E20088232B /* WaypointTVC.swift */; };
+		846EFA392F6A963E0088232B /* OwnTracksEditTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846EFA382F6A963E0088232B /* OwnTracksEditTVC.swift */; };
 		846FFA4F1B40C13C001482A6 /* NavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 846FFA4E1B40C13C001482A6 /* NavigationController.m */; };
 		8470352923D5E6B10041AAFB /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8470352823D5E6B10041AAFB /* SystemConfiguration.framework */; };
 		8474443A1DA4BC9600975BE4 /* ConnType.m in Sources */ = {isa = PBXBuildFile; fileRef = 847444391DA4BC9600975BE4 /* ConnType.m */; };
@@ -101,7 +102,6 @@
 		84ED67882F1E95110013A265 /* Sodium in Frameworks */ = {isa = PBXBuildFile; productRef = 84ED67872F1E95110013A265 /* Sodium */; };
 		84ED67922F1E9A0E0013A265 /* DSJSONSchemaValidation in Frameworks */ = {isa = PBXBuildFile; productRef = 84ED67912F1E9A0E0013A265 /* DSJSONSchemaValidation */; };
 		84FAEA7225F01DA100DCD479 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84FAEA7125F01DA100DCD479 /* Launch Screen.storyboard */; };
-		84FD93072353950100CCEC3B /* OwnTracksEditTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 84FD93062353950100CCEC3B /* OwnTracksEditTVC.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -233,6 +233,7 @@
 		846EFA2C2F680B0C0088232B /* FriendTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendTableViewCell.swift; sourceTree = "<group>"; };
 		846EFA332F6813550088232B /* FriendsTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsTVC.swift; sourceTree = "<group>"; };
 		846EFA362F69B9E20088232B /* WaypointTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaypointTVC.swift; sourceTree = "<group>"; };
+		846EFA382F6A963E0088232B /* OwnTracksEditTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnTracksEditTVC.swift; sourceTree = "<group>"; };
 		846FFA1B1B4023BE001482A6 /* Model 8.2.0.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 8.2.0.xcdatamodel"; sourceTree = "<group>"; };
 		846FFA431B402A1F001482A6 /* OwnTracking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OwnTracking.h; sourceTree = "<group>"; };
 		846FFA4D1B40C13C001482A6 /* NavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigationController.h; sourceTree = "<group>"; };
@@ -374,8 +375,6 @@
 		84F9622E25F008F3007A391A /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		84FA6C1722EAFF8800AC7D63 /* Model 12.0.6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 12.0.6.xcdatamodel"; sourceTree = "<group>"; };
 		84FAEA7125F01DA100DCD479 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
-		84FD93052353950100CCEC3B /* OwnTracksEditTVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OwnTracksEditTVC.h; sourceTree = "<group>"; };
-		84FD93062353950100CCEC3B /* OwnTracksEditTVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OwnTracksEditTVC.m; sourceTree = "<group>"; };
 		B1AC89F92E2FDF3400E0E194 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Storyboard.strings"; sourceTree = "<group>"; };
 		B1AC89FA2E2FDF3500E0E194 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Intents.strings"; sourceTree = "<group>"; };
 		B1AC89FB2E2FDF3700E0E194 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
@@ -631,8 +630,7 @@
 				84C3F4542CEF7490004DB332 /* AttachPhotoTVC.h */,
 				84C3F4552CEF7490004DB332 /* AttachPhotoTVC.m */,
 				84E3AE8D2F62BBC8009335B6 /* PhotoAnnotationV.swift */,
-				84FD93052353950100CCEC3B /* OwnTracksEditTVC.h */,
-				84FD93062353950100CCEC3B /* OwnTracksEditTVC.m */,
+				846EFA382F6A963E0088232B /* OwnTracksEditTVC.swift */,
 				840CA9522F507F6B00FD30C1 /* OwnTracksEditFetchTVC.swift */,
 				840CA9502F50377300FD30C1 /* HistoryTVC.swift */,
 				84A1737A1B428F0600CCB7D0 /* Friends */,
@@ -941,12 +939,12 @@
 				840CA94F2F4DF83C00FD30C1 /* SettingsTVC.swift in Sources */,
 				84E8A1891BB94782002518AA /* Setting+CoreDataProperties.m in Sources */,
 				840CA9592F50BA6500FD30C1 /* RegionTVC.swift in Sources */,
+				846EFA392F6A963E0088232B /* OwnTracksEditTVC.swift in Sources */,
 				84DD1CFC2F431FBA00BB15C2 /* CertificatesTVC.swift in Sources */,
 				8405CB602F14EBEF008C2580 /* CreateCardTVC.swift in Sources */,
 				8474443A1DA4BC9600975BE4 /* ConnType.m in Sources */,
 				842E6ED620BEF031001928FA /* Queue+CoreDataClass.m in Sources */,
 				84BDD0D12F2A815500358CC2 /* OwnTracksLog.m in Sources */,
-				84FD93072353950100CCEC3B /* OwnTracksEditTVC.m in Sources */,
 				84E3AE902F62CB58009335B6 /* FriendAnnotationV.swift in Sources */,
 				84C3F4562CEF7490004DB332 /* AttachPhotoTVC.m in Sources */,
 				8411B88B189FE79B0019D2D6 /* CoreData.m in Sources */,

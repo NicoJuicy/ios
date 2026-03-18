@@ -97,35 +97,35 @@ class RegionTVC: UITableViewController, UITextFieldDelegate {
         }
     }
     
-    @IBAction func tidChanged(_ sender: UITextField) {
+    @IBAction func tidchanged(_ sender: UITextField) {
         needsUpdate = true;
     }
     
-    @IBAction func nameChanged(_ sender: UITextField) {
+    @IBAction func namechanged(_ sender: UITextField) {
         needsUpdate = true;
     }
     
-    @IBAction func latitudeChanged(_ sender: UITextField) {
+    @IBAction func latitudechanged(_ sender: UITextField) {
         needsUpdate = true;
     }
     
-    @IBAction func longitudeChanged(_ sender: UITextField) {
+    @IBAction func longitudechanged(_ sender: UITextField) {
         needsUpdate = true;
     }
     
-    @IBAction func radiusChanged(_ sender: UITextField) {
+    @IBAction func radiuschanged(_ sender: UITextField) {
         needsUpdate = true;
     }
     
-    @IBAction func uuidChanged(_ sender: UITextField) {
+    @IBAction func uuidchanged(_ sender: UITextField) {
         needsUpdate = true;
     }
     
-    @IBAction func majorChanged(_ sender: UITextField) {
+    @IBAction func majorchanged(_ sender: UITextField) {
         needsUpdate = true;
     }
     
-    @IBAction func minorChanged(_ sender: UITextField) {
+    @IBAction func minorchanged(_ sender: UITextField) {
         needsUpdate = true;
     }
     
