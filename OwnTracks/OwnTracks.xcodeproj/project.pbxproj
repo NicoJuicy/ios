@@ -54,6 +54,7 @@
 		846EFA352F682A4E0088232B /* FriendTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846EFA2C2F680B0C0088232B /* FriendTableViewCell.swift */; };
 		846EFA372F69B9E20088232B /* WaypointTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846EFA362F69B9E20088232B /* WaypointTVC.swift */; };
 		846EFA392F6A963E0088232B /* OwnTracksEditTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846EFA382F6A963E0088232B /* OwnTracksEditTVC.swift */; };
+		846EFA3B2F6ABED20088232B /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846EFA3A2F6ABED20088232B /* TabBarController.swift */; };
 		846FFA4F1B40C13C001482A6 /* NavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 846FFA4E1B40C13C001482A6 /* NavigationController.m */; };
 		8470352923D5E6B10041AAFB /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8470352823D5E6B10041AAFB /* SystemConfiguration.framework */; };
 		8474443A1DA4BC9600975BE4 /* ConnType.m in Sources */ = {isa = PBXBuildFile; fileRef = 847444391DA4BC9600975BE4 /* ConnType.m */; };
@@ -69,7 +70,6 @@
 		849260442B0373E300F6DC13 /* encryption.json in Resources */ = {isa = PBXBuildFile; fileRef = 849260432B0373E300F6DC13 /* encryption.json */; };
 		849260462B037B0000F6DC13 /* messages.json in Resources */ = {isa = PBXBuildFile; fileRef = 849260452B037B0000F6DC13 /* messages.json */; };
 		84929F0B20AAC0D000227D00 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84929F0A20AAC0CF00227D00 /* WebKit.framework */; };
-		84930A2C1B3755AF00810C3A /* TabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84930A2B1B3755AF00810C3A /* TabBarController.m */; };
 		849551F52EF41EAE00675342 /* CreateTourTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849551F42EF41EAE00675342 /* CreateTourTVC.swift */; };
 		849551F72EF42D4300675342 /* ToursStatusCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849551F62EF42D4300675342 /* ToursStatusCell.swift */; };
 		84A452BA2F35157000AA6A29 /* StatusTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84A452B92F35156F00AA6A29 /* StatusTVC.swift */; };
@@ -234,6 +234,7 @@
 		846EFA332F6813550088232B /* FriendsTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsTVC.swift; sourceTree = "<group>"; };
 		846EFA362F69B9E20088232B /* WaypointTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaypointTVC.swift; sourceTree = "<group>"; };
 		846EFA382F6A963E0088232B /* OwnTracksEditTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnTracksEditTVC.swift; sourceTree = "<group>"; };
+		846EFA3A2F6ABED20088232B /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		846FFA1B1B4023BE001482A6 /* Model 8.2.0.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 8.2.0.xcdatamodel"; sourceTree = "<group>"; };
 		846FFA431B402A1F001482A6 /* OwnTracking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OwnTracking.h; sourceTree = "<group>"; };
 		846FFA4D1B40C13C001482A6 /* NavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigationController.h; sourceTree = "<group>"; };
@@ -270,8 +271,6 @@
 		84929F0A20AAC0CF00227D00 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		84930A221B36B8FB00810C3A /* Model 8.1.1.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 8.1.1.xcdatamodel"; sourceTree = "<group>"; };
 		84930A261B36C21B00810C3A /* Model 8.1.2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 8.1.2.xcdatamodel"; sourceTree = "<group>"; };
-		84930A2A1B3755AF00810C3A /* TabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TabBarController.h; sourceTree = "<group>"; };
-		84930A2B1B3755AF00810C3A /* TabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TabBarController.m; sourceTree = "<group>"; };
 		84930A2D1B376DDF00810C3A /* Model 8.1.3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 8.1.3.xcdatamodel"; sourceTree = "<group>"; };
 		84930A311B37729000810C3A /* Model 8.1.4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 8.1.4.xcdatamodel"; sourceTree = "<group>"; };
 		849551F32EF41EAE00675342 /* OwnTracks-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OwnTracks-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -621,8 +620,7 @@
 		846FFA491B40A301001482A6 /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				84930A2A1B3755AF00810C3A /* TabBarController.h */,
-				84930A2B1B3755AF00810C3A /* TabBarController.m */,
+				846EFA3A2F6ABED20088232B /* TabBarController.swift */,
 				846FFA4D1B40C13C001482A6 /* NavigationController.h */,
 				846FFA4E1B40C13C001482A6 /* NavigationController.m */,
 				8411B90A189FEC070019D2D6 /* ViewController.h */,
@@ -929,7 +927,6 @@
 				849551F72EF42D4300675342 /* ToursStatusCell.swift in Sources */,
 				8411B912189FEC070019D2D6 /* ViewController.m in Sources */,
 				846EFA352F682A4E0088232B /* FriendTableViewCell.swift in Sources */,
-				84930A2C1B3755AF00810C3A /* TabBarController.m in Sources */,
 				84E40204231413D400F1D6E6 /* History+CoreDataClass.m in Sources */,
 				8405CB622F153DD9008C2580 /* ModesTVC.swift in Sources */,
 				84001C141C78982800413E5B /* Queue+CoreDataProperties.m in Sources */,
@@ -966,6 +963,7 @@
 				8411B891189FE9CE0019D2D6 /* Settings.m in Sources */,
 				845299E71DFA004000A4DC21 /* Friend+CoreDataClass.m in Sources */,
 				8411B88E189FE9940019D2D6 /* Connection.m in Sources */,
+				846EFA3B2F6ABED20088232B /* TabBarController.swift in Sources */,
 				84E40205231413D400F1D6E6 /* History+CoreDataProperties.m in Sources */,
 				84E8A18D1BB94782002518AA /* Region+CoreDataProperties.m in Sources */,
 				84C7C0352898FAF90088A544 /* Tours.m in Sources */,
