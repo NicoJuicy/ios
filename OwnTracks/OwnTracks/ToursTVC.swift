@@ -154,13 +154,11 @@ class ToursTVC: OwnTracksEditTVC {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let tour = Tours.sharedInstance().tour(at: indexPath.row);
         if tour?.uuid != nil {
-            UIPasteboard.general.string = tour?.url
-            NavigationController.alert(
-                NSLocalizedString("Copied", comment: "Alert message header for copy"),
-                message:"\(tour?.url ?? "<URL not available>") " +
-                NSLocalizedString("URL copied to Clipboard",
-                                  comment: "URL copied to Clipboard"));
-            
+            UIPasteboard.general.string = tour?.url;
+            NavigationController.alert(title:NSLocalizedString("Copied", comment: "Alert message header for copy"),
+                                       message:"\(tour?.url ?? "<URL not available>") " +
+                                       NSLocalizedString("URL copied to Clipboard",
+                                                         comment: "URL copied to Clipboard"));
         }
         tableView.deselectRow(at: indexPath, animated: true);
     }

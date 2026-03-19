@@ -18,6 +18,7 @@
 #import "OwnTracksLog.h"
 #import <UserNotifications/UserNotifications.h>
 #import <UserNotifications/UNUserNotificationCenter.h>
+#import "OwnTracks-Swift.h"
 
 @implementation OwnTracking
 static OwnTracking *theInstance = nil;
@@ -464,11 +465,10 @@ static OwnTracking *theInstance = nil;
                                  at:timestamp
                               inMOC:context
                             maximum:[Settings theMaximumHistoryInMOC:context]];
-            
-            [NavigationController alert:NSLocalizedString(@"Friend",
-                                                          @"Alert message header for friend's messages")
-                                message:notificationMessage
-                           dismissAfter:2.0
+            [NavigationController alertWithTitle:NSLocalizedString(@"Friend",
+                                                                   @"Alert message header for friend's messages")
+                                         message:notificationMessage
+                                    dismissAfter:2.0
             ];
             OwnTracksLogInfo("[OwnTracking] processed transition for friend %@",
                       notificationMessage);

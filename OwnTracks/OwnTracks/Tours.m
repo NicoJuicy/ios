@@ -11,6 +11,7 @@
 #import "Settings.h"
 #import "OwnTracksAppDelegate.h"
 #import "OwnTracksLog.h"
+#import "OwnTracks-Swift.h"
 
 @implementation Tour
 - (instancetype)initFromDictionary:(NSDictionary *)dictionary {
@@ -275,16 +276,15 @@ static Tours *theInstance = nil;
                                 UIPasteboard *generalPasteboard = [UIPasteboard generalPasteboard];
                                 [generalPasteboard setString:tour.url];
                                 
-                                [NavigationController alert:
-                                     NSLocalizedString(@"Response",
-                                                       @"Alert message header for Request Response")
-                                                    message:
+                                [NavigationController alertWithTitle:NSLocalizedString(@"Response",
+                                                                                       @"Alert message header for Request Response")
+                                                             message:
                                      [NSString stringWithFormat:@"%@ %ld %@\n",
                                       NSLocalizedString(@"URL copied to Clipboard",
                                                         @"URL copied to Clipboard"),
                                       (long)status.integerValue,
                                       tour.url]
-                                                        url:tour.url
+                                                                 url:tour.url
                                 ];
                             } else {
                                 OwnTracksLogError("[Tours] processResponse invalid tour");

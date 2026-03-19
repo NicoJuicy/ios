@@ -170,15 +170,15 @@ class WaypointTVC: UITableViewController {
             if indexPath.section == 0 && indexPath.row == 0 {
                 let locationString = waypoint!.shortCoordinateText;
                 UIPasteboard.general.string = locationString;
-                NavigationController.alert(NSLocalizedString("Clipboard",
-                                                             comment: "Clipboard"),
+                NavigationController.alert(title: NSLocalizedString("Clipboard",
+                                                                    comment: "Clipboard"),
                                            message: NSLocalizedString("Location copied to clipboard",
                                                                       comment:"Location copied to clipboard"),
                                            dismissAfter: 1.0);
             } else if indexPath.section == 1 && indexPath.row == 6 {
                 UIPasteboard.general.string = waypoint!.belongsTo?.topic;
-                NavigationController.alert(NSLocalizedString("Clipboard",
-                                                             comment: "Clipboard"),
+                NavigationController.alert(title: NSLocalizedString("Clipboard",
+                                                                    comment: "Clipboard"),
                                            message: NSLocalizedString("Topic copied to clipboard",
                                                                       comment:"Topic copied to clipboard"),
                                            dismissAfter: 1.0);

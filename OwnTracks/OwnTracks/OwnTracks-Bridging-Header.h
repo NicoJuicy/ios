@@ -3,7 +3,6 @@
 //
 #import "OwnTracksAppDelegate.h"
 #import "OwnTracksLog.h"
-#import "NavigationController.h"
 #import "ViewController.h"
 #import "CoreData.h"
 #import "Tours.h"

@@ -24,6 +24,7 @@
 #import "OwnTracksChangeMonitoringIntent.h"
 #import "OwnTracksTagIntent.h"
 #import "OwnTracksPointOfInterestIntent.h"
+#import "OwnTracks-Swift.h"
 
 // experimental code for APNS
 #define APNS FALSE
@@ -473,7 +474,7 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
                                                                 contents:data
                                                               attributes:nil];
                     } else {
-                        [NavigationController alert:@"processNSURL"
+                        [NavigationController alertWithTitle:@"processNSURL"
                                             message:
                          [NSString stringWithFormat:@"OOPS %@ %@",
                           [NSError errorWithDomain:@"OwnTracks"
@@ -482,7 +483,7 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
                           url]];
                     }
                 } else {
-                    [NavigationController alert:@"processNSURL"
+                    [NavigationController alertWithTitle:@"processNSURL"
                                         message:
                          [NSString stringWithFormat:@"httpResponse.statusCode %ld %@",
                           (long)httpResponse.statusCode,
@@ -490,7 +491,7 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
                     ];
                 }
             } else {
-                [NavigationController alert:@"processNSURL"
+                [NavigationController alertWithTitle:@"processNSURL"
                                     message:
                      [NSString stringWithFormat:@"response %@ %@",
                       response,
@@ -498,7 +499,7 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
                 ];
             }
         } else {
-            [NavigationController alert:@"processNSURL"
+            [NavigationController alertWithTitle:@"processNSURL"
                                 message:
                  [NSString stringWithFormat:@"dataTaskWithRequest %@ %@",
                   error,
@@ -516,7 +517,7 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"reload" object:nil];
 
     if (error) {
-        [NavigationController alert:@"processNSURL"
+        [NavigationController alertWithTitle:@"processNSURL"
                             message:
              [NSString stringWithFormat:@"configFromDictionary %@ %@",
               error,
@@ -529,7 +530,7 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     NSError *error = [Settings waypointsFromDictionary:json inMOC:CoreData.sharedInstance.mainMOC];
     [CoreData.sharedInstance sync:CoreData.sharedInstance.mainMOC];
     if (error) {
-        [NavigationController alert:@"processNSURL"
+        [NavigationController alertWithTitle:@"processNSURL"
                             message:
              [NSString stringWithFormat:@"waypointsFromDictionary %@ %@",
               error,
@@ -625,13 +626,13 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     }
     
     if (self.backgroundFetchCheckMessage) {
-        [NavigationController alert:@"Background Fetch"
+        [NavigationController alertWithTitle:@"Background Fetch"
                             message:self.backgroundFetchCheckMessage];
         self.backgroundFetchCheckMessage = nil;
     }
     
     if (self.processingMessage) {
-        [NavigationController alert:@"openURL"
+        [NavigationController alertWithTitle:@"openURL"
                             message:self.processingMessage];
         self.processingMessage = nil;
         [self reconnect];
@@ -641,7 +642,7 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
         NSString *message = NSLocalizedString(@"To publish your location userID and deviceID must be set",
                                               @"Warning displayed if necessary settings are missing");
         
-        [NavigationController alert:@"Settings" message:message];
+        [NavigationController alertWithTitle:@"Settings" message:message];
     }
 }
 
@@ -1884,7 +1885,7 @@ performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completio
                                                   passphrase:passPhrase];
             if (!certificates) {
                 OwnTracksLogDefault("[OwnTracksAppDelegate] TLS Client Certificate incorrect file or passphrase");
-                [NavigationController alert:
+                [NavigationController alertWithTitle:
                      NSLocalizedString(@"TLS Client Certificate",
                                        @"Heading for certificate error message")
                                     message:
@@ -1963,7 +1964,7 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
                   withPOI:nil
                 withImage:nil
             withImageName:nil]) {
-            [NavigationController alert:
+            [NavigationController alertWithTitle:
                  NSLocalizedString(@"Location",
                                    @"Header of an alert message regarding a location")
                                 message:
@@ -1972,7 +1973,7 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
                            dismissAfter:1
             ];
         } else {
-            [NavigationController alert:
+            [NavigationController alertWithTitle:
              NSLocalizedString(@"Location",
                                @"Header of an alert message regarding a location")
                                 message:
@@ -2026,7 +2027,7 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
                   withPOI:name
                 withImage:nil
             withImageName:nil]) {
-            [NavigationController alert:
+            [NavigationController alertWithTitle:
                  NSLocalizedString(@"Location",
                                    @"Header of an alert message regarding a location")
                                 message:
@@ -2035,7 +2036,7 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
                            dismissAfter:1
             ];
         } else {
-            [NavigationController alert:
+            [NavigationController alertWithTitle:
              NSLocalizedString(@"Location",
                                @"Header of an alert message regarding a location")
                                 message:

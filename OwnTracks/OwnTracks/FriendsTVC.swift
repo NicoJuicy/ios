@@ -248,7 +248,7 @@ class FriendsTVC: OwnTracksEditFetchTVC {
             }
             
             let thisMorning = NSCalendar.current.startOfDay(for: Date());
-            if waypoint!.tst != nil {
+            if waypoint != nil && waypoint!.tst != nil {
                 if waypoint!.tst!.timeIntervalSince(thisMorning) > 0 {
                     friendTableViewCell.timestamp.text = DateFormatter.localizedString(from: waypoint!.tst!, dateStyle: .none, timeStyle: .short);
                 } else {

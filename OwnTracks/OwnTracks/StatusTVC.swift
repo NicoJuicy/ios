@@ -284,8 +284,8 @@ class StatusTVC: UITableViewController, UIDocumentInteractionControllerDelegate 
         if indexPath.section == 2 && indexPath.row == 0 {
             let location = LocationManager.sharedInstance().location;
             UIPasteboard.general.string = ("\(location.coordinate.latitude),\(location.coordinate.longitude)");
-            NavigationController.alert(NSLocalizedString("Clipboard",
-                                                         comment: "Clipboard"),
+            NavigationController.alert(title: NSLocalizedString("Clipboard",
+                                                                comment: "Clipboard"),
                                        message: NSLocalizedString("Location copied to clipboard",
                                                                   comment: "Location copied to clipboard"),
                                        dismissAfter: 1.0);

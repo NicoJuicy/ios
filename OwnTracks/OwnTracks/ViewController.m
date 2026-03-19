@@ -461,7 +461,7 @@
     if (!self.warning &&
         ![Setting existsSettingWithKey:@"mode" inMOC:CoreData.sharedInstance.mainMOC]) {
         self.warning = TRUE;
-        [NavigationController alert:
+        [NavigationController alertWithTitle:
              NSLocalizedString(@"Setup",
                                @"Header of an alert message regarding missing setup")
                             message:
@@ -1101,7 +1101,7 @@ calloutAccessoryControlTapped:(UIControl *)control {
         NSString *message = NSLocalizedString(@"To publish your location userID and deviceID must be set",
                                               @"Warning displayed if necessary settings are missing");
 
-        [NavigationController alert:@"Settings" message:message];
+        [NavigationController alertWithTitle:@"Settings" message:message];
         return;
     }
 
@@ -1110,7 +1110,7 @@ calloutAccessoryControlTapped:(UIControl *)control {
         (location.coordinate.latitude == 0.0 &&
          location.coordinate.longitude == 0.0)
         ) {
-        [NavigationController alert:
+        [NavigationController alertWithTitle:
              NSLocalizedString(@"Location",
                                @"Header of an alert message regarding a location")
                             message:
@@ -1121,7 +1121,7 @@ calloutAccessoryControlTapped:(UIControl *)control {
     }
 
     if (ignoreInaccurateLocations != 0 && location.horizontalAccuracy > ignoreInaccurateLocations) {
-        [NavigationController alert:
+        [NavigationController alertWithTitle:
              NSLocalizedString(@"Location",
                                @"Header of an alert message regarding a location")
                             message:
@@ -1133,7 +1133,7 @@ calloutAccessoryControlTapped:(UIControl *)control {
 
     OwnTracksAppDelegate *ad = (OwnTracksAppDelegate *)[UIApplication sharedApplication].delegate;
     if ([ad sendNow:location withPOI:poi withImage:image withImageName:imageName]) {
-        [NavigationController alert:
+        [NavigationController alertWithTitle:
              NSLocalizedString(@"Location",
                                @"Header of an alert message regarding a location")
                             message:
@@ -1142,7 +1142,7 @@ calloutAccessoryControlTapped:(UIControl *)control {
                        dismissAfter:1
         ];
     } else {
-        [NavigationController alert:
+        [NavigationController alertWithTitle:
          NSLocalizedString(@"Location",
                            @"Header of an alert message regarding a location")
                             message:
@@ -1171,7 +1171,7 @@ calloutAccessoryControlTapped:(UIControl *)control {
                                                lat:self.mapView.centerCoordinate.latitude
                                                lon:self.mapView.centerCoordinate.longitude];
 
-        [NavigationController alert:
+        [NavigationController alertWithTitle:
              NSLocalizedString(@"Region",
                                @"Header of an alert message regarding circular region")
                             message:

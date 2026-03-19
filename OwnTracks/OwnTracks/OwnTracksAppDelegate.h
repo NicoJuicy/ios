@@ -19,8 +19,6 @@
 #import "Friend+CoreDataClass.h"
 #import "Region+CoreDataClass.h"
 
-#import "NavigationController.h"
-
 #import "OwnTracksLog.h"
 
 @interface OwnTracksAppDelegate : UIResponder <UIApplicationDelegate, ConnectionDelegate, LocationManagerDelegate, UNUserNotificationCenterDelegate>

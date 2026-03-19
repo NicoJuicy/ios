@@ -10,6 +10,7 @@
 #import "OwnTracksAppDelegate.h"
 #import "CoreData.h"
 #import "OwnTracksLog.h"
+#import "OwnTracks-Swift.h"
 
 @interface LocationManager()
 @property (strong, nonatomic) CLLocationManager *manager;
@@ -441,40 +442,40 @@ static LocationManager *theInstance = nil;
         case kCLAuthorizationStatusAuthorizedAlways:
             break;
         case kCLAuthorizationStatusAuthorizedWhenInUse:
-            [NavigationController alert:@"LocationManager"
-                                message:
+            [NavigationController alertWithTitle:@"LocationManager"
+                                         message:
                  NSLocalizedString(@"App is not allowed to use location services in background",
                                    @"Location Manager error message")
             ];
             OwnTracksLogInfo("[LocationManager] %@", @"App is not allowed to use location services in background");
             break;
         case kCLAuthorizationStatusNotDetermined:
-            [NavigationController alert:@"LocationManager"
-                                message:
+            [NavigationController alertWithTitle:@"LocationManager"
+                                         message:
                  NSLocalizedString(@"App is not allowed to use location services yet",
                                    @"Location Manager error message")
             ];
             OwnTracksLogInfo("[LocationManager] %@", @"App is not allowed to use location services yet");
             break;
         case kCLAuthorizationStatusDenied:
-            [NavigationController alert:@"LocationManager"
-                                message:
+            [NavigationController alertWithTitle:@"LocationManager"
+                                         message:
                  NSLocalizedString(@"App is not allowed to use location services",
                                    @"Location Manager error message")
             ];
             OwnTracksLogInfo("[LocationManager] %@", @"App is not allowed to use location services");
             break;
         case kCLAuthorizationStatusRestricted:
-            [NavigationController alert:@"LocationManager"
-                                message:
+            [NavigationController alertWithTitle:@"LocationManager"
+                                         message:
                  NSLocalizedString(@"App use of location services is restricted",
                                    @"Location Manager error message")
             ];
             OwnTracksLogInfo("[LocationManager] %@", @"App use of location services is restricted");
             break;
         default:
-            [NavigationController alert:@"LocationManager"
-                                message:
+            [NavigationController alertWithTitle:@"LocationManager"
+                                         message:
                  NSLocalizedString(@"App use of location services is unclear",
                                    @"Location Manager error message")
             ];

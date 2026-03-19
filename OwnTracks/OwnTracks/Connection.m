@@ -20,6 +20,8 @@
 #import "Validation.h"
 
 #import "MQTTNWTransport.h"
+#import "OwnTracks-Swift.h"
+
 
 @interface Connection() <NSURLSessionDelegate>
 
@@ -410,7 +412,7 @@ willPerformHTTPRedirection:(NSHTTPURLResponse *)redirectResponse
 }
 
 - (void)HTTPerror:(NSString *)message {
-    [NavigationController alert:@"HTTP" message:message];
+    [NavigationController alertWithTitle:@"HTTP" message:message];
 }
 
 - (void)sendHTTP:(NSString *)topic data:(NSData *)data {

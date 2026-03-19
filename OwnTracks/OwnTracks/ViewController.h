@@ -11,7 +11,6 @@
 #import <CoreData/CoreData.h>
 #import <MapKit/MapKit.h>
 #import "Connection.h"
-#import "AttachPhotoTVC.h"
 #import "OwnTracksAppDelegate.h"
 
 @interface ViewController : UIViewController <MKMapViewDelegate, NSFetchedResultsControllerDelegate>

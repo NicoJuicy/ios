@@ -808,8 +808,8 @@ class SettingsTVC: UITableViewController, UIDocumentInteractionControllerDelegat
                                                         qos: Settings.theQos(inMOC: moc),
                                                         retain: true);
                                     
-                                    NavigationController.alert(NSLocalizedString("Card",
-                                                                                 comment: "Header of an alert message regarding a card"),
+                                    NavigationController.alert(title: NSLocalizedString("Card",
+                                                                                        comment: "Header of an alert message regarding a card"),
                                                                message: NSLocalizedString("set and sent to backend",
                                                                                           comment: "content of an alert message regarding card"));
                                 }
