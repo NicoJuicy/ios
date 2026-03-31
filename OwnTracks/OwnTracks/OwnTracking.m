@@ -626,7 +626,7 @@ static OwnTracking *theInstance = nil;
         json[@"batt"] = @(batteryLevelInt);
     }
 
-    if (waypoint.bs.doubleValue != UIDeviceBatteryStateUnknown) {
+    if (waypoint.bs.intValue != UIDeviceBatteryStateUnknown) {
         json[@"bs"] = waypoint.bs;
     }
 
