@@ -21,5 +21,7 @@ typedef NS_ENUM(NSInteger, ConnectionType) {
 @interface ConnType : NSObject
 + (NSString *)SSID;
 + (NSString *)BSSID;
-+ (ConnectionType)connectionType:(NSString *)host;
+
+@property (nonatomic, readonly) ConnectionType connectionType;
+
 @end

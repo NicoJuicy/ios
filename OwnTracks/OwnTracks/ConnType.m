@@ -7,10 +7,115 @@
 //
 
 #import "ConnType.h"
-#import <SystemConfiguration/SystemConfiguration.h>
 #import <SystemConfiguration/CaptiveNetwork.h>
 
+#import <Network/Network.h>
+#import "OwnTracksLog.h"
+
+@interface ConnType()
+@property nw_path_monitor_t pm;
+@property (nonatomic, readwrite) ConnectionType connectionType;
+@end
+
 @implementation ConnType
+
+
+- (instancetype)init {
+    self = super.init;
+    self.connectionType = ConnectionTypeUnknown;
+    self.pm = nw_path_monitor_create();
+    nw_path_monitor_set_queue(self.pm, dispatch_get_main_queue());
+    nw_path_monitor_set_update_handler(self.pm, ^(nw_path_t  _Nonnull path) {
+        nw_path_status_t status = nw_path_get_status(path);
+        const char *statusText = "unknown";
+        switch (status) {
+            case nw_path_status_invalid:
+                statusText = "invalid";
+                self.connectionType = ConnectionTypeUnknown;
+                break;
+            case nw_path_status_satisfied:
+                statusText = "satisfied";
+                self.connectionType = ConnectionTypeUnknown;
+                break;
+            case nw_path_status_satisfiable:
+                statusText = "satisfiable";
+                self.connectionType = ConnectionTypeUnknown;
+                break;
+            case nw_path_status_unsatisfied:
+                statusText = "unsatisfied";
+                self.connectionType = ConnectionTypeNone;
+                break;
+        }
+        bool ipv4 = nw_path_has_ipv4(path);
+        bool ipv6 = nw_path_has_ipv6(path);
+        bool dns = nw_path_has_dns(path);
+        bool constrained = nw_path_is_constrained(path);
+        bool expensive = nw_path_is_expensive(path);
+        OwnTracksLogDebug("[ConnType] path status=%s ipv4=%d ipv6=%d dns=%d constrained=%d expensive=%d",
+                          statusText, ipv4, ipv6, dns, constrained, expensive);
+
+        nw_path_enumerate_gateways(path, ^bool(nw_endpoint_t  _Nonnull gateway) {
+            nw_endpoint_type_t type = nw_endpoint_get_type(gateway);
+            const char *typeText = "unknown";
+            switch (type) {
+                case nw_endpoint_type_url:
+                    typeText = "url";
+                    break;
+                case nw_endpoint_type_host:
+                    typeText = "host";
+                    break;
+                case nw_endpoint_type_address:
+                    typeText = "address";
+                    break;
+                case nw_endpoint_type_invalid:
+                    typeText = "invalid";
+                    break;
+                case nw_endpoint_type_bonjour_service:
+                    typeText = "bonjour";
+                    break;
+            }
+            const char *hostname = "unknown";
+            hostname = nw_endpoint_get_hostname(gateway);
+            OwnTracksLogDebug("[ConnType] gateway type=%s hostname=%s",
+                              typeText, hostname);
+            return TRUE;
+        });
+        nw_path_enumerate_interfaces(path, ^bool(nw_interface_t  _Nonnull interface) {
+            nw_interface_type_t type =  nw_interface_get_type(interface);
+            const char *typeText = "unknown";
+            switch (type) {
+                case nw_interface_type_wifi:
+                    typeText = "wifi";
+                    self.connectionType = ConnectionTypeWIFI;
+                    break;
+                case nw_interface_type_other:
+                    typeText = "other";
+                    break;
+                case nw_interface_type_wired:
+                    typeText = "wired";
+                    break;
+                case nw_interface_type_cellular:
+                    typeText = "cellular";
+                    if (self.connectionType != ConnectionTypeWIFI) {
+                        self.connectionType = ConnectionTypeWWAN;
+                    }
+                    break;
+                case nw_interface_type_loopback:
+                    typeText = "loopback";
+                    break;
+            }
+            const char *name = nw_interface_get_name(interface);
+            uint32_t index = nw_interface_get_index(interface);
+            OwnTracksLogDebug("[ConnType] interface type=%s name=%s index=%d",
+                              typeText, name, index);
+            return TRUE;
+        });
+    });
+
+    nw_path_monitor_start(self.pm);
+
+    return self;
+}
 
 + (NSString *)SSID {
     NSString *ssid;
@@ -47,41 +152,5 @@
     }
     return bssid;
 }
-
-+ (ConnectionType)connectionType:(NSString *)host {
-    if (!host) {
-        return ConnectionTypeUnknown;
-    }
-
-    const char *hostCString = [host cStringUsingEncoding:NSASCIIStringEncoding];
-    if (hostCString == NULL) {
-        return ConnectionTypeUnknown;
-    }
-
-    SCNetworkReachabilityRef reachability = SCNetworkReachabilityCreateWithName(NULL, hostCString);
-    if (reachability == NULL) {
-        return ConnectionTypeUnknown;
-    }
-
-    SCNetworkReachabilityFlags flags;
-    BOOL success = SCNetworkReachabilityGetFlags(reachability, &flags);
-    CFRelease(reachability);
-    if (!success) {
-        return ConnectionTypeUnknown;
-    }
-    
-    BOOL isReachable = ((flags & kSCNetworkReachabilityFlagsReachable) != 0);
-    BOOL needsConnection = ((flags & kSCNetworkReachabilityFlagsConnectionRequired) != 0);
-    BOOL isNetworkReachable = (isReachable && !needsConnection);
-
-    if (!isNetworkReachable) {
-        return ConnectionTypeNone;
-    } else if ((flags & kSCNetworkReachabilityFlagsIsWWAN) != 0) {
-        return ConnectionTypeWWAN;
-    } else {
-        return ConnectionTypeWIFI;
-    }
-}
-
 
 @end

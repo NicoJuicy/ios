@@ -47,6 +47,8 @@
 @property (strong, nonatomic) NSTimer *holdTimer;
 @property (strong, nonatomic) NSTimer *bgTimer;
 
+@property (strong, nonatomic) ConnType *connType;
+
 @end
 
 @implementation OwnTracksAppDelegate
@@ -54,6 +56,7 @@
 - (instancetype)init {
     self = [super init];
     self.inQueue = @(0);
+    self.connType = [[ConnType alloc] init];
     return self;
 }
 
@@ -1622,7 +1625,9 @@ performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completio
     NSString *conn = nil;
     NSString *ssid = nil;
     NSString *bssid = nil;
-    switch ([ConnType connectionType:[Settings theHostInMOC:moc]]) {
+    ConnectionType newConnectionType = self.connType.connectionType;
+
+    switch (newConnectionType) {
         case ConnectionTypeNone:
             conn = @"o";
             break;
