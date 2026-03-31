@@ -24,20 +24,20 @@ class PersonTVC: UITableViewController {
         ];
         let contactsFetchRequest = CNContactFetchRequest(keysToFetch: keyDescriptors);
         let contactStore = CNContactStore();
-        do {
-            try contactStore.enumerateContacts(with: contactsFetchRequest) { contact, stop in
-                let name = CNContactFormatter.string(from: contact, style: .fullName);
-                if name != nil {
-                    let sectionKey = name?.prefix(1).uppercased();
-                    if sectionKey != nil {
-                        var persons : [CNContact] = sections[sectionKey!] ?? [];
-                        persons.append(contact);
-                        sections[sectionKey!] = persons;
+            do {
+                try contactStore.enumerateContacts(with: contactsFetchRequest) { contact, stop in
+                    let name = CNContactFormatter.string(from: contact, style: .fullName);
+                    if name != nil {
+                        let sectionKey = name?.prefix(1).uppercased();
+                        if sectionKey != nil {
+                            var persons : [CNContact] = sections[sectionKey!] ?? [];
+                            persons.append(contact);
+                            sections[sectionKey!] = persons;
+                        }
                     }
                 }
+            } catch {
             }
-        } catch {
-        }
         
         for sectionKey in sections.keys {
             let persons = sections[sectionKey]?.sorted(by: { (lhs: CNContact, rhs: CNContact) -> Bool in

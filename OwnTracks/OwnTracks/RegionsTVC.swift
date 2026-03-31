@@ -165,7 +165,7 @@ class RegionsTVC: OwnTracksEditFetchTVC {
             let vc = navigationController.topViewController;
             if vc != nil && vc is ViewController {
                 let viewController = vc as! ViewController;
-                viewController.setCenter(region!);
+                viewController.setCenter(annotation: region!);
             }
             tabBarController?.selectedIndex = 0;
         }

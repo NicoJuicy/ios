@@ -58,13 +58,12 @@ class ToursTVC: OwnTracksEditTVC {
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "timestamp" || keyPath == "message" {
-            performSelector(onMainThread: #selector(update), with: nil, waitUntilDone: false);
+            DispatchQueue.main.async {
+                self.refreshControl?.endRefreshing()
+                self.tableView.reloadData();
+            }
         }
 
-    }
-    @objc func update() -> () {
-        refreshControl?.endRefreshing()
-        tableView.reloadData();
     }
     
     @IBAction func tourSaved(_ segue: UIStoryboardSegue) {

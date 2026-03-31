@@ -65,8 +65,9 @@ class StatusTVC: UITableViewController, UIDocumentInteractionControllerDelegate 
     }
     
     override func observeValue(forKeyPath keyPath: String?, of _: Any?, change: [NSKeyValueChangeKey : Any]?, context _: UnsafeMutableRawPointer?) {
-        self.performSelector(onMainThread: #selector(updatedStatus), with: nil, waitUntilDone: false);
-        
+        DispatchQueue.main.async {
+            self.updatedStatus();
+        }
     }
     
     private func connectionStateDescription(state: NSNumber) -> String {
@@ -92,7 +93,7 @@ class StatusTVC: UITableViewController, UIDocumentInteractionControllerDelegate 
         return description;
     }
     
-    @objc func updatedStatus() -> () {
+    func updatedStatus() -> () {
         let ad = UIApplication.shared.delegate as! OwnTracksAppDelegate;
         let connection = ad.connection;
         let lastErrorCode = connection?.lastErrorCode;

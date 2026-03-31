@@ -11,6 +11,7 @@
 #import "Region+CoreDataClass.h"
 #import "History+CoreDataClass.h"
 #import "Friend+CoreDataClass.h"
+#import "Setting+CoreDataClass.h"
 #import "Settings.h"
 #import "OwnTracking.h"
 #import "MQTTMessage.h"

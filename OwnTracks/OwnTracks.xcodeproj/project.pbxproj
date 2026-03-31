@@ -29,7 +29,6 @@
 		8411B88E189FE9940019D2D6 /* Connection.m in Sources */ = {isa = PBXBuildFile; fileRef = 8411B88D189FE9940019D2D6 /* Connection.m */; };
 		8411B891189FE9CE0019D2D6 /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 8411B890189FE9CE0019D2D6 /* Settings.m */; };
 		8411B8E1189FEB790019D2D6 /* Location.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 8411B8AE189FEB790019D2D6 /* Location.gpx */; };
-		8411B912189FEC070019D2D6 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8411B90B189FEC070019D2D6 /* ViewController.m */; };
 		841C22342F3DD7E70005F530 /* MQTTClient in Frameworks */ = {isa = PBXBuildFile; productRef = 841C22332F3DD7E70005F530 /* MQTTClient */; };
 		841D3523209C5DDF0084FCD0 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 841D3522209C5DDF0084FCD0 /* UserNotifications.framework */; };
 		841D3525209C74E70084FCD0 /* Contacts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 841D3524209C74E60084FCD0 /* Contacts.framework */; };
@@ -85,6 +84,7 @@
 		84C7C0352898FAF90088A544 /* Tours.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C7C0342898FAF90088A544 /* Tours.m */; };
 		84CC5A521FEC71850010314C /* OwnTracks-29.png in Resources */ = {isa = PBXBuildFile; fileRef = 84CC5A511FEC71840010314C /* OwnTracks-29.png */; };
 		84D6B47D25C844A500B2AC07 /* NSNumber+decimals.m in Sources */ = {isa = PBXBuildFile; fileRef = 84D6B47C25C844A500B2AC07 /* NSNumber+decimals.m */; };
+		84DB10222F6C54D900DF0651 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DB101F2F6C41D500DF0651 /* ViewController.swift */; };
 		84DC826F2E0757CE0045CD05 /* OwnTracksBatteryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 84DC826E2E0757CE0045CD05 /* OwnTracksBatteryTests.m */; };
 		84DD1CFC2F431FBA00BB15C2 /* CertificatesTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DD1CFB2F431FBA00BB15C2 /* CertificatesTVC.swift */; };
 		84DE749824A9E1C600C0DA68 /* Intents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 84DE749B24A9E1C600C0DA68 /* Intents.intentdefinition */; };
@@ -327,6 +327,7 @@
 		84D6B47B25C844A500B2AC07 /* NSNumber+decimals.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSNumber+decimals.h"; sourceTree = "<group>"; };
 		84D6B47C25C844A500B2AC07 /* NSNumber+decimals.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSNumber+decimals.m"; sourceTree = "<group>"; };
 		84D7516F1B35B1C600B06A0C /* Model 8.1.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 8.1.xcdatamodel"; sourceTree = "<group>"; };
+		84DB101F2F6C41D500DF0651 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		84DC68392CA53B1000FCFE44 /* gl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = gl; path = gl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		84DC683B2CA53B1000FCFE44 /* gl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = gl; path = gl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		84DC683C2CA53B1000FCFE44 /* gl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = gl; path = gl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -622,6 +623,7 @@
 				846EFA3E2F6BECDF0088232B /* NavigationController.swift */,
 				8411B90A189FEC070019D2D6 /* ViewController.h */,
 				8411B90B189FEC070019D2D6 /* ViewController.m */,
+				84DB101F2F6C41D500DF0651 /* ViewController.swift */,
 				846EFA3C2F6ADF6C0088232B /* AttachPhotoTVC.swift */,
 				84E3AE8D2F62BBC8009335B6 /* PhotoAnnotationV.swift */,
 				846EFA382F6A963E0088232B /* OwnTracksEditTVC.swift */,
@@ -921,7 +923,7 @@
 				8411B83A189FDB140019D2D6 /* main.m in Sources */,
 				84DE749824A9E1C600C0DA68 /* Intents.intentdefinition in Sources */,
 				849551F72EF42D4300675342 /* ToursStatusCell.swift in Sources */,
-				8411B912189FEC070019D2D6 /* ViewController.m in Sources */,
+				84DB10222F6C54D900DF0651 /* ViewController.swift in Sources */,
 				846EFA352F682A4E0088232B /* FriendTableViewCell.swift in Sources */,
 				84E40204231413D400F1D6E6 /* History+CoreDataClass.m in Sources */,
 				846EFA3F2F6BECDF0088232B /* NavigationController.swift in Sources */,

@@ -98,16 +98,14 @@ class FriendsTVC: OwnTracksEditFetchTVC {
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        performSelector(onMainThread: #selector(setBadge), with: nil, waitUntilDone: false);
-    }
-    
-    @objc func setBadge() {
-        let ad = UIApplication.shared.delegate as! OwnTracksAppDelegate;
-        let inQueue = ad.inQueue.uintValue;
-        if inQueue > 0 {
-            navigationItem.searchController?.tabBarItem.badgeValue = "\(inQueue)";
-        } else {
-            navigationItem.searchController?.tabBarItem.badgeValue = nil;
+        DispatchQueue.main.async {
+            let ad = UIApplication.shared.delegate as! OwnTracksAppDelegate;
+            let inQueue = ad.inQueue.uintValue;
+            if inQueue > 0 {
+                self.navigationItem.searchController?.tabBarItem.badgeValue = "\(inQueue)";
+            } else {
+                self.navigationItem.searchController?.tabBarItem.badgeValue = nil;
+            }
         }
     }
     
@@ -163,7 +161,7 @@ class FriendsTVC: OwnTracksEditFetchTVC {
             let vc = navigationController.topViewController;
             if vc != nil && vc is ViewController {
                 let viewController = vc as! ViewController;
-                viewController.setCenter(friend);
+                viewController.setCenter(annotation: friend);
             }
             tabBarController?.selectedIndex = 0;
         }

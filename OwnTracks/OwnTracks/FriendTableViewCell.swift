@@ -17,25 +17,23 @@ class FriendTableViewCell: UITableViewCell {
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var address: UILabel!
     
-    @objc func deferredReverseGeoCode(waypoint: Waypoint?) {
-        NSObject.cancelPreviousPerformRequests(withTarget: self);
-        perform(#selector(reverseGeoCode), with: waypoint, afterDelay: 1.0)
-    }
-
-    @objc func reverseGeoCode(waypoint: Waypoint?) {
-        if waypoint != nil {
-            if waypoint!.isDeleted == false {
-                if UserDefaults.standard.integer(forKey: "noRevgeo") > 0 {
-                    waypoint!.getReverseGeoCode();
-                } else {
-                    waypoint!.placemark = waypoint!.defaultPlacemark;
-                    waypoint!.belongsTo?.topic = waypoint!.belongsTo?.topic;
-                    if waypoint!.managedObjectContext != nil {
-                        CoreData.sharedInstance().sync(waypoint!.managedObjectContext!);
+    func deferredReverseGeoCode(waypoint: Waypoint?) {
+        DispatchQueue.cancelPreviousPerformRequests(withTarget: self);
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0, execute: {
+            if waypoint != nil {
+                if waypoint!.isDeleted == false {
+                    if UserDefaults.standard.integer(forKey: "noRevgeo") > 0 {
+                        waypoint!.getReverseGeoCode();
+                    } else {
+                        waypoint!.placemark = waypoint!.defaultPlacemark;
+                        waypoint!.belongsTo?.topic = waypoint!.belongsTo?.topic;
+                        if waypoint!.managedObjectContext != nil {
+                            CoreData.sharedInstance().sync(waypoint!.managedObjectContext!);
+                        }
                     }
                 }
             }
-        }
+        });
     }
 }
 

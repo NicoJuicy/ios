@@ -135,10 +135,14 @@ class SettingsTVC: UITableViewController, UIDocumentInteractionControllerDelegat
     
     override func observeValue(forKeyPath keyPath: String?, of _: Any?, change: [NSKeyValueChangeKey: Any]?, context _: UnsafeMutableRawPointer?) {
         if keyPath == "configLoad" {
-            self.performSelector(onMainThread: #selector(updated), with: nil, waitUntilDone: false);
+            DispatchQueue.main.async {
+                self.updated();
+            }
         }
         if keyPath == "monitoring" {
-            self.performSelector(onMainThread: #selector(updated), with: nil, waitUntilDone: false);
+            DispatchQueue.main.async {
+                self.updated();
+            }
         }
     }
     
@@ -147,7 +151,7 @@ class SettingsTVC: UITableViewController, UIDocumentInteractionControllerDelegat
         return true;
     }
     
-    @objc func updateValues() -> ()  {
+    func updateValues() -> ()  {
         let moc = CoreData.sharedInstance().mainMOC;
         
         if UIDeviceID != nil {
@@ -428,7 +432,7 @@ class SettingsTVC: UITableViewController, UIDocumentInteractionControllerDelegat
         CoreData.sharedInstance().sync(moc);
     }
     
-    @objc func updated() -> () {
+    func updated() -> () {
         let moc = CoreData.sharedInstance().mainMOC;
         let locked = Settings.theLocked(inMOC: moc);
         

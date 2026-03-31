@@ -32,7 +32,9 @@ class TabBarController: UITabBarController {
         NotificationCenter.default.addObserver(forName:  NSNotification.Name(rawValue: "reload"),
                                                object: nil,
                                                queue: OperationQueue.main) { [self] notification in
-            performSelector(onMainThread: #selector(adjust), with: nil, waitUntilDone: false);
+            DispatchQueue.main.async {
+                self.adjust();
+            }
         };
     }
     
@@ -41,7 +43,7 @@ class TabBarController: UITabBarController {
         adjust();
     }
     
-    @objc func adjust() -> () {
+    func adjust() -> () {
         var vCs = viewControllers;
     
         if vCs != nil {
