@@ -20,7 +20,6 @@ typedef NS_ENUM(NSInteger, ConnectionType) {
 };
 
 @interface ConnType : NSObject
-- (void)updateWifi;
 @property (nonatomic, readonly) ConnectionType connectionType;
 @property (strong, nonatomic, readonly, nullable) NSString* ssid;
 @property (strong, nonatomic, readonly, nullable) NSString* bssid;

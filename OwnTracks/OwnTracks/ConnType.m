@@ -116,6 +116,7 @@
                               typeText, name, index);
             return TRUE;
         });
+        [self updateWifi];
     });
 
     nw_path_monitor_start(self.pm);
