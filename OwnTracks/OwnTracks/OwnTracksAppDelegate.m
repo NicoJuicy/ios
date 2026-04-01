@@ -1635,8 +1635,9 @@ performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completio
         case ConnectionTypeWIFI:
         {
             conn = @"w";
-            ssid = [ConnType SSID];
-            bssid = [ConnType BSSID];
+            [self.connType updateWifi];
+            ssid = self.connType.ssid;
+            bssid = self.connType.bssid;
             break;
         }
             

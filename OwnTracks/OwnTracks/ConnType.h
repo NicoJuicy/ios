@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <NetworkExtension/NEHotspotNetwork.h>
 
 /**
  Enumeration of MQTTSession states
@@ -19,9 +20,10 @@ typedef NS_ENUM(NSInteger, ConnectionType) {
 };
 
 @interface ConnType : NSObject
-+ (NSString *)SSID;
-+ (NSString *)BSSID;
-
+- (void)updateWifi;
 @property (nonatomic, readonly) ConnectionType connectionType;
+@property (strong, nonatomic, readonly, nullable) NSString* ssid;
+@property (strong, nonatomic, readonly, nullable) NSString* bssid;
+@property (nonatomic, readonly) NEHotspotNetworkSecurityType securityType;
 
 @end

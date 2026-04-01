@@ -7,7 +7,6 @@
 //
 
 #import "ConnType.h"
-#import <SystemConfiguration/CaptiveNetwork.h>
 
 #import <Network/Network.h>
 #import "OwnTracksLog.h"
@@ -15,6 +14,10 @@
 @interface ConnType()
 @property nw_path_monitor_t pm;
 @property (nonatomic, readwrite) ConnectionType connectionType;
+@property (strong, nonatomic, readwrite, nullable) NSString* ssid;
+@property (strong, nonatomic, readwrite, nullable) NSString* bssid;
+@property (nonatomic, readwrite) NEHotspotNetworkSecurityType securityType;
+
 @end
 
 @implementation ConnType
@@ -23,6 +26,9 @@
 - (instancetype)init {
     self = super.init;
     self.connectionType = ConnectionTypeUnknown;
+    self.ssid = NULL;
+    self.bssid = NULL;
+    self.securityType = NEHotspotNetworkSecurityTypeUnknown;
     self.pm = nw_path_monitor_create();
     nw_path_monitor_set_queue(self.pm, dispatch_get_main_queue());
     nw_path_monitor_set_update_handler(self.pm, ^(nw_path_t  _Nonnull path) {
@@ -117,40 +123,39 @@
     return self;
 }
 
-+ (NSString *)SSID {
-    NSString *ssid;
-
-    CFArrayRef siRef = CNCopySupportedInterfaces();
-    if (siRef != NULL) {
-        CFDictionaryRef niRef = CNCopyCurrentNetworkInfo(CFArrayGetValueAtIndex(siRef, 0));
-        if (niRef != NULL) {
-            CFStringRef ssidRef = CFDictionaryGetValue(niRef, kCNNetworkInfoKeySSID);
-            if (ssidRef != NULL) {
-                ssid = (__bridge NSString *)ssidRef;
+- (void)updateWifi {
+    [NEHotspotNetwork fetchCurrentWithCompletionHandler:^(NEHotspotNetwork * _Nullable currentNetwork) {
+        if (currentNetwork != NULL) {
+            const char *securityTypeText = "unknown";
+            switch (currentNetwork.securityType) {
+                case NEHotspotNetworkSecurityTypeOpen:
+                    securityTypeText = "open";
+                    break;
+                case NEHotspotNetworkSecurityTypeWEP:
+                    securityTypeText = "WEP";
+                    break;
+                case NEHotspotNetworkSecurityTypePersonal:
+                    securityTypeText = "personal";
+                    break;
+                case NEHotspotNetworkSecurityTypeEnterprise:
+                    securityTypeText = "enterprise";
+                    break;
+                case NEHotspotNetworkSecurityTypeUnknown:
+                    securityTypeText = "unknown";
+                    break;
             }
-            CFRelease(niRef);
+            OwnTracksLogDebug("[ConnType] currentNetwork BSSID=%@ SSID=%@ securityType=%s",
+                              currentNetwork.BSSID, currentNetwork.SSID, securityTypeText);
+            self.bssid = currentNetwork.BSSID;
+            self.ssid = currentNetwork.SSID;
+            self.securityType = currentNetwork.securityType;
+        } else {
+            OwnTracksLogInfo("[ConnType] currentNetwork is NULL");
+            self.bssid = nil;
+            self.ssid = nil;
+            self.securityType = NEHotspotNetworkSecurityTypeUnknown;
         }
-        CFRelease(siRef);
-    }
-    return ssid;
-}
-
-+ (NSString *)BSSID {
-    NSString *bssid;
-
-    CFArrayRef siRef = CNCopySupportedInterfaces();
-    if (siRef != NULL) {
-        CFDictionaryRef niRef = CNCopyCurrentNetworkInfo(CFArrayGetValueAtIndex(siRef, 0));
-        if (niRef != NULL) {
-            CFStringRef bssidRef = CFDictionaryGetValue(niRef, kCNNetworkInfoKeyBSSID);
-            if (bssidRef != NULL) {
-                bssid = (__bridge NSString *)(bssidRef);
-            }
-            CFRelease(niRef);
-        }
-        CFRelease(siRef);
-    }
-    return bssid;
+    }];
 }
 
 @end
