@@ -26,9 +26,6 @@
 #import "OwnTracksPointOfInterestIntent.h"
 #import "OwnTracks-Swift.h"
 
-// experimental code for APNS
-#define APNS FALSE
-
 @interface OwnTracksAppDelegate()
 
 @property (nonatomic) UIBackgroundTaskIdentifier backgroundTask;
@@ -176,11 +173,7 @@
         OwnTracksLogInfo("[OwnTracksAppDelegate] UNUserNotificationCenter requestAuthorizationWithOptions granted:%d error:%@", granted, error);
     }];
     center.delegate = self;
-    
-#if APNS
-    [[UIApplication sharedApplication] registerForRemoteNotifications];
-#endif
-    
+        
     return YES;
 }
 
@@ -233,20 +226,6 @@
                       UNNotificationPresentationOptionBanner |
                       UNNotificationPresentationOptionSound);
 }
-
-#if APNS
-- (void)application:(UIApplication *)application
-didReceiveRemoteNotification:(NSDictionary *)userInfo
-fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
-    OwnTracksLogInfo("[OwnTracksAppDelegate] didReceiveRemoteNotification starting");
-    
-    [self performSelectorOnMainThread:@selector(doRefresh)
-                           withObject:nil
-                        waitUntilDone:TRUE];
-    OwnTracksLogInfo("[OwnTracksAppDelegate] didReceiveRemoteNotification finished");
-    completionHandler(UIBackgroundFetchResultNewData);
-}
-#endif
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     OwnTracksLogInfo("[OwnTracksAppDelegate] applicationWillResignActive");
@@ -2052,28 +2031,6 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
     }
     return NO;
 }
-
-#if APNS
-#pragma Remote Notifications
-- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-    
-    NSString *deviceHexString = [[NSString alloc] init];
-    for (int i = 0; i < deviceToken.length; i++) {
-        unsigned char c;
-        [deviceToken getBytes:&c range:NSMakeRange(i, 1)];
-        deviceHexString = [deviceHexString stringByAppendingFormat:@"%02X", c];
-    }
-    OwnTracksLogInfo("[OwnTracksAppDelegate] didRegisterForRemoteNotificationsWithDeviceToken: %@",
-              deviceHexString);
-}
-
-- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
-    OwnTracksLogError("[OwnTracksAppDelegate] didFailToRegisterForRemoteNotificationsWithError: %@",
-               error.localizedDescription);
-    
-}
-
-#endif
 
 @end
 
