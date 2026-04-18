@@ -46,234 +46,204 @@ static SettingsDefaults *defaults;
 
 @implementation Settings
 
-+ (NSError *)fromStream:(NSInputStream *)input
-                  inMOC:(NSManagedObjectContext *)context {
-    NSError *error;
-    
-    NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithStream:input
-                                                                 options:0
-                                                                   error:&error];
-    if (dictionary) {
-        return [self fromDictionary:dictionary inMOC:context];
-    } else {
-        return error;
++ (NSString *)theIntentAuthKey {
+    NSString *intentAuthKey = [[NSUserDefaults standardUserDefaults] stringForKey:@"intentAuthKey"];
+    if (intentAuthKey == nil) {
+        intentAuthKey = [NSUUID UUID].UUIDString;
+        [[NSUserDefaults standardUserDefaults] setObject:intentAuthKey forKey:@"intentAuthKey"];
     }
+    return intentAuthKey;
 }
 
 + (NSError *)fromDictionary:(NSDictionary *)dictionary
                       inMOC:(NSManagedObjectContext *)context {
-    if (dictionary && [dictionary isKindOfClass:[NSDictionary class]]) {
-        for (NSString *key in dictionary.allKeys) {
-            NSObject *object = dictionary[key];
-            OwnTracksLogInfo("Configuration %@:%@ (%@)", key, object, object.class);
-        }
-        
-        NSString *type = dictionary[@"_type"];
-        if (type && [type isKindOfClass:[NSString class]] && [type isEqualToString:@"configuration"]) {
-            NSObject *object;
-
-            NSNumber *mode = dictionary[@"mode"];
-            if (mode) {
-                if ([mode isKindOfClass:[NSNumber class]] &&
-                (mode.intValue == CONNECTION_MODE_MQTT ||
-                 mode.intValue == CONNECTION_MODE_HTTP)) {
-                    [self setInt:mode.intValue forKey:@"mode" inMOC:context];
-                } else {
-                    OwnTracksLogError("[Settings] fromDictionary invalid mode");
-                    return [NSError errorWithDomain:@"OwnTracks Settings"
-                                               code:1
-                                           userInfo:@{@"mode": [NSString stringWithFormat:@"%@", dictionary[@"mode"]]}];
-                }
-            }
-
-            object = dictionary[@"deviceId"];
-            if (object) [self setString:(NSString *)object forKey:@"deviceid_preference" inMOC:context];
-
-            object = dictionary[@"tid"];
-            if (object) [self setString:object forKey:@"trackerid_preference" inMOC:context];
-            
-            object = dictionary[@"clientId"];
-            if (object) [self setString:object forKey:@"clientid_preference" inMOC:context];
-            
-            object = dictionary[@"subTopic"];
-            if (object) [self setString:object forKey:@"subscription_preference" inMOC:context];
-            
-            object = dictionary[@"pubTopicBase"];
-            if (object) [self setString:object forKey:@"topic_preference" inMOC:context];
-            
-            object = dictionary[@"host"];
-            if (object) [self setString:object forKey:@"host_preference" inMOC:context];
-            
-            object = dictionary[@"url"];
-            if (object) [self setString:object forKey:@"url_preference" inMOC:context];
-
-            object = dictionary[@"httpHeaders"];
-            if (object) [self setString:object forKey:@"httpheaders_preference" inMOC:context];
-
-            object = dictionary[@"encryptionKey"];
-            if (object) [self setString:object forKey:@"secret_preference" inMOC:context];
-
-            object = dictionary[@"osmTemplate"];
-            if (object) [self setString:object forKey:@"osmtemplate_preference" inMOC:context];
-
-            object = dictionary[@"osmCopyright"];
-            if (object) [self setString:object forKey:@"osmcopyright_preference" inMOC:context];
-
-            object = dictionary[@"username"];
-            if (object) [self setString:object forKey:@"user_preference" inMOC:context];
-
-            object = dictionary[@"password"];
-            if (object) [self setString:object forKey:@"pass_preference" inMOC:context];
-
-            object = dictionary[@"subQos"];
-            if (object) [self setString:object forKey:@"subscriptionqos_preference" inMOC:context];
-            
-            object = dictionary[@"pubQos"];
-            if (object) [self setString:object forKey:@"qos_preference" inMOC:context];
-            
-            object = dictionary[@"port"];
-            if (object) [self setString:object forKey:@"port_preference" inMOC:context];
-
-            object = dictionary[@"mqttProtocolLevel"];
-            if (object) [self setString:object forKey:@"mqttProtocolLevel" inMOC:context];
-
-            object = dictionary[@"ignoreStaleLocations"];
-            if (object) [self setString:object forKey:@"ignorestalelocations_preference" inMOC:context];
-
-            object = dictionary[@"ignoreInaccurateLocations"];
-            if (object) [self setString:object forKey:@"ignoreinaccuratelocations_preference" inMOC:context];
-
-            object = dictionary[@"keepalive"];
-            if (object) [self setString:object forKey:@"keepalive_preference" inMOC:context];
-                        
-            object = dictionary[@"locatorDisplacement"];
-            if (object) {
-                [self setString: object forKey:@"mindist_preference" inMOC:context];
-                [LocationManager sharedInstance].minDist =
-                [Settings doubleForKey:@"mindist_preference"
-                              inMOC:context];
-            }
-            
-            object = dictionary[@"locatorInterval"];
-            if (object) {
-                [self setString:object forKey:@"mintime_preference" inMOC:context];
-                [LocationManager sharedInstance].minTime =
-                [Settings doubleForKey:@"mintime_preference"
-                              inMOC:context];
-            }
-            
-            object = dictionary[@"monitoring"];
-            if (object) {
-                [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"downgraded"];
-                [self setString:object forKey:@"monitoring_preference" inMOC:context];
-                [LocationManager sharedInstance].monitoring =
-                [Settings intForKey:@"monitoring_preference"
-                              inMOC:context];
-            }
-
-            object = dictionary[@"downgrade"];
-            if (object) [self setString:object forKey:@"downgrade_preference" inMOC:context];
-            
-            object = dictionary[@"adapt"];
-            if (object) [self setString:object forKey:@"adapt_preference" inMOC:context];
-            
-            object = dictionary[@"ranging"];
-            if (object) [self setString:object forKey:@"ranging_preference" inMOC:context];
-            
-            object = dictionary[@"cmd"];
-            if (object) [self setString:object forKey:@"cmd_preference" inMOC:context];
-
-            object = dictionary[@"sub"];
-            if (object) [self setString:object forKey:@"sub_preference" inMOC:context];
-
-            object = dictionary[@"pubRetain"];
-            if (object) [self setString:object forKey:@"retain_preference" inMOC:context];
-            
-            object = dictionary[@"tls"];
-            if (object) [self setString:object forKey:@"tls_preference" inMOC:context];
-
-            object = dictionary[@"ws"];
-            if (object) [self setString:object forKey:@"ws_preference" inMOC:context];
-
-            object = dictionary[@"auth"];
-            if (object) [self setString:object forKey:@"auth_preference" inMOC:context];
-
-            object = dictionary[@"usePassword"];
-            if (object) [self setString:object forKey:@"usepassword_preference" inMOC:context];
-
-            object = dictionary[@"cleanSession"];
-            if (object) [self setString:object forKey:@"clean_preference" inMOC:context];
-            
-            object = dictionary[@"positions"];
-            if (object) [self setString:object forKey:@"positions_preference" inMOC:context];
-
-            object = dictionary[@"days"];
-            if (object) [self setString:object forKey:@"days_preference" inMOC:context];
-
-            object = dictionary[@"maxHistory"];
-            if (object) [self setString:object forKey:@"maxhistory_preference" inMOC:context];
-
-            object = dictionary[@"allowRemoteLocation"];
-            if (object) [self setString:object forKey:@"allowremotelocation_preference" inMOC:context];
-            
-            object = dictionary[@"remoteConfiguration"];
-            if (object) [self setString:object forKey:@"allowremoteconfiguration_preference" inMOC:context];
-            
-            object = dictionary[@"uriConfiguration"];
-            if (object) [self setString:object forKey:@"allowruriconfiguration_preference" inMOC:context];
-            
-            object = dictionary[@"urlConfiguration"];
-            if (object) [self setString:object forKey:@"allowuriconfiguration_preference" inMOC:context];
-            
-            object = dictionary[@"allowIntents"];
-            if (object) [self setString:object forKey:@"allowintents_preference" inMOC:context];
-            
-            object = dictionary[@"extendedData"];
-            if (object) [self setString:object forKey:@"extendeddata_preference" inMOC:context];
-            
-            object = dictionary[@"locked"];
-            if (object) [self setString:object forKey:@"locked" inMOC:context];
-            
-            object = dictionary[@"clientpkcs"];
-            if (object) [self setString:object forKey:@"clientpkcs" inMOC:context];
-
-            object = dictionary[@"passphrase"];
-            if (object) [self setString:object forKey:@"passphrase" inMOC:context];
-            
-            object = dictionary[@"allowinvalidcerts"];
-            if (object) [self setString:object forKey:@"allowinvalidcerts" inMOC:context];
-                                                
-            NSArray *waypoints = dictionary[@"waypoints"];
-            if (waypoints) [self setWaypoints:waypoints inMOC:context];
-            
-        } else {
-            OwnTracksLogError("[Settings] fromDictionary invalid _type");
-            return [NSError errorWithDomain:@"OwnTracks Settings"
-                                       code:1
-                                   userInfo:@{@"_type": [NSString stringWithFormat:@"%@", dictionary[@"_type"]]}];
-        }
-    } else {
+    if (!dictionary && ![dictionary isKindOfClass:[NSDictionary class]]) {
         OwnTracksLogError("[Settings] fromDictionary invalid dictionary");
         return [NSError errorWithDomain:@"OwnTracks Settings"
                                    code:2
                                userInfo:@{}];
     }
-
-    return nil;
-}
-
-+ (NSError *)waypointsFromStream:(NSInputStream *)input
-                           inMOC:(NSManagedObjectContext *)context  {
-    NSError *error;
-    
-    NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithStream:input
-                                                                 options:0
-                                                                   error:&error];
-    if (dictionary) {
-        return [self waypointsFromDictionary:dictionary inMOC:context];
-    } else {
-        return error;
+    for (NSString *key in dictionary.allKeys) {
+        NSObject *object = dictionary[key];
+        OwnTracksLogDebug("Configuration %@:%@ (%@)", key, object, object.class);
     }
+        
+    NSString *type = dictionary[@"_type"];
+    if (!type || ![type isKindOfClass:[NSString class]] || ![type isEqualToString:@"configuration"]) {
+        OwnTracksLogError("[Settings] fromDictionary invalid _type");
+        return [NSError errorWithDomain:@"OwnTracks Settings"
+                                   code:1
+                               userInfo:@{@"_type": [NSString stringWithFormat:@"%@", dictionary[@"_type"]]}];
+    }
+                
+    NSObject *object;
+    
+    NSNumber *mode = dictionary[@"mode"];
+    if (mode) {
+        if ([mode isKindOfClass:[NSNumber class]] &&
+            (mode.intValue == CONNECTION_MODE_MQTT ||
+             mode.intValue == CONNECTION_MODE_HTTP)) {
+            [self setInt:mode.intValue forKey:@"mode" inMOC:context];
+        } else {
+            OwnTracksLogError("[Settings] fromDictionary invalid mode");
+            return [NSError errorWithDomain:@"OwnTracks Settings"
+                                       code:1
+                                   userInfo:@{@"mode": [NSString stringWithFormat:@"%@", dictionary[@"mode"]]}];
+        }
+    }
+    
+    object = dictionary[@"deviceId"];
+    if (object) [self setString:(NSString *)object forKey:@"deviceid_preference" inMOC:context];
+    
+    object = dictionary[@"tid"];
+    if (object) [self setString:object forKey:@"trackerid_preference" inMOC:context];
+    
+    object = dictionary[@"clientId"];
+    if (object) [self setString:object forKey:@"clientid_preference" inMOC:context];
+    
+    object = dictionary[@"subTopic"];
+    if (object) [self setString:object forKey:@"subscription_preference" inMOC:context];
+    
+    object = dictionary[@"pubTopicBase"];
+    if (object) [self setString:object forKey:@"topic_preference" inMOC:context];
+    
+    object = dictionary[@"host"];
+    if (object) [self setString:object forKey:@"host_preference" inMOC:context];
+    
+    object = dictionary[@"url"];
+    if (object) [self setString:object forKey:@"url_preference" inMOC:context];
+    
+    object = dictionary[@"httpHeaders"];
+    if (object) [self setString:object forKey:@"httpheaders_preference" inMOC:context];
+    
+    object = dictionary[@"encryptionKey"];
+    if (object) [self setString:object forKey:@"secret_preference" inMOC:context];
+    
+    object = dictionary[@"osmTemplate"];
+    if (object) [self setString:object forKey:@"osmtemplate_preference" inMOC:context];
+    
+    object = dictionary[@"osmCopyright"];
+    if (object) [self setString:object forKey:@"osmcopyright_preference" inMOC:context];
+    
+    object = dictionary[@"username"];
+    if (object) [self setString:object forKey:@"user_preference" inMOC:context];
+    
+    object = dictionary[@"password"];
+    if (object) [self setString:object forKey:@"pass_preference" inMOC:context];
+    
+    object = dictionary[@"subQos"];
+    if (object) [self setString:object forKey:@"subscriptionqos_preference" inMOC:context];
+    
+    object = dictionary[@"pubQos"];
+    if (object) [self setString:object forKey:@"qos_preference" inMOC:context];
+    
+    object = dictionary[@"port"];
+    if (object) [self setString:object forKey:@"port_preference" inMOC:context];
+    
+    object = dictionary[@"mqttProtocolLevel"];
+    if (object) [self setString:object forKey:@"mqttProtocolLevel" inMOC:context];
+    
+    object = dictionary[@"ignoreStaleLocations"];
+    if (object) [self setString:object forKey:@"ignorestalelocations_preference" inMOC:context];
+    
+    object = dictionary[@"ignoreInaccurateLocations"];
+    if (object) [self setString:object forKey:@"ignoreinaccuratelocations_preference" inMOC:context];
+    
+    object = dictionary[@"keepalive"];
+    if (object) [self setString:object forKey:@"keepalive_preference" inMOC:context];
+    
+    object = dictionary[@"locatorDisplacement"];
+    if (object) {
+        [self setString: object forKey:@"mindist_preference" inMOC:context];
+        [LocationManager sharedInstance].minDist =
+        [Settings doubleForKey:@"mindist_preference"
+                         inMOC:context];
+    }
+    
+    object = dictionary[@"locatorInterval"];
+    if (object) {
+        [self setString:object forKey:@"mintime_preference" inMOC:context];
+        [LocationManager sharedInstance].minTime =
+        [Settings doubleForKey:@"mintime_preference"
+                         inMOC:context];
+    }
+    
+    object = dictionary[@"monitoring"];
+    if (object) {
+        [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"downgraded"];
+        [self setString:object forKey:@"monitoring_preference" inMOC:context];
+        [LocationManager sharedInstance].monitoring =
+        [Settings intForKey:@"monitoring_preference"
+                      inMOC:context];
+    }
+    
+    object = dictionary[@"downgrade"];
+    if (object) [self setString:object forKey:@"downgrade_preference" inMOC:context];
+    
+    object = dictionary[@"adapt"];
+    if (object) [self setString:object forKey:@"adapt_preference" inMOC:context];
+    
+    object = dictionary[@"ranging"];
+    if (object) [self setString:object forKey:@"ranging_preference" inMOC:context];
+    
+    object = dictionary[@"cmd"];
+    if (object) [self setString:object forKey:@"cmd_preference" inMOC:context];
+    
+    object = dictionary[@"sub"];
+    if (object) [self setString:object forKey:@"sub_preference" inMOC:context];
+    
+    object = dictionary[@"pubRetain"];
+    if (object) [self setString:object forKey:@"retain_preference" inMOC:context];
+    
+    object = dictionary[@"tls"];
+    if (object) [self setString:object forKey:@"tls_preference" inMOC:context];
+    
+    object = dictionary[@"ws"];
+    if (object) [self setString:object forKey:@"ws_preference" inMOC:context];
+    
+    object = dictionary[@"auth"];
+    if (object) [self setString:object forKey:@"auth_preference" inMOC:context];
+    
+    object = dictionary[@"usePassword"];
+    if (object) [self setString:object forKey:@"usepassword_preference" inMOC:context];
+    
+    object = dictionary[@"cleanSession"];
+    if (object) [self setString:object forKey:@"clean_preference" inMOC:context];
+    
+    object = dictionary[@"positions"];
+    if (object) [self setString:object forKey:@"positions_preference" inMOC:context];
+    
+    object = dictionary[@"days"];
+    if (object) [self setString:object forKey:@"days_preference" inMOC:context];
+    
+    object = dictionary[@"maxHistory"];
+    if (object) [self setString:object forKey:@"maxhistory_preference" inMOC:context];
+    
+    object = dictionary[@"allowRemoteLocation"];
+    if (object) [self setString:object forKey:@"allowremotelocation_preference" inMOC:context];
+    
+    object = dictionary[@"remoteConfiguration"];
+    if (object) [self setString:object forKey:@"allowremoteconfiguration_preference" inMOC:context];
+        
+    object = dictionary[@"extendedData"];
+    if (object) [self setString:object forKey:@"extendeddata_preference" inMOC:context];
+    
+    object = dictionary[@"locked"];
+    if (object) [self setString:object forKey:@"locked" inMOC:context];
+    
+    object = dictionary[@"clientpkcs"];
+    if (object) [self setString:object forKey:@"clientpkcs" inMOC:context];
+    
+    object = dictionary[@"passphrase"];
+    if (object) [self setString:object forKey:@"passphrase" inMOC:context];
+    
+    object = dictionary[@"allowinvalidcerts"];
+    if (object) [self setString:object forKey:@"allowinvalidcerts" inMOC:context];
+    
+    NSArray *waypoints = dictionary[@"waypoints"];
+    if (waypoints) [self setWaypoints:waypoints inMOC:context];
+            
+    return nil;
 }
 
 + (NSError *)waypointsFromDictionary:(NSDictionary *)dictionary
@@ -449,9 +419,6 @@ static SettingsDefaults *defaults;
     dict[@"cmd"] =                  @([Settings boolForKey:@"cmd_preference" inMOC:context]);
     dict[@"allowRemoteLocation"] =  @([Settings boolForKey:@"allowremotelocation_preference" inMOC:context]);
     dict[@"remoteConfiguration"] =  @([Settings boolForKey:@"allowremoteconfiguration_preference" inMOC:context]);
-    dict[@"uriConfiguration"] =     @([Settings boolForKey:@"allowuriconfiguration_preference" inMOC:context]);
-    dict[@"urlConfiguration"] =     @([Settings boolForKey:@"allowurlconfiguration_preference" inMOC:context]);
-    dict[@"allowIntents"] =         @([Settings boolForKey:@"allowintents_preference" inMOC:context]);
     dict[@"auth"] =                 @([Settings boolForKey:@"auth_preference" inMOC:context]);
     dict[@"usePassword"] =          @([Settings boolForKey:@"usepassword_preference" inMOC:context]);
     dict[@"encryptionKey"] =        [Settings stringOrZeroForKey:@"secret_preference" inMOC:context];
@@ -509,7 +476,7 @@ static SettingsDefaults *defaults;
     
     NSError *error;
     NSData *myData = [NSJSONSerialization dataWithJSONObject:dict
-                                                     options:NSJSONWritingPrettyPrinted
+                                                     options:NSJSONWritingPrettyPrinted | NSJSONWritingSortedKeys
                                                        error:&error];
     return myData;
 }
@@ -774,16 +741,12 @@ static SettingsDefaults *defaults;
     return [self boolForKey:@"allowremoteconfiguration_preference" inMOC:context];
 }
 
-+ (BOOL)theAllowURLConfigurationInMOC:(NSManagedObjectContext *)context {
-    return [self boolForKey:@"allowurlconfiguration_preference" inMOC:context];
++ (BOOL)theallowConfigurationByURIAndConfigFileInMOC:(NSManagedObjectContext *)context {
+    return [self boolForKey:@"allowConfigurationByURIAndConfigFile" inMOC:context];
 }
 
-+ (BOOL)theAllowURIConfigurationInMOC:(NSManagedObjectContext *)context {
-    return [self boolForKey:@"allowuriconfiguration_preference" inMOC:context];
-}
-
-+ (BOOL)theAllowIntentsInMOC:(NSManagedObjectContext *)context {
-    return [self boolForKey:@"allowintents_preference" inMOC:context];
++ (BOOL)theAllowIntentControlInMOC:(NSManagedObjectContext *)context {
+    return [self boolForKey:@"allowIntentControl" inMOC:context];
 }
 
 + (BOOL)theMqttAuthInMOC:(NSManagedObjectContext *)context {

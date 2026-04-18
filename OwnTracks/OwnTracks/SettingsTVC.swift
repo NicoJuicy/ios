@@ -60,8 +60,7 @@ class SettingsTVC: UITableViewController, UIDocumentInteractionControllerDelegat
     @IBOutlet weak var UIallowRemoteLocation: UISwitch!
     @IBOutlet weak var UIremoteConfiguration: UISwitch!
     @IBOutlet weak var UIuriConfiguration: UISwitch!
-    @IBOutlet weak var UIurlConfiguration: UISwitch!
-    @IBOutlet weak var UIprivacyKey: UITextField!
+    @IBOutlet weak var UIintentAuthKey: UITextField!
     @IBOutlet weak var UIintents: UISwitch!
     
     @IBOutlet weak var UITLSCell: UITableViewCell!
@@ -406,19 +405,13 @@ class SettingsTVC: UITableViewController, UIDocumentInteractionControllerDelegat
 
         if UIuriConfiguration != nil {
             Settings.setBool(UIuriConfiguration.isOn,
-                             forKey: "allowuriconfiguration_preference",
-                             inMOC: moc);
-        }
-
-        if UIurlConfiguration != nil {
-            Settings.setBool(UIurlConfiguration.isOn,
-                             forKey: "allowurlconfiguration_preference",
+                             forKey: "allowConfigurationByURIAndConfigFile",
                              inMOC: moc);
         }
 
         if UIintents != nil {
             Settings.setBool(UIintents.isOn,
-                             forKey: "allowintents_preference",
+                             forKey: "allowIntentControl",
                              inMOC: moc);
         }
 
@@ -716,22 +709,15 @@ class SettingsTVC: UITableViewController, UIDocumentInteractionControllerDelegat
         }
 
         if UIuriConfiguration != nil {
-            UIuriConfiguration.isOn = Settings.theAllowURIConfiguration(inMOC: moc);
-            UIuriConfiguration.isEnabled = !locked;
-        }
-
-        if UIurlConfiguration != nil {
-            UIurlConfiguration.isOn = Settings.theAllowURLConfiguration(inMOC: moc);
-            UIurlConfiguration.isEnabled = !locked;
+            UIuriConfiguration.isOn = Settings.theallowConfigurationByURIAndConfigFile(inMOC: moc);
         }
 
         if UIintents != nil {
-            UIintents.isOn = Settings.theAllowIntents(inMOC: moc);
-            UIintents.isEnabled = !locked;
+            UIintents.isOn = Settings.theAllowIntentControl(inMOC: moc);
         }
         
-        if UIprivacyKey != nil {
-            UIprivacyKey.text = UserDefaults.standard.string(forKey: "privacyKey") ?? "";
+        if UIintentAuthKey != nil {
+            UIintentAuthKey.text = Settings.theIntentAuthKey();
         }
 
         if UIurl != nil {
@@ -1174,46 +1160,41 @@ class SettingsTVC: UITableViewController, UIDocumentInteractionControllerDelegat
     }
     
     @IBAction func remoteConfigurationChanged(_ sender: UISwitch) {
-        if sender.isOn {
-            configWarning();
-        }
+        updateValues();
+        updated();
     }
     
     @IBAction func uriConfigurationChanged(_ sender: UISwitch) {
         if sender.isOn {
             configWarning();
-        }
-    }
-    
-    @IBAction func urlConfigurationChanged(_ sender: UISwitch) {
-        if sender.isOn {
-            configWarning();
+        } else {
+            updateValues();
+            updated();
         }
     }
     
     @IBAction func intentsChanged(_ sender: UISwitch) {
-        if sender.isOn {
-            configWarning();
-        }
+        updateValues();
+        updated();
     }
     
     override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         let tableViewCell = tableView.cellForRow(at: indexPath);
         if tableViewCell?.tag == 99 {
-            UIPasteboard.general.string = UserDefaults.standard.string(forKey: "privacyKey");
+            UIPasteboard.general.string = Settings.theIntentAuthKey();
             NavigationController.alert(title: NSLocalizedString("Clipboard",
                                                                 comment: "Clipboard"),
-                                       message: NSLocalizedString("Privacy Key copied to clipboard",
-                                                                  comment: "Privacy Key  copied to clipboard"),
+                                       message: NSLocalizedString("Intent auth key copied to clipboard",
+                                                                  comment: "Intent auth key copied to clipboard"),
                                        dismissAfter: 1.0);
         }
         return nil;
     }
     
     func configWarning() {
-        let ac = UIAlertController(title:NSLocalizedString("External Configuration change",
+        let ac = UIAlertController(title:NSLocalizedString("Allow external configuration?",
                                                            comment:"Alert header for external configuration change warning"),
-                                   message: NSLocalizedString("Please be aware you are changing the permissions to configure your app externally. Do not enable this setting unless you know what you are doing.",
+                                   message: NSLocalizedString("Any owntracks: URL or config file can completely reconfigure this app, including change the backend, credentials and tracking settings. Only enable this if you trust all sources that can send such URLs to this device.",
                                                               comment: "Alert content for external configuration change warning"),
                                    preferredStyle: .alert);
         let cancel = UIAlertAction(title: NSLocalizedString("Cancel",

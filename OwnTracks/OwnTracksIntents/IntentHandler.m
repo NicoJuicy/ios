@@ -29,8 +29,8 @@
 - (void)handleSendNow:(nonnull OwnTracksSendNowIntent *)intent
            completion:(nonnull void (^)(OwnTracksSendNowIntentResponse * _Nonnull))completion {
     NSUserDefaults *shared = [[NSUserDefaults alloc] initWithSuiteName:@"group.org.owntracks.Owntracks"];
-     [shared setObject:[NSDate date] forKey:@"sendNow"];
-     [shared synchronize];
+    [shared setObject:@{@"sendNow": [NSDate date] , @"intentAuthKey": intent.IntentAuthKey} forKey:@"sendNowWithAuthKey"];
+    [shared synchronize];
     
     OwnTracksSendNowIntentResponse *response = [[OwnTracksSendNowIntentResponse alloc] initWithCode:OwnTracksSendNowIntentResponseCodeSuccess userActivity:nil];
     completion(response);
@@ -56,7 +56,8 @@
          default:
              break;
      }
-     [shared setInteger:monitoring forKey:@"monitoring"];
+    [shared setObject:@{@"monitoring": @(monitoring), @"intentAuthKey": intent.IntentAuthKey} forKey:@"monitoringWithAuthKey"];
+
      [shared synchronize];
 
      OwnTracksChangeMonitoringIntentResponse *response = [[OwnTracksChangeMonitoringIntentResponse alloc] initWithCode:OwnTracksChangeMonitoringIntentResponseCodeSuccess userActivity:nil];
@@ -81,9 +82,9 @@
 - (void)handleTag:(OwnTracksTagIntent *)intent
        completion:(void (^)(OwnTracksTagIntentResponse * _Nonnull))completion {
     NSUserDefaults *shared = [[NSUserDefaults alloc] initWithSuiteName:@"group.org.owntracks.Owntracks"];
-     [shared setObject:intent.tag forKey:@"tag"];
-     [shared synchronize];
-
+    [shared setObject:@{@"tag": intent.tag, @"intentAuthKey": intent.IntentAuthKey} forKey:@"tagWithAuthKey"];
+    [shared synchronize];
+    
     OwnTracksTagIntentResponse *response = [[OwnTracksTagIntentResponse alloc] initWithCode:OwnTracksTagIntentResponseCodeSuccess userActivity:nil];
     completion(response);
 }
@@ -95,7 +96,7 @@
 
 - (void)handlePointOfInterest:(OwnTracksPointOfInterestIntent *)intent completion:(void (^)(OwnTracksPointOfInterestIntentResponse * _Nonnull))completion {
     NSUserDefaults *shared = [[NSUserDefaults alloc] initWithSuiteName:@"group.org.owntracks.Owntracks"];
-    [shared setObject:intent.name forKey:@"poi"];
+    [shared setObject:@{@"poi": intent.name, @"intentAuthKey": intent.IntentAuthKey} forKey:@"poiWithAuthKey"];
     [shared synchronize];
 
     OwnTracksPointOfInterestIntentResponse *response = [[OwnTracksPointOfInterestIntentResponse alloc] initWithCode:OwnTracksPointOfInterestIntentResponseCodeSuccess userActivity:nil];

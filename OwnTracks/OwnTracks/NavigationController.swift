@@ -14,7 +14,7 @@ import UIKit
 class NavigationController: UINavigationController {
     static var sharedInstance: NavigationController? = nil;
     
-    var queuedAlerts: [(String, String, String?, TimeInterval?)] = [];
+    var queuedAlerts: [(String, String, String?, TimeInterval?, (() -> Void)?)] = [];
     let progressView = UIProgressView(progressViewStyle: .bar);
 
     override func viewDidLoad() {
@@ -86,35 +86,54 @@ class NavigationController: UINavigationController {
     }
     
     @objc class func alert(title: String, message: String) {
-        NavigationController.sharedInstance?.showAlert(title, message: message, url: nil, dismissAfter: 0);
+        NavigationController.sharedInstance?.showAlert(title, message: message, url: nil, dismissAfter: 0, operation: nil);
     }
     
     @objc class func alert(title: String, message: String, dismissAfter: TimeInterval) {
-        NavigationController.sharedInstance?.showAlert(title, message: message, url: nil, dismissAfter: dismissAfter);
+        NavigationController.sharedInstance?.showAlert(title, message: message, url: nil, dismissAfter: dismissAfter, operation: nil);
     }
     
     @objc class func alert(title: String, message: String, url: String) {
-        NavigationController.sharedInstance?.showAlert(title, message: message, url: url, dismissAfter: 0);
+        NavigationController.sharedInstance?.showAlert(title, message: message, url: url, dismissAfter: 0, operation: nil);
     }
     
+    @objc class func alert(title: String, message: String, operation: (() -> Void)? = nil) {
+        NavigationController.sharedInstance?.showAlert(title, message: message, url: nil, dismissAfter: 0, operation: operation);
+    }
+
     @objc class func shared() -> NavigationController? {
         return sharedInstance;
     }
     
-    func showAlert(_ title: String, message: String, url: String?, dismissAfter: TimeInterval!) {
+    func showAlert(_ title: String, message: String, url: String? = nil, dismissAfter: TimeInterval!, operation: (() -> Void)? = nil) {
         DispatchQueue.main.async {
             if self.presentedViewController != nil {
-                self.queuedAlerts.append( (title, message, url, dismissAfter) );
+                self.queuedAlerts.append( (title, message, url, dismissAfter, operation) );
             } else {
                 let ac = UIAlertController(title: title, message: message, preferredStyle: .alert);
                 if dismissAfter == 0 {
-                    let ok = UIAlertAction(title: NSLocalizedString("Continue",
-                                                                    comment: "Continue button title"),
+                    let cancel = UIAlertAction(title: NSLocalizedString("Cancel",
+                                                                    comment: "Cancel button title"),
                                            style: .cancel) { action in
                         if self.queuedAlerts.count > 0 {
                             let nextAlert = self.queuedAlerts.removeFirst();
-                            self.showAlert(nextAlert.0, message: nextAlert.1, url: nextAlert.2, dismissAfter: nextAlert.3);
+                            self.showAlert(nextAlert.0, message: nextAlert.1, url: nextAlert.2, dismissAfter: nextAlert.3, operation: nextAlert.4);
                         }
+                    }
+
+                    let ok = UIAlertAction(title: NSLocalizedString("Continue",
+                                                                    comment: "Continue button title"),
+                                           style: .default) { action in
+                        if operation != nil {
+                            operation!();
+                        }
+                        if self.queuedAlerts.count > 0 {
+                            let nextAlert = self.queuedAlerts.removeFirst();
+                            self.showAlert(nextAlert.0, message: nextAlert.1, url: nextAlert.2, dismissAfter: nextAlert.3, operation: nextAlert.4);
+                        }
+                    }
+                    if operation != nil {
+                        ac.addAction(cancel);
                     }
                     ac.addAction(ok);
                     if url != nil {

@@ -17,12 +17,8 @@ typedef NS_ENUM(int, ConnectionMode) {
 
 @interface Settings : NSObject
 
-+ (NSError * _Nullable)fromStream:(NSInputStream * _Nonnull)input
-                            inMOC:(NSManagedObjectContext * _Nonnull)context;
 + (NSError * _Nullable)fromDictionary:(NSDictionary * _Nonnull)dictionary
                                 inMOC:(NSManagedObjectContext * _Nonnull)context;
-+ (NSError * _Nullable)waypointsFromStream:(NSInputStream * _Nonnull)input
-                                     inMOC:(NSManagedObjectContext * _Nonnull)context;
 + (NSError * _Nullable)waypointsFromDictionary:(NSDictionary * _Nonnull)dictionary
                                          inMOC:(NSManagedObjectContext * _Nonnull)context;
 + (NSError * _Nullable)clearWaypoints:(NSManagedObjectContext * _Nonnull)context;
@@ -53,6 +49,8 @@ typedef NS_ENUM(int, ConnectionMode) {
          forKey:(NSString *_Nonnull)key 
           inMOC:(NSManagedObjectContext *_Nonnull)context;
 
++ (NSString * _Nonnull)theIntentAuthKey;
+
 + (NSString * _Nonnull)theHostInMOC:(NSManagedObjectContext * _Nonnull)context;
 + (NSString * _Nonnull)theGeneralTopicInMOC:(NSManagedObjectContext * _Nonnull)context;
 + (NSString * _Nonnull)theWillTopicInMOC:(NSManagedObjectContext * _Nonnull)context;
@@ -68,9 +66,8 @@ typedef NS_ENUM(int, ConnectionMode) {
 + (BOOL)theLockedInMOC:(NSManagedObjectContext * _Nonnull)context;
 + (BOOL)theAllowRemoteLocationInMOC:(NSManagedObjectContext * _Nonnull)context;
 + (BOOL)theAllowRemoteConfigurationInMOC:(NSManagedObjectContext * _Nonnull)context;
-+ (BOOL)theAllowURIConfigurationInMOC:(NSManagedObjectContext * _Nonnull)context;
-+ (BOOL)theAllowIntentsInMOC:(NSManagedObjectContext * _Nonnull)context;
-+ (BOOL)theAllowURLConfigurationInMOC:(NSManagedObjectContext * _Nonnull)context;
++ (BOOL)theallowConfigurationByURIAndConfigFileInMOC:(NSManagedObjectContext * _Nonnull)context;
++ (BOOL)theAllowIntentControlInMOC:(NSManagedObjectContext * _Nonnull)context;
 + (BOOL)theWillRetainFlagInMOC:(NSManagedObjectContext * _Nonnull)context;
 
 + (int)theMaximumHistoryInMOC:(NSManagedObjectContext * _Nonnull)context;

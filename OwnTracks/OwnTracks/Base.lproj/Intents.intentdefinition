@@ -75,9 +75,9 @@
 	<key>INIntentDefinitionSystemVersion</key>
 	<string>25E253</string>
 	<key>INIntentDefinitionToolsBuildVersion</key>
-	<string>17E192</string>
+	<string>17E202</string>
 	<key>INIntentDefinitionToolsVersion</key>
-	<string>26.4</string>
+	<string>26.4.1</string>
 	<key>INIntents</key>
 	<array>
 		<dict>
@@ -93,12 +93,18 @@
 			<string>Send your location immediately</string>
 			<key>INIntentDescriptionID</key>
 			<string>WvwXPJ</string>
+			<key>INIntentLastParameterTag</key>
+			<integer>1</integer>
 			<key>INIntentManagedParameterCombinations</key>
 			<dict>
-				<key></key>
+				<key>IntentAuthKey</key>
 				<dict>
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
+					<key>INIntentParameterCombinationTitle</key>
+					<string>Send Position Now</string>
+					<key>INIntentParameterCombinationTitleID</key>
+					<string>CGnpIc</string>
 					<key>INIntentParameterCombinationUpdatesLinked</key>
 					<true/>
 				</dict>
@@ -118,7 +124,65 @@
 					<key>INIntentParameterCombinationTitleID</key>
 					<string>EJYIEL</string>
 				</dict>
+				<key>IntentAuthKey</key>
+				<dict>
+					<key>INIntentParameterCombinationIsLinked</key>
+					<true/>
+					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
+					<true/>
+					<key>INIntentParameterCombinationTitle</key>
+					<string>Send Position Now</string>
+					<key>INIntentParameterCombinationTitleID</key>
+					<string>xY4CSM</string>
+				</dict>
 			</dict>
+			<key>INIntentParameters</key>
+			<array>
+				<dict>
+					<key>INIntentParameterConfigurable</key>
+					<true/>
+					<key>INIntentParameterDisplayName</key>
+					<string>Intent Auth Key</string>
+					<key>INIntentParameterDisplayNameID</key>
+					<string>H8LpB6</string>
+					<key>INIntentParameterDisplayPriority</key>
+					<integer>1</integer>
+					<key>INIntentParameterMetadata</key>
+					<dict>
+						<key>INIntentParameterMetadataCapitalization</key>
+						<string>None</string>
+						<key>INIntentParameterMetadataDefaultValueID</key>
+						<string>rqsNOC</string>
+						<key>INIntentParameterMetadataDisableAutocorrect</key>
+						<true/>
+						<key>INIntentParameterMetadataDisableSmartDashes</key>
+						<true/>
+						<key>INIntentParameterMetadataDisableSmartQuotes</key>
+						<true/>
+					</dict>
+					<key>INIntentParameterName</key>
+					<string>IntentAuthKey</string>
+					<key>INIntentParameterPromptDialogs</key>
+					<array>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Configuration</string>
+						</dict>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Primary</string>
+						</dict>
+					</array>
+					<key>INIntentParameterTag</key>
+					<integer>1</integer>
+					<key>INIntentParameterType</key>
+					<string>String</string>
+				</dict>
+			</array>
 			<key>INIntentResponse</key>
 			<dict>
 				<key>INIntentResponseCodes</key>
@@ -162,10 +226,10 @@
 			<key>INIntentKeyParameter</key>
 			<string>monitoring</string>
 			<key>INIntentLastParameterTag</key>
-			<integer>3</integer>
+			<integer>4</integer>
 			<key>INIntentManagedParameterCombinations</key>
 			<dict>
-				<key>monitoring</key>
+				<key>monitoring,IntentAuthKey</key>
 				<dict>
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
@@ -181,16 +245,18 @@
 			<string>ChangeMonitoring</string>
 			<key>INIntentParameterCombinations</key>
 			<dict>
-				<key>monitoring</key>
+				<key>monitoring,IntentAuthKey</key>
 				<dict>
 					<key>INIntentParameterCombinationIsLinked</key>
+					<true/>
+					<key>INIntentParameterCombinationIsPrimary</key>
 					<true/>
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
 					<key>INIntentParameterCombinationTitle</key>
 					<string>Change Monitoring Mode</string>
 					<key>INIntentParameterCombinationTitleID</key>
-					<string>FYfTj6</string>
+					<string>GQsdA6</string>
 				</dict>
 			</dict>
 			<key>INIntentParameters</key>
@@ -248,6 +314,50 @@
 					<key>INIntentParameterType</key>
 					<string>Integer</string>
 				</dict>
+				<dict>
+					<key>INIntentParameterConfigurable</key>
+					<true/>
+					<key>INIntentParameterDisplayName</key>
+					<string>Intent Auth Key</string>
+					<key>INIntentParameterDisplayNameID</key>
+					<string>wh8nib</string>
+					<key>INIntentParameterDisplayPriority</key>
+					<integer>2</integer>
+					<key>INIntentParameterMetadata</key>
+					<dict>
+						<key>INIntentParameterMetadataCapitalization</key>
+						<string>None</string>
+						<key>INIntentParameterMetadataDefaultValueID</key>
+						<string>naeiCL</string>
+						<key>INIntentParameterMetadataDisableAutocorrect</key>
+						<true/>
+						<key>INIntentParameterMetadataDisableSmartDashes</key>
+						<true/>
+						<key>INIntentParameterMetadataDisableSmartQuotes</key>
+						<true/>
+					</dict>
+					<key>INIntentParameterName</key>
+					<string>IntentAuthKey</string>
+					<key>INIntentParameterPromptDialogs</key>
+					<array>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Configuration</string>
+						</dict>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Primary</string>
+						</dict>
+					</array>
+					<key>INIntentParameterTag</key>
+					<integer>4</integer>
+					<key>INIntentParameterType</key>
+					<string>String</string>
+				</dict>
 			</array>
 			<key>INIntentResponse</key>
 			<dict>
@@ -295,7 +405,7 @@
 			<integer>2</integer>
 			<key>INIntentManagedParameterCombinations</key>
 			<dict>
-				<key>tag,PrivacyKey</key>
+				<key>tag,IntentAuthKey</key>
 				<dict>
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
@@ -311,7 +421,7 @@
 			<string>Tag</string>
 			<key>INIntentParameterCombinations</key>
 			<dict>
-				<key>tag,PrivacyKey</key>
+				<key>tag,IntentAuthKey</key>
 				<dict>
 					<key>INIntentParameterCombinationIsLinked</key>
 					<true/>
@@ -375,7 +485,7 @@
 					<key>INIntentParameterConfigurable</key>
 					<true/>
 					<key>INIntentParameterDisplayName</key>
-					<string>Privacy Key</string>
+					<string>Intent Auth Key</string>
 					<key>INIntentParameterDisplayNameID</key>
 					<string>Efz5jn</string>
 					<key>INIntentParameterDisplayPriority</key>
@@ -394,7 +504,7 @@
 						<true/>
 					</dict>
 					<key>INIntentParameterName</key>
-					<string>PrivacyKey</string>
+					<string>IntentAuthKey</string>
 					<key>INIntentParameterPromptDialogs</key>
 					<array>
 						<dict>
@@ -406,16 +516,10 @@
 						<dict>
 							<key>INIntentParameterPromptDialogCustom</key>
 							<true/>
-							<key>INIntentParameterPromptDialogFormatString</key>
-							<string>Please add PrivacyKey</string>
-							<key>INIntentParameterPromptDialogFormatStringID</key>
-							<string>IOQTRb</string>
 							<key>INIntentParameterPromptDialogType</key>
 							<string>Primary</string>
 						</dict>
 					</array>
-					<key>INIntentParameterSupportsResolution</key>
-					<true/>
 					<key>INIntentParameterTag</key>
 					<integer>2</integer>
 					<key>INIntentParameterType</key>
@@ -465,10 +569,10 @@
 			<key>INIntentKeyParameter</key>
 			<string>name</string>
 			<key>INIntentLastParameterTag</key>
-			<integer>1</integer>
+			<integer>2</integer>
 			<key>INIntentManagedParameterCombinations</key>
 			<dict>
-				<key>name</key>
+				<key>name,IntentAuthKey</key>
 				<dict>
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
@@ -484,16 +588,18 @@
 			<string>PointOfInterest</string>
 			<key>INIntentParameterCombinations</key>
 			<dict>
-				<key>name</key>
+				<key>name,IntentAuthKey</key>
 				<dict>
 					<key>INIntentParameterCombinationIsLinked</key>
+					<true/>
+					<key>INIntentParameterCombinationIsPrimary</key>
 					<true/>
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
 					<key>INIntentParameterCombinationTitle</key>
 					<string>Name of the Point of Interest</string>
 					<key>INIntentParameterCombinationTitleID</key>
-					<string>wcOPCR</string>
+					<string>XnXOna</string>
 				</dict>
 			</dict>
 			<key>INIntentParameters</key>
@@ -539,6 +645,50 @@
 					<true/>
 					<key>INIntentParameterTag</key>
 					<integer>1</integer>
+					<key>INIntentParameterType</key>
+					<string>String</string>
+				</dict>
+				<dict>
+					<key>INIntentParameterConfigurable</key>
+					<true/>
+					<key>INIntentParameterDisplayName</key>
+					<string>Intent Auth Key</string>
+					<key>INIntentParameterDisplayNameID</key>
+					<string>DKetLW</string>
+					<key>INIntentParameterDisplayPriority</key>
+					<integer>2</integer>
+					<key>INIntentParameterMetadata</key>
+					<dict>
+						<key>INIntentParameterMetadataCapitalization</key>
+						<string>None</string>
+						<key>INIntentParameterMetadataDefaultValueID</key>
+						<string>16dv6J</string>
+						<key>INIntentParameterMetadataDisableAutocorrect</key>
+						<true/>
+						<key>INIntentParameterMetadataDisableSmartDashes</key>
+						<true/>
+						<key>INIntentParameterMetadataDisableSmartQuotes</key>
+						<true/>
+					</dict>
+					<key>INIntentParameterName</key>
+					<string>IntentAuthKey</string>
+					<key>INIntentParameterPromptDialogs</key>
+					<array>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Configuration</string>
+						</dict>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Primary</string>
+						</dict>
+					</array>
+					<key>INIntentParameterTag</key>
+					<integer>2</integer>
 					<key>INIntentParameterType</key>
 					<string>String</string>
 				</dict>

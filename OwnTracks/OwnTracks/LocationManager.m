@@ -133,16 +133,16 @@ static LocationManager *theInstance = nil;
     }];
     
     self.sharedUserDefaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.org.owntracks.Owntracks"];
-    [self.sharedUserDefaults addObserver:self forKeyPath:@"monitoring"
+    [self.sharedUserDefaults addObserver:self forKeyPath:@"monitoringWithAuthKey"
                                  options:NSKeyValueObservingOptionNew
                                  context:nil];
-    [self.sharedUserDefaults addObserver:self forKeyPath:@"sendNow"
+    [self.sharedUserDefaults addObserver:self forKeyPath:@"sendNowWithAuthKey"
                                  options:NSKeyValueObservingOptionNew
                                  context:nil];
-    [self.sharedUserDefaults addObserver:self forKeyPath:@"poi"
+    [self.sharedUserDefaults addObserver:self forKeyPath:@"poiWithAuthKey"
                                  options:NSKeyValueObservingOptionNew
                                  context:nil];
-    [self.sharedUserDefaults addObserver:self forKeyPath:@"tag"
+    [self.sharedUserDefaults addObserver:self forKeyPath:@"tagWithAuthKey"
                                  options:NSKeyValueObservingOptionNew
                                  context:nil];
 
@@ -153,42 +153,93 @@ static LocationManager *theInstance = nil;
                       ofObject:(id)object
                         change:(NSDictionary<NSKeyValueChangeKey,id> *)change
                        context:(void *)context {
-    if (![Settings theAllowIntentsInMOC:CoreData.sharedInstance.mainMOC]) {
+    OwnTracksLogError("[LocationManager] observeValueForKeyPath %@", keyPath);
+
+    if (![Settings theAllowIntentControlInMOC:CoreData.sharedInstance.mainMOC]) {
         [NavigationController alertWithTitle:
-         NSLocalizedString(@"Intents",
-                           @"Header of an alert message regarding intents")
+         NSLocalizedString(@"Intent Control",
+                           @"Header of an alert message regarding intent control")
                             message:
-         NSLocalizedString(@"Intents are not allowed",
-                           @"content of an alert message regarding intents")];
+         NSLocalizedString(@"Intent control not allowed",
+                           @"content of an alert message regarding intent control")];
         OwnTracksLogInfo("[LocationManager] Intents not allowed: %@", keyPath);
     } else {
-        if ([keyPath isEqualToString:@"monitoring"]) {
+        if ([keyPath isEqualToString:@"monitoringWithAuthKey"]) {
             NSUserDefaults *shared = object;
-            NSInteger monitoring = [shared integerForKey:@"monitoring"];
-            if (monitoring != self.monitoring) {
-                self.monitoring = monitoring;
-                [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"downgraded"];
-                NSManagedObjectContext *moc = CoreData.sharedInstance.mainMOC;
-                [Settings setInt:(int)[LocationManager sharedInstance].monitoring
-                          forKey:@"monitoring_preference" inMOC:moc];
-                [CoreData.sharedInstance sync:moc];
-                
-            }
-        } else if ([keyPath isEqualToString:@"sendNow"]) {
-            OwnTracksAppDelegate *ad = (OwnTracksAppDelegate *)[UIApplication sharedApplication].delegate;
-            [ad sendNow:self.location withPOI:nil withImage:nil withImageName:nil];
-        } else if ([keyPath isEqualToString:@"poi"]) {
-            NSUserDefaults *shared = object;
-            NSString *poi = [shared stringForKey:@"poi"];
-            OwnTracksAppDelegate *ad = (OwnTracksAppDelegate *)[UIApplication sharedApplication].delegate;
-            [ad sendNow:self.location withPOI:poi withImage:nil withImageName:nil];
-        } else if ([keyPath isEqualToString:@"tag"]) {
-            NSUserDefaults *shared = object;
-            NSString *tag = [shared stringForKey:@"tag"];
-            if (tag && tag.length) {
-                [[NSUserDefaults standardUserDefaults] setObject:tag forKey:@"tag"];
+            NSDictionary *dict = [shared objectForKey:@"monitoringWithAuthKey"];
+            NSString *intentAuthKey = dict[@"intentAuthKey"];
+            NSNumber *monitoringNumber = dict[@"monitoring"];
+            NSInteger monitoring = monitoringNumber != nil ? monitoringNumber.integerValue : 0;
+            if (intentAuthKey == nil || ![intentAuthKey isEqualToString:[Settings theIntentAuthKey]]) {
+                [NavigationController alertWithTitle:
+                 NSLocalizedString(@"Intent Control",
+                                   @"Header of an alert message regarding intent control")
+                                             message:
+                 NSLocalizedString(@"Wrong intent auth key",
+                                   @"content of an alert message regarding intent auth key")];
+                OwnTracksLogError("[LocationManager] Wrong Intent Auth Key");
             } else {
-                [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"tag"];
+                if (monitoring != self.monitoring) {
+                    self.monitoring = monitoring;
+                    [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"downgraded"];
+                    NSManagedObjectContext *moc = CoreData.sharedInstance.mainMOC;
+                    [Settings setInt:(int)[LocationManager sharedInstance].monitoring
+                              forKey:@"monitoring_preference" inMOC:moc];
+                    [CoreData.sharedInstance sync:moc];
+                }
+            }
+        } else if ([keyPath isEqualToString:@"sendNowWithAuthKey"]) {
+            NSUserDefaults *shared = object;
+            NSDictionary *dict = [shared objectForKey:@"sendNowWithAuthKey"];
+            NSString *intentAuthKey = dict[@"intentAuthKey"];
+            if (intentAuthKey == nil || ![intentAuthKey isEqualToString:[Settings theIntentAuthKey]]) {
+                [NavigationController alertWithTitle:
+                 NSLocalizedString(@"Intent Control",
+                                   @"Header of an alert message regarding intent control")
+                                             message:
+                 NSLocalizedString(@"Wrong intent auth key",
+                                   @"content of an alert message regarding intent auth key")];
+                OwnTracksLogError("[LocationManager] Wrong Intent Auth Key");
+            } else {
+                OwnTracksAppDelegate *ad = (OwnTracksAppDelegate *)[UIApplication sharedApplication].delegate;
+                [ad sendNow:self.location withPOI:nil withImage:nil withImageName:nil];
+            }
+        } else if ([keyPath isEqualToString:@"poiWithAuthKey"]) {
+            NSUserDefaults *shared = object;
+            NSDictionary *dict = [shared objectForKey:@"poiWithAuthKey"];
+            NSString *intentAuthKey = dict[@"intentAuthKey"];
+            NSString *poi = dict[@"poi"];
+            if (intentAuthKey == nil || ![intentAuthKey isEqualToString:[Settings theIntentAuthKey]]) {
+                [NavigationController alertWithTitle:
+                 NSLocalizedString(@"Intent Control",
+                                   @"Header of an alert message regarding intent control")
+                                             message:
+                 NSLocalizedString(@"Wrong intent auth key",
+                                   @"content of an alert message regarding intent auth key")];
+                OwnTracksLogError("[LocationManager] Wrong Intent Auth Key");
+            } else {
+                OwnTracksAppDelegate *ad = (OwnTracksAppDelegate *)[UIApplication sharedApplication].delegate;
+                [ad sendNow:self.location withPOI:poi withImage:nil withImageName:nil];
+            }
+        } else if ([keyPath isEqualToString:@"tagWithAuthKey"]) {
+            NSUserDefaults *shared = object;
+            NSDictionary *dict = [shared objectForKey:@"tagWithAuthKey"];
+            NSString *intentAuthKey = dict[@"intentAuthKey"];
+            NSString *tag = dict[@"tag"];
+            if (intentAuthKey == nil || ![intentAuthKey isEqualToString:[Settings theIntentAuthKey]]) {
+                [NavigationController alertWithTitle:
+                 NSLocalizedString(@"Intent Control",
+                                   @"Header of an alert message regarding intent control")
+                                             message:
+                 NSLocalizedString(@"Wrong intent auth key",
+                                   @"content of an alert message regarding intent auth key")];
+                OwnTracksLogError("[LocationManager] Wrong Intent Auth Key");
+            } else {
+                if (tag && tag.length) {
+                    [[NSUserDefaults standardUserDefaults] setObject:tag forKey:@"tag"];
+                } else {
+                    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"tag"];
+                }
             }
         }
     }

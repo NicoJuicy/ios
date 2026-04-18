@@ -36,8 +36,6 @@
 @property (strong, nonatomic) CoreData *coreData;
 @property (strong, nonatomic) CMPedometer *pedometer;
 
-@property (strong, nonatomic) NSUserActivity *sendNowActivity;
-
 #define BACKGROUND_DISCONNECT_AFTER 25.0
 #define BACKGROUND_HOLD_FOR 10.0
 @property (strong, nonatomic) NSTimer *disconnectTimer;
@@ -65,12 +63,6 @@
 }
 
 - (void)setShortcutItems {
-    NSString *privacyKey = [[NSUserDefaults standardUserDefaults] stringForKey:@"privacyKey"];
-    if (privacyKey == nil) {
-        privacyKey = [NSUUID UUID].UUIDString;
-        [[NSUserDefaults standardUserDefaults] setObject:privacyKey forKey:@"privacyKey"];
-    }
-
     UIApplication *application = [UIApplication sharedApplication];
     UIApplicationShortcutItem *move =
     [[UIApplicationShortcutItem alloc]
@@ -281,10 +273,10 @@
         
         if ([url.scheme isEqualToString:@"owntracks"]) {
             OwnTracksLogDebug("[OwnTracksAppDelegate] URL path %@ query %@", url.path, url.query);
-            if (![Settings theAllowURIConfigurationInMOC:CoreData.sharedInstance.mainMOC]) {
-                self.processingMessage = NSLocalizedString(@"URI configuration not allowed",
-                                                           @"URI configuration not allowed");
-                OwnTracksLogInfo("[OwnTracksAppDelegate] URI configuration not allowed");
+            if (![Settings theallowConfigurationByURIAndConfigFileInMOC:CoreData.sharedInstance.mainMOC]) {
+                self.processingMessage = NSLocalizedString(@"URI or file configuration not allowed",
+                                                           @"URI or file configuration not allowed");
+                OwnTracksLogInfo("[OwnTracksAppDelegate] URI or file configuration not allowed");
                 return FALSE;
             }
             NSURLComponents *components = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:TRUE];
@@ -305,10 +297,10 @@
                 return FALSE;
             }
         } else if ([url.scheme isEqualToString:@"file"]) {
-            if (![Settings theAllowURLConfigurationInMOC:CoreData.sharedInstance.mainMOC]) {
-                self.processingMessage = NSLocalizedString(@"URL configuration not allowed",
-                                                           @"URL configuration not allowed");
-                OwnTracksLogInfo("[OwnTracksAppDelegate] URL configuration not allowed");
+            if (![Settings theallowConfigurationByURIAndConfigFileInMOC:CoreData.sharedInstance.mainMOC]) {
+                self.processingMessage = NSLocalizedString(@"URI or file configuration not allowed",
+                                                           @"URI or file configuration not allowed");
+                OwnTracksLogInfo("[OwnTracksAppDelegate] URI or file configuration not allowed");
                 return FALSE;
             }
             [self processFile:url];
@@ -346,15 +338,8 @@
                 dict = json;
             }
             if (dict) {
-                [self performSelectorOnMainThread:@selector(terminateSession)
-                                       withObject:nil
-                                    waitUntilDone:TRUE];
                 [self performSelectorOnMainThread:@selector(configFromDictionary:)
                                        withObject:dict
-                                    waitUntilDone:TRUE];
-                self.configLoad = [NSDate date];
-                [self performSelectorOnMainThread:@selector(reconnect)
-                                       withObject:nil
                                     waitUntilDone:TRUE];
                 
                 self.processingMessage = NSLocalizedString(@"Configuration successfully processed",
@@ -399,28 +384,35 @@
         rid = Region.newRid;
     }
     
-    NSString *desc = [NSString stringWithFormat:@"%@:%@%@%@",
-                      name,
-                      uuid,
-                      major ? [NSString stringWithFormat:@":%d", major] : @"",
-                      minor ? [NSString stringWithFormat:@":%d", minor] : @""
-    ];
+    [NavigationController alertWithTitle:NSLocalizedString(@"Process Configuration?",
+                                                           @"Process Configuration?")
+                                 message:[NSString stringWithFormat:@"Beacon name: %@\nuuid: %@\nmajor: %d minor %d",
+                                          name, uuid, major, minor]
+                               operation:^{
+        NSString *desc = [NSString stringWithFormat:@"%@:%@%@%@",
+                          name,
+                          uuid,
+                          major ? [NSString stringWithFormat:@":%d", major] : @"",
+                          minor ? [NSString stringWithFormat:@":%d", minor] : @""
+        ];
+        
+        [Settings waypointsFromDictionary:
+         @{@"_type":@"waypoints",
+           @"waypoints":@[@{@"_type":@"waypoint",
+                            @"rid":rid,
+                            @"desc":desc,
+                            @"tst":@((int)round(([NSDate date].timeIntervalSince1970))),
+                            @"lat":@([LocationManager sharedInstance].location.coordinate.latitude),
+                            @"lon":@([LocationManager sharedInstance].location.coordinate.longitude),
+                            @"rad":@(-1)
+           }]
+         } inMOC:CoreData.sharedInstance.mainMOC];
+        [CoreData.sharedInstance sync:CoreData.sharedInstance.mainMOC];
+        self.processingMessage = NSLocalizedString(@"Beacon QR successfully processed",
+                                                   @"Display after processing beacon QR code");
+        OwnTracksLogInfo("[OwnTracksAppDelegate] Beacon QR successfully processed");        
+    }];
     
-    [Settings waypointsFromDictionary:
-     @{@"_type":@"waypoints",
-       @"waypoints":@[@{@"_type":@"waypoint",
-                        @"rid":rid,
-                        @"desc":desc,
-                        @"tst":@((int)round(([NSDate date].timeIntervalSince1970))),
-                        @"lat":@([LocationManager sharedInstance].location.coordinate.latitude),
-                        @"lon":@([LocationManager sharedInstance].location.coordinate.longitude),
-                        @"rad":@(-1)
-       }]
-     } inMOC:CoreData.sharedInstance.mainMOC];
-    [CoreData.sharedInstance sync:CoreData.sharedInstance.mainMOC];
-    self.processingMessage = NSLocalizedString(@"Beacon QR successfully processed",
-                                               @"Display after processing beacon QR code");
-    OwnTracksLogInfo("[OwnTracksAppDelegate] Beacon QR successfully processed");
     return TRUE;
 }
 
@@ -586,7 +578,6 @@
     NSError *error;
     NSString *extension = url.pathExtension;
     if ([extension isEqualToString:@"otrc"] || [extension isEqualToString:@"mqtc"]) {
-        [self terminateSession];
         NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithStream:input
                                                                      options:0
                                                                        error:&error];
@@ -1507,17 +1498,7 @@ performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completio
       withImage:(nullable NSData *)image
   withImageName:(nullable NSString *)imageName {
     OwnTracksLogDebug("[OwnTracksAppDelegate] sendNow %@ withPOI %@ %@ %@", location, poi, image, imageName);
-    
-    if (self.sendNowActivity) {
-        [self.sendNowActivity invalidate];
-    }
-    self.sendNowActivity =
-    [[NSUserActivity alloc]
-     initWithActivityType:@"org.mqttitude.MQTTitude.sendNow"];
-    self.sendNowActivity.title = NSLocalizedString(@"Send location now", @"Send location now");
-    self.sendNowActivity.eligibleForSearch = true;
-    self.sendNowActivity.eligibleForPrediction = true;
-    [self.sendNowActivity becomeCurrent];
+    OwnTracksLogInfo("[OwnTracksAppDelegate] sendNow");
     return [self publishLocation:location trigger:@"u"
                          withPOI:poi
                        withImage:image
@@ -1984,127 +1965,6 @@ performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completio
         OwnTracksLogError("[OwnTracksAppDelegate] isValidJSONObject failed %@", [jsonObject description]);
     }
     return data;
-}
-
-- (BOOL)application:(UIApplication *)application
-continueUserActivity:(nonnull NSUserActivity *)userActivity
- restorationHandler:(nonnull void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler {
-    OwnTracksLogInfo("application continueUserActivity:%@", userActivity.activityType);
-    OwnTracksLogInfo("application continueUserActivity:%@", userActivity.activityType);
-
-    if (![Settings theAllowIntentsInMOC:CoreData.sharedInstance.mainMOC]) {
-        [NavigationController alertWithTitle:
-         NSLocalizedString(@"Intents",
-                           @"Header of an alert message regarding intents")
-                            message:
-         NSLocalizedString(@"Intents are not allowed",
-                           @"content of an alert message regarding intents")];
-        OwnTracksLogInfo("[OwnTracksAppDelegate] Intents not allowed: %@", userActivity.activityType);
-        return NO;
-    }
-    
-    if ([userActivity.activityType isEqualToString:@"org.mqttitude.MQTTitude.sendNow"] ||
-        [userActivity.activityType isEqualToString:@"OwnTracksSendNowIntent"]) {
-        if ([self sendNow:[LocationManager sharedInstance].location
-                  withPOI:nil
-                withImage:nil
-            withImageName:nil]) {
-            [NavigationController alertWithTitle:
-                 NSLocalizedString(@"Location",
-                                   @"Header of an alert message regarding a location")
-                                message:
-                 NSLocalizedString(@"publish queued on user request",
-                                   @"content of an alert message regarding user publish")
-                           dismissAfter:1
-            ];
-        } else {
-            [NavigationController alertWithTitle:
-             NSLocalizedString(@"Location",
-                               @"Header of an alert message regarding a location")
-                                message:
-             NSLocalizedString(@"publish queued on user request",
-                               @"content of an alert message regarding user publish")];
-        }
-        
-        return YES;
-    } else if ([userActivity.activityType isEqualToString:@"OwnTracksChangeMonitoringIntent"]) {
-        OwnTracksChangeMonitoringIntent *intent = (OwnTracksChangeMonitoringIntent *)userActivity.interaction.intent;
-        LocationMonitoring monitoring = [LocationManager sharedInstance].monitoring;
-        switch (intent.monitoring) {
-            case OwnTracksEnumQuiet:
-                monitoring = LocationMonitoringQuiet;
-                break;
-            case OwnTracksEnumManual:
-                monitoring = LocationMonitoringManual;
-                break;
-            case OwnTracksEnumSignificant:
-                monitoring = LocationMonitoringSignificant;
-                break;
-            case OwnTracksEnumMove:
-                monitoring = LocationMonitoringMove;
-                break;
-            default:
-                break;
-        }
-        [LocationManager sharedInstance].monitoring = monitoring;
-        [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"downgraded"];
-        [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"adapted"];
-        NSManagedObjectContext *moc = CoreData.sharedInstance.mainMOC;
-        [Settings setInt:(int)[LocationManager sharedInstance].monitoring
-                  forKey:@"monitoring_preference" inMOC:moc];
-        [CoreData.sharedInstance sync:moc];
-        
-        return YES;
-    } else if ([userActivity.activityType isEqualToString:@"OwnTracksTagIntent"]) {
-        OwnTracksTagIntent *intent = (OwnTracksTagIntent *)userActivity.interaction.intent;
-        NSString *privacyKey = intent.PrivacyKey;
-        OwnTracksLogInfo("[OwnTracksAppDelegate] PrivacyKey: %@", privacyKey);
-
-        if (privacyKey != [[NSUserDefaults standardUserDefaults] stringForKey:@"privacyKey"]) {
-            [NavigationController alertWithTitle:
-             NSLocalizedString(@"Intents",
-                               @"Header of an alert message regarding intents")
-                                message:
-             NSLocalizedString(@"Intent Privacy Key does not match",
-                               @"content of an alert message regarding intent privacy key")];
-            OwnTracksLogInfo("[OwnTracksAppDelegate] Intents not allowed: %@", userActivity.activityType);
-            return NO;
-        }
-
-        NSString *tag = intent.tag;
-        if (tag && tag.length) {
-            [[NSUserDefaults standardUserDefaults] setObject:tag forKey:@"tag"];
-        } else {
-            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"tag"];
-        }
-        
-        return YES;
-    } else if ([userActivity.activityType isEqualToString:@"OwnTracksPointOfInterestIntent"]) {
-        OwnTracksPointOfInterestIntent *intent = (OwnTracksPointOfInterestIntent *)userActivity.interaction.intent;
-        NSString *name = intent.name;
-        if ([self sendNow:[LocationManager sharedInstance].location
-                  withPOI:name
-                withImage:nil
-            withImageName:nil]) {
-            [NavigationController alertWithTitle:
-                 NSLocalizedString(@"Location",
-                                   @"Header of an alert message regarding a location")
-                                message:
-                 NSLocalizedString(@"publish queued on user request",
-                                   @"content of an alert message regarding user publish")
-                           dismissAfter:1
-            ];
-        } else {
-            [NavigationController alertWithTitle:
-             NSLocalizedString(@"Location",
-                               @"Header of an alert message regarding a location")
-                                message:
-             NSLocalizedString(@"publish queued on user request",
-                               @"content of an alert message regarding user publish")];
-        }
-        return YES;
-    }
-    return NO;
 }
 
 @end

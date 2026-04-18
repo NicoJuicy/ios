@@ -50,11 +50,9 @@
 	<true/>
 	<key>allowremoteconfiguration_preference</key>
 	<false/>
-	<key>allowuriconfiguration_preference</key>
+	<key>allowConfigurationByURIAndConfigFile</key>
 	<false/>
-	<key>allowurlconfiguration_preference</key>
-	<false/>
-	<key>allowintents_preference</key>
+	<key>allowIntentControl</key>
 	<false/>
 	<key>extendeddata_preference</key>
 	<true/>
