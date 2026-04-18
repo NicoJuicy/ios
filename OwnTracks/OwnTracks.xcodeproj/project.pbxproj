@@ -29,7 +29,6 @@
 		8411B88E189FE9940019D2D6 /* Connection.m in Sources */ = {isa = PBXBuildFile; fileRef = 8411B88D189FE9940019D2D6 /* Connection.m */; };
 		8411B891189FE9CE0019D2D6 /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 8411B890189FE9CE0019D2D6 /* Settings.m */; };
 		8411B8E1189FEB790019D2D6 /* Location.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 8411B8AE189FEB790019D2D6 /* Location.gpx */; };
-		841C22342F3DD7E70005F530 /* MQTTClient in Frameworks */ = {isa = PBXBuildFile; productRef = 841C22332F3DD7E70005F530 /* MQTTClient */; };
 		841D3523209C5DDF0084FCD0 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 841D3522209C5DDF0084FCD0 /* UserNotifications.framework */; };
 		841D3525209C74E70084FCD0 /* Contacts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 841D3524209C74E60084FCD0 /* Contacts.framework */; };
 		8422AF681AF825C7008932A2 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8422AF671AF825C7008932A2 /* SystemConfiguration.framework */; };
@@ -72,6 +71,7 @@
 		84929F0B20AAC0D000227D00 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84929F0A20AAC0CF00227D00 /* WebKit.framework */; };
 		849551F52EF41EAE00675342 /* CreateTourTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849551F42EF41EAE00675342 /* CreateTourTVC.swift */; };
 		849551F72EF42D4300675342 /* ToursStatusCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849551F62EF42D4300675342 /* ToursStatusCell.swift */; };
+		84A4002B2F8ABBFA00340475 /* MQTTClient in Frameworks */ = {isa = PBXBuildFile; productRef = 84A4002A2F8ABBFA00340475 /* MQTTClient */; };
 		84A452BA2F35157000AA6A29 /* StatusTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84A452B92F35156F00AA6A29 /* StatusTVC.swift */; };
 		84AFD40B2434486200F1E922 /* OwnTracking.m in Sources */ = {isa = PBXBuildFile; fileRef = 84AFD40A2434486200F1E922 /* OwnTracking.m */; };
 		84B0CDAD239E2EFA00CE9305 /* BackgroundTasks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84B0CDAC239E2EFA00CE9305 /* BackgroundTasks.framework */; };
@@ -408,7 +408,7 @@
 				8411B82C189FDB140019D2D6 /* Foundation.framework in Frameworks */,
 				84ED67922F1E9A0E0013A265 /* DSJSONSchemaValidation in Frameworks */,
 				84ED67862F1E95110013A265 /* Clibsodium in Frameworks */,
-				841C22342F3DD7E70005F530 /* MQTTClient in Frameworks */,
+				84A4002B2F8ABBFA00340475 /* MQTTClient in Frameworks */,
 				84C3F45E2CF09F9B004DB332 /* PhotosUI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -829,7 +829,7 @@
 			packageReferences = (
 				84ED67842F1E95110013A265 /* XCRemoteSwiftPackageReference "swift-sodium" */,
 				84ED67902F1E9A0E0013A265 /* XCRemoteSwiftPackageReference "JSONSchemaValidation" */,
-				841C22322F3DD6A00005F530 /* XCRemoteSwiftPackageReference "MQTTClient" */,
+				84C2E5E22F8ABA0400D5FFD5 /* XCRemoteSwiftPackageReference "MQTTClient" */,
 			);
 			productRefGroup = 8411B829189FDB140019D2D6 /* Products */;
 			projectDirPath = "";
@@ -1626,7 +1626,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		841C22322F3DD6A00005F530 /* XCRemoteSwiftPackageReference "MQTTClient" */ = {
+		84C2E5E22F8ABA0400D5FFD5 /* XCRemoteSwiftPackageReference "MQTTClient" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "git@github.com:ckrey/MQTTClient.git";
 			requirement = {
@@ -1653,9 +1653,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		841C22332F3DD7E70005F530 /* MQTTClient */ = {
+		84A4002A2F8ABBFA00340475 /* MQTTClient */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 841C22322F3DD6A00005F530 /* XCRemoteSwiftPackageReference "MQTTClient" */;
+			package = 84C2E5E22F8ABA0400D5FFD5 /* XCRemoteSwiftPackageReference "MQTTClient" */;
 			productName = MQTTClient;
 		};
 		84ED67852F1E95110013A265 /* Clibsodium */ = {

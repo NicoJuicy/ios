@@ -282,7 +282,8 @@ class StatusTVC: UITableViewController, UIDocumentInteractionControllerDelegate 
     }
 
     override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-        if indexPath.section == 2 && indexPath.row == 0 {
+        let tableViewCell = tableView.cellForRow(at: indexPath);
+        if tableViewCell?.tag == 98 {
             let location = LocationManager.sharedInstance().location;
             UIPasteboard.general.string = ("\(location.coordinate.latitude),\(location.coordinate.longitude)");
             NavigationController.alert(title: NSLocalizedString("Clipboard",

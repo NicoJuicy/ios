@@ -93,7 +93,7 @@ static OwnTracking *theInstance = nil;
                 [context deleteObject:friend];
             }
             [CoreData.sharedInstance sync:context];
-            OwnTracksLogInfo("[OwnTracking] deleted friend %@",
+            OwnTracksLogDebug("[OwnTracking] deleted friend %@",
                       device);
         } else {
             if (dictionary && [dictionary isKindOfClass:[NSDictionary class]]) {
@@ -112,7 +112,7 @@ static OwnTracking *theInstance = nil;
                         [self processFace:friend dictionary:dictionary];
                         
                     } else if ([type isEqualToString:@"lwt"]) {
-                        OwnTracksLogInfo("[OwnTracking] received lwt for friend %@",
+                        OwnTracksLogDebug("[OwnTracking] received lwt for friend %@",
                                   device);
                         // ignore
                         
@@ -140,7 +140,7 @@ static OwnTracking *theInstance = nil;
         }
         NSDate *timestamp = [NSDate dateWithTimeIntervalSince1970:tst.doubleValue];
         if (friend.lastLocation && [friend.lastLocation compare:timestamp] != NSOrderedAscending) {
-            OwnTracksLogInfo("[OwnTracking] skipped location for friend %@ @%@",
+            OwnTracksLogDebug("[OwnTracking] skipped location for friend %@ @%@",
                       friend.topic, timestamp);
             return;
         }
@@ -370,7 +370,7 @@ static OwnTracking *theInstance = nil;
                  motionActivities:motionActivities];
         int positions = [Settings intForKey:@"positions_preference" inMOC:friend.managedObjectContext];
         NSInteger remainingPositions = [friend limitWaypointsToMaximum:positions];
-        OwnTracksLogInfo("[OwnTracking] processed location for friend %@ @%@ (%ld)",
+        OwnTracksLogDebug("[OwnTracking] processed location for friend %@ @%@ (%ld)",
                   friend.topic, timestamp, remainingPositions);
     } else {
         OwnTracksLogError("[OwnTracking processLocation] json is no dictionary");
@@ -470,7 +470,7 @@ static OwnTracking *theInstance = nil;
                                          message:notificationMessage
                                     dismissAfter:2.0
             ];
-            OwnTracksLogInfo("[OwnTracking] processed transition for friend %@",
+            OwnTracksLogDebug("[OwnTracking] processed transition for friend %@",
                       notificationMessage);
         }
     } else {
@@ -504,7 +504,7 @@ static OwnTracking *theInstance = nil;
                 friend.cardImage = nil;
             }
 
-            OwnTracksLogInfo("[OwnTracking] processed card for friend %@",
+            OwnTracksLogDebug("[OwnTracking] processed card for friend %@",
                       friend.topic);
             [CoreData.sharedInstance sync:friend.managedObjectContext];
 
@@ -544,7 +544,7 @@ static OwnTracking *theInstance = nil;
 }
 
 - (void)removeRegion:(Region *)region context:(NSManagedObjectContext *)context {
-    OwnTracksLogInfo("[OwnTracking] removeRegion %@", region.name);
+    OwnTracksLogDebug("[OwnTracking] removeRegion %@", region.name);
     [[LocationManager sharedInstance] stopRegion:region.CLregion];
     [context deleteObject:region];
     [[CoreData sharedInstance] sync:context];

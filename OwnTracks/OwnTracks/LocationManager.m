@@ -153,33 +153,43 @@ static LocationManager *theInstance = nil;
                       ofObject:(id)object
                         change:(NSDictionary<NSKeyValueChangeKey,id> *)change
                        context:(void *)context {
-    if ([keyPath isEqualToString:@"monitoring"]) {
-        NSUserDefaults *shared = object;
-        NSInteger monitoring = [shared integerForKey:@"monitoring"];
-        if (monitoring != self.monitoring) {
-            self.monitoring = monitoring;
-            [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"downgraded"];
-            NSManagedObjectContext *moc = CoreData.sharedInstance.mainMOC;
-            [Settings setInt:(int)[LocationManager sharedInstance].monitoring
-                      forKey:@"monitoring_preference" inMOC:moc];
-            [CoreData.sharedInstance sync:moc];
-
-        }
-    } else if ([keyPath isEqualToString:@"sendNow"]) {
-        OwnTracksAppDelegate *ad = (OwnTracksAppDelegate *)[UIApplication sharedApplication].delegate;
-        [ad sendNow:self.location withPOI:nil withImage:nil withImageName:nil];
-    } else if ([keyPath isEqualToString:@"poi"]) {
-        NSUserDefaults *shared = object;
-        NSString *poi = [shared stringForKey:@"poi"];
-        OwnTracksAppDelegate *ad = (OwnTracksAppDelegate *)[UIApplication sharedApplication].delegate;
-        [ad sendNow:self.location withPOI:poi withImage:nil withImageName:nil];
-    } else if ([keyPath isEqualToString:@"tag"]) {
-        NSUserDefaults *shared = object;
-        NSString *tag = [shared stringForKey:@"tag"];
-        if (tag && tag.length) {
-            [[NSUserDefaults standardUserDefaults] setObject:tag forKey:@"tag"];
-        } else {
-            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"tag"];
+    if (![Settings theAllowIntentsInMOC:CoreData.sharedInstance.mainMOC]) {
+        [NavigationController alertWithTitle:
+         NSLocalizedString(@"Intents",
+                           @"Header of an alert message regarding intents")
+                            message:
+         NSLocalizedString(@"Intents are not allowed",
+                           @"content of an alert message regarding intents")];
+        OwnTracksLogInfo("[LocationManager] Intents not allowed: %@", keyPath);
+    } else {
+        if ([keyPath isEqualToString:@"monitoring"]) {
+            NSUserDefaults *shared = object;
+            NSInteger monitoring = [shared integerForKey:@"monitoring"];
+            if (monitoring != self.monitoring) {
+                self.monitoring = monitoring;
+                [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"downgraded"];
+                NSManagedObjectContext *moc = CoreData.sharedInstance.mainMOC;
+                [Settings setInt:(int)[LocationManager sharedInstance].monitoring
+                          forKey:@"monitoring_preference" inMOC:moc];
+                [CoreData.sharedInstance sync:moc];
+                
+            }
+        } else if ([keyPath isEqualToString:@"sendNow"]) {
+            OwnTracksAppDelegate *ad = (OwnTracksAppDelegate *)[UIApplication sharedApplication].delegate;
+            [ad sendNow:self.location withPOI:nil withImage:nil withImageName:nil];
+        } else if ([keyPath isEqualToString:@"poi"]) {
+            NSUserDefaults *shared = object;
+            NSString *poi = [shared stringForKey:@"poi"];
+            OwnTracksAppDelegate *ad = (OwnTracksAppDelegate *)[UIApplication sharedApplication].delegate;
+            [ad sendNow:self.location withPOI:poi withImage:nil withImageName:nil];
+        } else if ([keyPath isEqualToString:@"tag"]) {
+            NSUserDefaults *shared = object;
+            NSString *tag = [shared stringForKey:@"tag"];
+            if (tag && tag.length) {
+                [[NSUserDefaults standardUserDefaults] setObject:tag forKey:@"tag"];
+            } else {
+                [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"tag"];
+            }
         }
     }
 }
@@ -411,7 +421,7 @@ static LocationManager *theInstance = nil;
 }
 
 - (void)activityTimer:(NSTimer *)timer {
-    OwnTracksLogInfo("[LocationManager] activityTimer fired after %f", self.minTime);
+    OwnTracksLogDebug("[LocationManager] activityTimer fired after %f", self.minTime);
     CLLocation *location = self.manager.location;
     if (location) {
         self.lastUsedLocation = location;
@@ -506,7 +516,7 @@ static LocationManager *theInstance = nil;
     int count = 0;
     for (CLLocation *location in locations) {
         count++;
-        OwnTracksLogInfo("[LocationManager] Location#%d: Δs:%.0f/%.0f Δm:%.0f/%.0f Δs:%.0f %@ %@ %@",
+        OwnTracksLogDebug("[LocationManager] Location#%d: Δs:%.0f/%.0f Δm:%.0f/%.0f Δs:%.0f %@ %@ %@",
                   count,
                   self.lastUsedLocation ? [location.timestamp timeIntervalSinceDate:self.lastUsedLocation.timestamp] : 0,
                   self.minTime,
@@ -609,7 +619,7 @@ static LocationManager *theInstance = nil;
 
 - (void)locationManager:(CLLocationManager *)manager
          didEnterRegion:(CLRegion *)region {
-    OwnTracksLogInfo("[LocationManager] didEnterRegion %@", region);
+    OwnTracksLogDebug("[LocationManager] didEnterRegion %@", region);
     
     if (![self removeHoldDown:region]) {
         [self locationManager:manager didDetermineState:CLRegionStateInside forRegion:region];
@@ -619,7 +629,7 @@ static LocationManager *theInstance = nil;
 
 - (void)locationManager:(CLLocationManager *)manager
           didExitRegion:(CLRegion *)region {
-    OwnTracksLogInfo("[LocationManager] didExitRegion %@", region);
+    OwnTracksLogDebug("[LocationManager] didExitRegion %@", region);
     
     if ([region.identifier hasPrefix:@"-"]) {
         [self removeHoldDown:region];
@@ -631,7 +641,7 @@ static LocationManager *theInstance = nil;
 }
 
 - (BOOL)removeHoldDown:(CLRegion *)region {
-    OwnTracksLogInfo("[LocationManager] removeHoldDown %@ [%lu]", region.identifier, (unsigned long)self.pendingRegionEvents.count);
+    OwnTracksLogDebug("[LocationManager] removeHoldDown %@ [%lu]", region.identifier, (unsigned long)self.pendingRegionEvents.count);
     
     for (PendingRegionEvent *p in self.pendingRegionEvents) {
         if (p.region == region) {
@@ -646,7 +656,7 @@ static LocationManager *theInstance = nil;
 }
 
 - (void)holdDownExpired:(NSTimer *)timer {
-    OwnTracksLogInfo("[LocationManager] holdDownExpired %@", timer.userInfo);
+    OwnTracksLogDebug("[LocationManager] holdDownExpired %@", timer.userInfo);
     if ([timer.userInfo isKindOfClass:[PendingRegionEvent class]]) {
         PendingRegionEvent *p = (PendingRegionEvent *)timer.userInfo;
         OwnTracksLogDebug("[LocationManager] holdDownExpired %@", p.region.identifier);
@@ -688,7 +698,7 @@ didFailRangingBeaconsForConstraint:(CLBeaconIdentityConstraint *)beaconConstrain
 - (void)locationManager:(CLLocationManager *)manager
         didRangeBeacons:(NSArray<CLBeacon *> *)beacons
    satisfyingConstraint:(CLBeaconIdentityConstraint *)beaconConstraint {
-    OwnTracksLogInfo("[LocationManager] didRangeBeacons %@ satisfyingContraint %@",
+    OwnTracksLogDebug("[LocationManager] didRangeBeacons %@ satisfyingContraint %@",
                  beacons, beaconConstraint);
     for (CLBeacon *beacon in beacons) {
         if (beacon.proximity != CLProximityUnknown) {
@@ -760,7 +770,7 @@ didFailRangingBeaconsForConstraint:(CLBeaconIdentityConstraint *)beaconConstrain
  *
  */
 - (void)locationManager:(CLLocationManager *)manager didVisit:(CLVisit *)visit {
-    OwnTracksLogInfo("[LocationManager] didVisit %g,%g ha=%g a=%@ d=%@",
+    OwnTracksLogDebug("[LocationManager] didVisit %g,%g ha=%g a=%@ d=%@",
                  visit.coordinate.latitude,
                  visit.coordinate.longitude,
                  visit.horizontalAccuracy,

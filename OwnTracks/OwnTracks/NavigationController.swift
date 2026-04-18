@@ -97,6 +97,10 @@ class NavigationController: UINavigationController {
         NavigationController.sharedInstance?.showAlert(title, message: message, url: url, dismissAfter: 0);
     }
     
+    @objc class func shared() -> NavigationController? {
+        return sharedInstance;
+    }
+    
     func showAlert(_ title: String, message: String, url: String?, dismissAfter: TimeInterval!) {
         DispatchQueue.main.async {
             if self.presentedViewController != nil {

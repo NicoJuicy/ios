@@ -65,6 +65,12 @@
 }
 
 - (void)setShortcutItems {
+    NSString *privacyKey = [[NSUserDefaults standardUserDefaults] stringForKey:@"privacyKey"];
+    if (privacyKey == nil) {
+        privacyKey = [NSUUID UUID].UUIDString;
+        [[NSUserDefaults standardUserDefaults] setObject:privacyKey forKey:@"privacyKey"];
+    }
+
     UIApplication *application = [UIApplication sharedApplication];
     UIApplicationShortcutItem *move =
     [[UIApplicationShortcutItem alloc]
@@ -264,21 +270,23 @@
     [center addNotificationRequest:request withCompletionHandler:^(NSError * _Nullable error) {
         //
     }];
-    
-
 }
 
 -(BOOL)application:(UIApplication *)app
            openURL:(NSURL *)url
            options:(NSDictionary<NSString *,id> *)options {
     OwnTracksLogInfo("[OwnTracksAppDelegate] openURL %@ options %@", url, options);
-    
     if (url) {
         OwnTracksLogDebug("[OwnTracksAppDelegate] URL scheme %@", url.scheme);
         
         if ([url.scheme isEqualToString:@"owntracks"]) {
             OwnTracksLogDebug("[OwnTracksAppDelegate] URL path %@ query %@", url.path, url.query);
-            
+            if (![Settings theAllowURIConfigurationInMOC:CoreData.sharedInstance.mainMOC]) {
+                self.processingMessage = NSLocalizedString(@"URI configuration not allowed",
+                                                           @"URI configuration not allowed");
+                OwnTracksLogInfo("[OwnTracksAppDelegate] URI configuration not allowed");
+                return FALSE;
+            }
             NSURLComponents *components = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:TRUE];
             NSArray<NSURLQueryItem *> *items = [components queryItems];
             NSMutableDictionary *queryStrings = [[NSMutableDictionary alloc] init];
@@ -287,111 +295,133 @@
             }
             
             if ([url.path isEqualToString:@"/beacon"]) {
-                NSString *rid = queryStrings[@"rid"];
-                NSString *name = queryStrings[@"name"];
-                NSString *uuid = queryStrings[@"uuid"];
-                int major = [queryStrings[@"major"] intValue];
-                int minor = [queryStrings[@"minor"] intValue];
-                
-                if (!rid) {
-                    rid = Region.newRid;
-                }
-                
-                NSString *desc = [NSString stringWithFormat:@"%@:%@%@%@",
-                                  name,
-                                  uuid,
-                                  major ? [NSString stringWithFormat:@":%d", major] : @"",
-                                  minor ? [NSString stringWithFormat:@":%d", minor] : @""
-                ];
-                
-                [Settings waypointsFromDictionary:
-                 @{@"_type":@"waypoints",
-                   @"waypoints":@[@{@"_type":@"waypoint",
-                                    @"rid":rid,
-                                    @"desc":desc,
-                                    @"tst":@((int)round(([NSDate date].timeIntervalSince1970))),
-                                    @"lat":@([LocationManager sharedInstance].location.coordinate.latitude),
-                                    @"lon":@([LocationManager sharedInstance].location.coordinate.longitude),
-                                    @"rad":@(-1)
-                   }]
-                 } inMOC:CoreData.sharedInstance.mainMOC];
-                [CoreData.sharedInstance sync:CoreData.sharedInstance.mainMOC];
-                self.processingMessage = NSLocalizedString(@"Beacon QR successfully processed",
-                                                           @"Display after processing beacon QR code");
-                OwnTracksLogInfo("[OwnTracksAppDelegate] openURL ok %@", self.processingMessage);
-                return TRUE;
+                return [self processURIBeacon:queryStrings];
             } else if ([url.path isEqualToString:@"/config"]) {
-                NSString *urlString = queryStrings[@"url"];
-                NSString *base64String = queryStrings[@"inline"];
-                if (urlString) {
-                    NSURL *urlFromString = [NSURL URLWithString:urlString];
-                    return [self processNSURL:urlFromString];
-                } else if (base64String) {
-                    NSData *jsonData = [[NSData alloc] initWithBase64EncodedString:base64String options:0];
-                    if (jsonData) {
-                        NSDictionary *dict = nil;
-                        id json = [[Validation sharedInstance] validateMessageData:jsonData];
-                        if (json &&
-                            [json isKindOfClass:[NSDictionary class]]) {
-                            dict = json;
-                        }
-                        if (dict) {
-                            [self performSelectorOnMainThread:@selector(terminateSession)
-                                                   withObject:nil
-                                                waitUntilDone:TRUE];
-                            [self performSelectorOnMainThread:@selector(configFromDictionary:)
-                                                   withObject:dict
-                                                waitUntilDone:TRUE];
-                            self.configLoad = [NSDate date];
-                            [self performSelectorOnMainThread:@selector(reconnect)
-                                                   withObject:nil
-                                                waitUntilDone:TRUE];
-                            
-                            self.processingMessage = NSLocalizedString(@"Inline Configuration successfully processed",
-                                                                       @"Display after processing inline config");
-                            OwnTracksLogInfo("[OwnTracksAppDelegate] openURL ok %@", self.processingMessage);
-                            return TRUE;
-                        } else {
-                            self.processingMessage = NSLocalizedString(@"Inline Configuration incorrect",
-                                                                       @"Display for incorrect inline config");
-                            OwnTracksLogInfo("[OwnTracksAppDelegate] openURL problem %@", self.processingMessage);
-                            return FALSE;
-                        }
-                    } else {
-                        self.processingMessage = NSLocalizedString(@"Inline Configuration incorrectly encoded",
-                                                                   @"Display for incorrectly encoded inline config");
-                        OwnTracksLogInfo("[OwnTracksAppDelegate] openURL problem %@", self.processingMessage);
-                        return FALSE;
-                    }
-                }
-                self.processingMessage = NSLocalizedString(@"Inline Configuration missing parameters",
-                                                           @"Display for config without parameters");
-                OwnTracksLogInfo("[OwnTracksAppDelegate] openURL problem %@", self.processingMessage);
-                return FALSE;
+                return [self processURIConfig:queryStrings];
             } else {
                 self.processingMessage = NSLocalizedString(@"unknown url path",
                                                            @"Display for unknown url path");
-                OwnTracksLogInfo("[OwnTracksAppDelegate] openURL problem %@", self.processingMessage);
+                OwnTracksLogInfo("[OwnTracksAppDelegate] unknown url path %@", url.path);
                 return FALSE;
             }
         } else if ([url.scheme isEqualToString:@"file"]) {
-            return [self processFile:url];
-        } else if ([url.scheme isEqualToString:@"http"] ||
-                   [url.scheme isEqualToString:@"https"]) {
-            return [self processNSURL:url];
+            if (![Settings theAllowURLConfigurationInMOC:CoreData.sharedInstance.mainMOC]) {
+                self.processingMessage = NSLocalizedString(@"URL configuration not allowed",
+                                                           @"URL configuration not allowed");
+                OwnTracksLogInfo("[OwnTracksAppDelegate] URL configuration not allowed");
+                return FALSE;
+            }
+            [self processFile:url];
+            return TRUE;
+            
         } else {
             self.processingMessage = [NSString stringWithFormat:@"%@ %@",
                                       NSLocalizedString(@"unknown scheme in url",
                                                         @"Display after entering an unknown scheme in url"),
                                       url.scheme];
-            OwnTracksLogInfo("[OwnTracksAppDelegate] openURL problem %@", self.processingMessage);
+            OwnTracksLogInfo("[OwnTracksAppDelegate] unkonwn scheme in URL %@", url.scheme);
             return FALSE;
         }
+    } else {
+        self.processingMessage = NSLocalizedString(@"no url specified",
+                                                   @"Display after trying to process a file");
+        OwnTracksLogInfo("[OwnTracksAppDelegate] ono url specified");
+        return FALSE;
     }
-    self.processingMessage = NSLocalizedString(@"no url specified",
-                                               @"Display after trying to process a file");
-    OwnTracksLogInfo("[OwnTracksAppDelegate] openURL problem %@", self.processingMessage);
-    return FALSE;
+}
+
+- (BOOL)processURIConfig:(NSDictionary *)queryStrings {
+    NSString *urlString = queryStrings[@"url"];
+    NSString *base64String = queryStrings[@"inline"];
+    if (urlString) {
+        NSURL *urlFromString = [NSURL URLWithString:urlString];
+        return [self processNSURL:urlFromString];
+    } else if (base64String) {
+        NSData *jsonData = [[NSData alloc] initWithBase64EncodedString:base64String options:0];
+        if (jsonData) {
+            NSDictionary *dict = nil;
+            id json = [[Validation sharedInstance] validateMessageData:jsonData];
+            if (json &&
+                [json isKindOfClass:[NSDictionary class]]) {
+                dict = json;
+            }
+            if (dict) {
+                [self performSelectorOnMainThread:@selector(terminateSession)
+                                       withObject:nil
+                                    waitUntilDone:TRUE];
+                [self performSelectorOnMainThread:@selector(configFromDictionary:)
+                                       withObject:dict
+                                    waitUntilDone:TRUE];
+                self.configLoad = [NSDate date];
+                [self performSelectorOnMainThread:@selector(reconnect)
+                                       withObject:nil
+                                    waitUntilDone:TRUE];
+                
+                self.processingMessage = NSLocalizedString(@"Configuration successfully processed",
+                                                           @"Display after processing config");
+                OwnTracksLogInfo("[OwnTracksAppDelegate] Configuration successfully processed");
+                return TRUE;
+            } else {
+                self.processingMessage = NSLocalizedString(@"Configuration incorrect",
+                                                           @"Display for incorrect config");
+                OwnTracksLogInfo("[OwnTracksAppDelegate] Configuration incorrect");
+                return FALSE;
+            }
+        } else {
+            self.processingMessage = NSLocalizedString(@"Inline Configuration incorrect",
+                                                       @"Display for incorrect inline config");
+            OwnTracksLogInfo("[OwnTracksAppDelegate] Inline Configuration incorrect");
+            return FALSE;
+        }
+    } else {
+        self.processingMessage = NSLocalizedString(@"missing config components",
+                                                   @"Display for missing components");
+        OwnTracksLogInfo("[OwnTracksAppDelegate] missing config components %@", queryStrings);
+        return FALSE;
+    }
+}
+
+- (BOOL)processURIBeacon:(NSDictionary *)queryStrings {
+    NSString *rid = queryStrings[@"rid"];
+    NSString *name = queryStrings[@"name"];
+    NSString *uuid = queryStrings[@"uuid"];
+    int major = [queryStrings[@"major"] intValue];
+    int minor = [queryStrings[@"minor"] intValue];
+    
+    if (name == nil || uuid == nil) {
+        self.processingMessage = NSLocalizedString(@"Beacon QR incomplete",
+                                                   @"Beacon QR code incomplete");
+        OwnTracksLogInfo("[OwnTracksAppDelegate] Beacon QR incomplete");
+        return FALSE;
+    }
+    
+    if (!rid) {
+        rid = Region.newRid;
+    }
+    
+    NSString *desc = [NSString stringWithFormat:@"%@:%@%@%@",
+                      name,
+                      uuid,
+                      major ? [NSString stringWithFormat:@":%d", major] : @"",
+                      minor ? [NSString stringWithFormat:@":%d", minor] : @""
+    ];
+    
+    [Settings waypointsFromDictionary:
+     @{@"_type":@"waypoints",
+       @"waypoints":@[@{@"_type":@"waypoint",
+                        @"rid":rid,
+                        @"desc":desc,
+                        @"tst":@((int)round(([NSDate date].timeIntervalSince1970))),
+                        @"lat":@([LocationManager sharedInstance].location.coordinate.latitude),
+                        @"lon":@([LocationManager sharedInstance].location.coordinate.longitude),
+                        @"rad":@(-1)
+       }]
+     } inMOC:CoreData.sharedInstance.mainMOC];
+    [CoreData.sharedInstance sync:CoreData.sharedInstance.mainMOC];
+    self.processingMessage = NSLocalizedString(@"Beacon QR successfully processed",
+                                               @"Display after processing beacon QR code");
+    OwnTracksLogInfo("[OwnTracksAppDelegate] Beacon QR successfully processed");
+    return TRUE;
 }
 
 - (BOOL)processNSURL:(NSURL *)url {
@@ -421,15 +451,8 @@
                             dict = json;
                         }
                         if (dict) {
-                            [self performSelectorOnMainThread:@selector(terminateSession)
-                                                   withObject:nil
-                                                waitUntilDone:TRUE];
                             [self performSelectorOnMainThread:@selector(configFromDictionary:)
                                                    withObject:dict
-                                                waitUntilDone:TRUE];
-                            self.configLoad = [NSDate date];
-                            [self performSelectorOnMainThread:@selector(reconnect)
-                                                   withObject:nil
                                                 waitUntilDone:TRUE];
                         }
                     } else if ([extension isEqualToString:@"otrw"] || [extension isEqualToString:@"mqtw"]) {
@@ -444,7 +467,7 @@
                                                    withObject:dict
                                                 waitUntilDone:TRUE];
                         }
-                    } else if ([extension isEqualToString:@"otrp"] || [extension isEqualToString:@"otre"]) {
+                    } else if ([extension isEqualToString:@"otrp"]) {
                         NSURL *directoryURL = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory
                                                                                      inDomain:NSUserDomainMask
                                                                             appropriateForURL:nil
@@ -494,9 +517,12 @@
 }
 
 - (void)configFromDictionary:(NSDictionary *)json {
+    [self terminateSession];
     NSError *error = [Settings fromDictionary:json inMOC:CoreData.sharedInstance.mainMOC];
     [CoreData.sharedInstance sync:CoreData.sharedInstance.mainMOC];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"reload" object:nil];
+    self.configLoad = [NSDate date];
+    [self reconnect];
 
     if (error) {
         [NavigationController alertWithTitle:@"processNSURL"
@@ -519,6 +545,19 @@
               json]
         ];
     }
+}
+
+- (void)copyOTRPFile:(NSURL *)url {
+    NSError *error;
+    NSURL *directoryURL = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory
+                                                                 inDomain:NSUserDomainMask
+                                                        appropriateForURL:nil
+                                                                   create:YES
+                                                                    error:&error];
+    NSString *fileName = url.lastPathComponent;
+    NSURL *fileURL = [directoryURL URLByAppendingPathComponent:fileName];
+    [[NSFileManager defaultManager] removeItemAtURL:fileURL error:nil];
+    [[NSFileManager defaultManager] copyItemAtURL:url toURL:fileURL error:nil];
 }
 
 - (BOOL)processFile:(NSURL *)url {
@@ -548,24 +587,21 @@
     NSString *extension = url.pathExtension;
     if ([extension isEqualToString:@"otrc"] || [extension isEqualToString:@"mqtc"]) {
         [self terminateSession];
-        error = [Settings fromStream:input inMOC:CoreData.sharedInstance.mainMOC];
-        [CoreData.sharedInstance sync:CoreData.sharedInstance.mainMOC];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"reload" object:nil];
-        self.configLoad = [NSDate date];
-        [self reconnect];
+        NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithStream:input
+                                                                     options:0
+                                                                       error:&error];
+        if (dictionary) {
+            [self configFromDictionary:dictionary];
+        }
     } else if ([extension isEqualToString:@"otrw"] || [extension isEqualToString:@"mqtw"]) {
-        error = [Settings waypointsFromStream:input inMOC:CoreData.sharedInstance.mainMOC];
-        [CoreData.sharedInstance sync:CoreData.sharedInstance.mainMOC];
-    } else if ([extension isEqualToString:@"otrp"] || [extension isEqualToString:@"otre"]) {
-        NSURL *directoryURL = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory
-                                                                     inDomain:NSUserDomainMask
-                                                            appropriateForURL:nil
-                                                                       create:YES
-                                                                        error:&error];
-        NSString *fileName = url.lastPathComponent;
-        NSURL *fileURL = [directoryURL URLByAppendingPathComponent:fileName];
-        [[NSFileManager defaultManager] removeItemAtURL:fileURL error:nil];
-        [[NSFileManager defaultManager] copyItemAtURL:url toURL:fileURL error:nil];
+        NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithStream:input
+                                                                     options:0
+                                                                       error:&error];
+        if (dictionary) {
+            [self waypointsFromDictionary:dictionary];
+        }
+    } else if ([extension isEqualToString:@"otrp"]) {
+        [self copyOTRPFile:url];
     } else {
         error = [NSError errorWithDomain:@"OwnTracks"
                                     code:2
@@ -583,7 +619,7 @@
                                   url.lastPathComponent,
                                   error.localizedDescription,
                                   error.userInfo];
-        OwnTracksLogInfo("[OwnTracksAppDelegate] processFile problem %@", self.processingMessage);
+        OwnTracksLogInfo("[OwnTracksAppDelegate] processFile problem %@ %@", url.lastPathComponent, error);
         return FALSE;
     }
     self.processingMessage = [NSString stringWithFormat:@"%@ %@ %@",
@@ -592,7 +628,7 @@
                               url.lastPathComponent,
                               NSLocalizedString(@"successfully processed",
                                                 @"Display when file processing succeeds")];
-    OwnTracksLogInfo("[OwnTracksAppDelegate] processFile ok %@", self.processingMessage);
+    OwnTracksLogInfo("[OwnTracksAppDelegate] processFile ok %@", url.lastPathComponent);
     return TRUE;
 }
 
@@ -1106,13 +1142,14 @@ performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completio
                                 } else if ([action isEqualToString:@"reportLocation"]) {
                                     if (([LocationManager sharedInstance].monitoring == LocationMonitoringSignificant ||
                                         [LocationManager sharedInstance].monitoring == LocationMonitoringMove) &&
-                                        [Settings boolForKey:@"allowremotelocation_preference"
-                                                       inMOC:CoreData.sharedInstance.queuedMOC]) {
+                                        [Settings theAllowRemoteLocationInMOC:CoreData.sharedInstance.queuedMOC]) {
                                         [self performSelectorOnMainThread:@selector(reportLocation)
                                                                withObject:nil
                                                             waitUntilDone:NO];
+                                    } else {
+                                        OwnTracksLogDefault("[OwnTracksAppDelegate] remote location not allowed");
                                     }
-                                    
+
                                 } else if ([action isEqualToString:@"reportSteps"]) {
                                     NSNumber *from = dictionary[@"from"];
                                     NSNumber *to = dictionary[@"to"];
@@ -1129,19 +1166,31 @@ performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completio
                                                         waitUntilDone:NO];
                                                                         
                                 } else if ([action isEqualToString:@"setWaypoints"]) {
-                                    [self performSelectorOnMainThread:@selector(performSetWaypoints:)
-                                                           withObject:dictionary
-                                                        waitUntilDone:NO];
-                                    
+                                    if ([Settings theAllowRemoteConfigurationInMOC:CoreData.sharedInstance.queuedMOC]) {
+                                        [self performSelectorOnMainThread:@selector(performSetWaypoints:)
+                                                               withObject:dictionary
+                                                            waitUntilDone:NO];
+                                    } else {
+                                        OwnTracksLogDefault("[OwnTracksAppDelegate] remote configuration not allowed");
+                                    }
+
                                 } else if ([action isEqualToString:@"clearWaypoints"]) {
-                                    [self performSelectorOnMainThread:@selector(performClearWaypoints:)
-                                                           withObject:dictionary
-                                                        waitUntilDone:NO];
-                                    
+                                    if ([Settings theAllowRemoteConfigurationInMOC:CoreData.sharedInstance.queuedMOC]) {
+                                        [self performSelectorOnMainThread:@selector(performClearWaypoints:)
+                                                               withObject:dictionary
+                                                            waitUntilDone:NO];
+                                    } else {
+                                        OwnTracksLogDefault("[OwnTracksAppDelegate] remote configuration not allowed");
+                                    }
+
                                 } else if ([action isEqualToString:@"setConfiguration"]) {
-                                    [self performSelectorOnMainThread:@selector(performSetConfiguration:)
-                                                           withObject:dictionary
-                                                        waitUntilDone:NO];
+                                    if ([Settings theAllowRemoteConfigurationInMOC:CoreData.sharedInstance.queuedMOC]) {
+                                        [self performSelectorOnMainThread:@selector(performSetConfiguration:)
+                                                               withObject:dictionary
+                                                            waitUntilDone:NO];
+                                    } else {
+                                        OwnTracksLogDefault("[OwnTracksAppDelegate] remote configuration not allowed");
+                                    }
                                     
                                 } else if ([action isEqualToString:@"response"]) {
                                     [self performSelectorOnMainThread:@selector(performResponse:)
@@ -1457,7 +1506,7 @@ performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completio
         withPOI:(NSString *)poi
       withImage:(nullable NSData *)image
   withImageName:(nullable NSString *)imageName {
-    OwnTracksLogInfo("[OwnTracksAppDelegate] sendNow %@ withPOI %@ %@ %@", location, poi, image, imageName);
+    OwnTracksLogDebug("[OwnTracksAppDelegate] sendNow %@ withPOI %@ %@ %@", location, poi, image, imageName);
     
     if (self.sendNowActivity) {
         [self.sendNowActivity invalidate];
@@ -1705,7 +1754,7 @@ performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completio
             remainingPositions = [friend limitWaypointsToMaximum:positions];
         }
         [CoreData.sharedInstance sync:moc];
-        OwnTracksLogInfo("[OwnTracksAppDelegate] stored location @%@ (%ld)",
+        OwnTracksLogDebug("[OwnTracksAppDelegate] stored location @%@ (%ld)",
                   createdAt, remainingPositions);
         
     } else {
@@ -1730,7 +1779,7 @@ performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completio
                 batteryLevel < downgrade / 100.0) {
                 // Move Mode, but battery is not full, not charging and less than downgrade%
                 [[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:@"downgraded"];
-                OwnTracksLogInfo("[OwnTracksAppDelegate] downgraded TRUE");
+                OwnTracksLogDebug("[OwnTracksAppDelegate] downgraded TRUE");
                 LocationManager.sharedInstance.monitoring = LocationMonitoringSignificant;
                 [Settings setInt:(int)[LocationManager sharedInstance].monitoring
                           forKey:@"monitoring_preference" inMOC:moc];
@@ -1746,7 +1795,7 @@ performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completio
                     batteryLevel >= downgrade / 100.0) {
                     // not Move Mode, previously downgraded and battery is charging or full or more than downgrade%
                     [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"downgraded"];
-                    OwnTracksLogInfo("[OwnTracksAppDelegate] downgraded FALSE");
+                    OwnTracksLogDebug("[OwnTracksAppDelegate] downgraded FALSE");
                     LocationManager.sharedInstance.monitoring = LocationMonitoringMove;
                     [Settings setInt:(int)[LocationManager sharedInstance].monitoring
                               forKey:@"monitoring_preference" inMOC:moc];
@@ -1781,7 +1830,7 @@ performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completio
                 if (insideFollowRegion) {
                     // Move Mode, but not moving, in a follow Region, and adapt is on
                     [[NSUserDefaults standardUserDefaults] setBool:TRUE forKey:@"adapted"];
-                    OwnTracksLogInfo("[OwnTracksAppDelegate] adapted TRUE");
+                    OwnTracksLogDebug("[OwnTracksAppDelegate] adapted TRUE");
                     LocationManager.sharedInstance.monitoring = LocationMonitoringSignificant;
                     [Settings setInt:(int)[LocationManager sharedInstance].monitoring
                               forKey:@"monitoring_preference" inMOC:moc];
@@ -1795,7 +1844,7 @@ performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completio
             // not Move Mode, previously adapted
             
             [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"adapted"];
-            OwnTracksLogInfo("[OwnTracksAppDelegate] adapted FALSE");
+            OwnTracksLogDebug("[OwnTracksAppDelegate] adapted FALSE");
             LocationManager.sharedInstance.monitoring = LocationMonitoringMove;
             [Settings setInt:(int)[LocationManager sharedInstance].monitoring
                       forKey:@"monitoring_preference" inMOC:moc];
@@ -1808,7 +1857,7 @@ performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completio
 }
 
 - (void)sendEmpty:(NSString *)topic {
-    OwnTracksLogInfo("[OwnTracksAppDelegate] sendEmpty");
+    OwnTracksLogDebug("[OwnTracksAppDelegate] sendEmpty");
     [self.connection sendData:nil
                         topic:topic
                    topicAlias:nil
@@ -1817,7 +1866,7 @@ performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completio
 }
 
 - (void)sendRegion:(Region *)region {
-    OwnTracksLogInfo("[OwnTracksAppDelegate] sendRegion %@", region);
+    OwnTracksLogDebug("[OwnTracksAppDelegate] sendRegion %@", region);
     NSManagedObjectContext *moc = CoreData.sharedInstance.mainMOC;
     
     if ([Settings validIdsInMOC:moc]) {
@@ -1862,7 +1911,7 @@ performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completio
         NSString *fileName = [Settings stringForKey:@"clientpkcs" inMOC:moc];
         NSString *passPhrase = [Settings stringForKey:@"passphrase" inMOC:moc];
         if (fileName && fileName.length) {
-            OwnTracksLogInfo("[OwnTracksAppDelegate] getting p12 filename:%@ passphrase:%@",
+            OwnTracksLogDebug("[OwnTracksAppDelegate] getting p12 filename:%@ passphrase:%@",
                       fileName, passPhrase);
             NSString *clientPKCSPath = [directoryURL.path stringByAppendingPathComponent:fileName];
             certificates = [MQTTTransport clientCertsFromP12:clientPKCSPath
@@ -1941,6 +1990,18 @@ performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completio
 continueUserActivity:(nonnull NSUserActivity *)userActivity
  restorationHandler:(nonnull void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler {
     OwnTracksLogInfo("application continueUserActivity:%@", userActivity.activityType);
+    OwnTracksLogInfo("application continueUserActivity:%@", userActivity.activityType);
+
+    if (![Settings theAllowIntentsInMOC:CoreData.sharedInstance.mainMOC]) {
+        [NavigationController alertWithTitle:
+         NSLocalizedString(@"Intents",
+                           @"Header of an alert message regarding intents")
+                            message:
+         NSLocalizedString(@"Intents are not allowed",
+                           @"content of an alert message regarding intents")];
+        OwnTracksLogInfo("[OwnTracksAppDelegate] Intents not allowed: %@", userActivity.activityType);
+        return NO;
+    }
     
     if ([userActivity.activityType isEqualToString:@"org.mqttitude.MQTTitude.sendNow"] ||
         [userActivity.activityType isEqualToString:@"OwnTracksSendNowIntent"]) {
@@ -1996,6 +2057,20 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
         return YES;
     } else if ([userActivity.activityType isEqualToString:@"OwnTracksTagIntent"]) {
         OwnTracksTagIntent *intent = (OwnTracksTagIntent *)userActivity.interaction.intent;
+        NSString *privacyKey = intent.PrivacyKey;
+        OwnTracksLogInfo("[OwnTracksAppDelegate] PrivacyKey: %@", privacyKey);
+
+        if (privacyKey != [[NSUserDefaults standardUserDefaults] stringForKey:@"privacyKey"]) {
+            [NavigationController alertWithTitle:
+             NSLocalizedString(@"Intents",
+                               @"Header of an alert message regarding intents")
+                                message:
+             NSLocalizedString(@"Intent Privacy Key does not match",
+                               @"content of an alert message regarding intent privacy key")];
+            OwnTracksLogInfo("[OwnTracksAppDelegate] Intents not allowed: %@", userActivity.activityType);
+            return NO;
+        }
+
         NSString *tag = intent.tag;
         if (tag && tag.length) {
             [[NSUserDefaults standardUserDefaults] setObject:tag forKey:@"tag"];

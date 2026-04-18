@@ -53,11 +53,17 @@ class SettingsTVC: UITableViewController, UIDocumentInteractionControllerDelegat
     @IBOutlet weak var UIranging: UISwitch!
     @IBOutlet weak var UIlocked: UISwitch!
     @IBOutlet weak var UIsub: UISwitch!
-    @IBOutlet weak var UIcmd: UISwitch!
-    @IBOutlet weak var UIpubRetain: UISwitch!
-    @IBOutlet weak var UIallowRemoteLocation: UISwitch!
     @IBOutlet weak var UIcleanSession: UISwitch!
-
+    @IBOutlet weak var UIpubRetain: UISwitch!
+    
+    @IBOutlet weak var UIcmd: UISwitch!
+    @IBOutlet weak var UIallowRemoteLocation: UISwitch!
+    @IBOutlet weak var UIremoteConfiguration: UISwitch!
+    @IBOutlet weak var UIuriConfiguration: UISwitch!
+    @IBOutlet weak var UIurlConfiguration: UISwitch!
+    @IBOutlet weak var UIprivacyKey: UITextField!
+    @IBOutlet weak var UIintents: UISwitch!
+    
     @IBOutlet weak var UITLSCell: UITableViewCell!
     @IBOutlet weak var UIclientPKCSCell: UITableViewCell!
 
@@ -392,6 +398,30 @@ class SettingsTVC: UITableViewController, UIDocumentInteractionControllerDelegat
                              inMOC: moc);
         }
 
+        if UIremoteConfiguration != nil {
+            Settings.setBool(UIremoteConfiguration.isOn,
+                             forKey: "allowremoteconfiguration_preference",
+                             inMOC: moc);
+        }
+
+        if UIuriConfiguration != nil {
+            Settings.setBool(UIuriConfiguration.isOn,
+                             forKey: "allowuriconfiguration_preference",
+                             inMOC: moc);
+        }
+
+        if UIurlConfiguration != nil {
+            Settings.setBool(UIurlConfiguration.isOn,
+                             forKey: "allowurlconfiguration_preference",
+                             inMOC: moc);
+        }
+
+        if UIintents != nil {
+            Settings.setBool(UIintents.isOn,
+                             forKey: "allowintents_preference",
+                             inMOC: moc);
+        }
+
         if UIurl != nil {
             Settings.setString(UIurl.text as? NSObject,
                                forKey: "url_preference",
@@ -676,8 +706,32 @@ class SettingsTVC: UITableViewController, UIDocumentInteractionControllerDelegat
         }
 
         if UIallowRemoteLocation != nil {
-            UIallowRemoteLocation.isOn = Settings.bool(forKey: "allowremotelocation_preference", inMOC: moc);
+            UIallowRemoteLocation.isOn = Settings.theAllowRemoteLocation(inMOC: moc);
             UIallowRemoteLocation.isEnabled = !locked;
+        }
+
+        if UIremoteConfiguration != nil {
+            UIremoteConfiguration.isOn = Settings.theAllowRemoteConfiguration(inMOC: moc);
+            UIremoteConfiguration.isEnabled = !locked;
+        }
+
+        if UIuriConfiguration != nil {
+            UIuriConfiguration.isOn = Settings.theAllowURIConfiguration(inMOC: moc);
+            UIuriConfiguration.isEnabled = !locked;
+        }
+
+        if UIurlConfiguration != nil {
+            UIurlConfiguration.isOn = Settings.theAllowURLConfiguration(inMOC: moc);
+            UIurlConfiguration.isEnabled = !locked;
+        }
+
+        if UIintents != nil {
+            UIintents.isOn = Settings.theAllowIntents(inMOC: moc);
+            UIintents.isEnabled = !locked;
+        }
+        
+        if UIprivacyKey != nil {
+            UIprivacyKey.text = UserDefaults.standard.string(forKey: "privacyKey") ?? "";
         }
 
         if UIurl != nil {
@@ -1099,11 +1153,6 @@ class SettingsTVC: UITableViewController, UIDocumentInteractionControllerDelegat
         updated();
     }
 
-    @IBAction func cmdChanged(_ sender: UISwitch) {
-        updateValues();
-        updated();
-    }
-
     @IBAction func pubRetainChanged(_ sender: UISwitch) {
         updateValues();
         updated();
@@ -1113,11 +1162,79 @@ class SettingsTVC: UITableViewController, UIDocumentInteractionControllerDelegat
         changeWarning();
     }
 
-    @IBAction func allowRemoteLocationChanged(_ sender: UISwitch) {
+    // Remote Control Section
+    @IBAction func cmdChanged(_ sender: UISwitch) {
         updateValues();
         updated();
     }
 
+   @IBAction func allowRemoteLocationChanged(_ sender: UISwitch) {
+        updateValues();
+        updated();
+    }
+    
+    @IBAction func remoteConfigurationChanged(_ sender: UISwitch) {
+        if sender.isOn {
+            configWarning();
+        }
+    }
+    
+    @IBAction func uriConfigurationChanged(_ sender: UISwitch) {
+        if sender.isOn {
+            configWarning();
+        }
+    }
+    
+    @IBAction func urlConfigurationChanged(_ sender: UISwitch) {
+        if sender.isOn {
+            configWarning();
+        }
+    }
+    
+    @IBAction func intentsChanged(_ sender: UISwitch) {
+        if sender.isOn {
+            configWarning();
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        let tableViewCell = tableView.cellForRow(at: indexPath);
+        if tableViewCell?.tag == 99 {
+            UIPasteboard.general.string = UserDefaults.standard.string(forKey: "privacyKey");
+            NavigationController.alert(title: NSLocalizedString("Clipboard",
+                                                                comment: "Clipboard"),
+                                       message: NSLocalizedString("Privacy Key copied to clipboard",
+                                                                  comment: "Privacy Key  copied to clipboard"),
+                                       dismissAfter: 1.0);
+        }
+        return nil;
+    }
+    
+    func configWarning() {
+        let ac = UIAlertController(title:NSLocalizedString("External Configuration change",
+                                                           comment:"Alert header for external configuration change warning"),
+                                   message: NSLocalizedString("Please be aware you are changing the permissions to configure your app externally. Do not enable this setting unless you know what you are doing.",
+                                                              comment: "Alert content for external configuration change warning"),
+                                   preferredStyle: .alert);
+        let cancel = UIAlertAction(title: NSLocalizedString("Cancel",
+                                                            comment:"Cancel button title"),
+                                   style: .cancel) { _ in
+            self.updated();
+        }
+        let ok = UIAlertAction(title: NSLocalizedString("Continue",
+                                                        comment: "Continue button title"),
+                               style: .destructive) { _ in
+            let ad = UIApplication.shared.delegate as! OwnTracksAppDelegate;
+            ad.terminateSession();
+            self.updateValues();
+            self.updated();
+        }
+        ac.addAction(cancel);
+        ac.addAction(ok);
+        present(ac, animated: true);
+    }
+
+    
     @IBAction func allowUntrustedCertificatesChanged(_ sender: UISwitch) {
         updateValues();
         updated();

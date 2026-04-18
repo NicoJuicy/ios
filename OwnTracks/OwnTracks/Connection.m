@@ -341,7 +341,7 @@ willPerformHTTPRedirection:(NSHTTPURLResponse *)redirectResponse
         topicAlias:(NSNumber *)topicAlias
                qos:(MQTTQosLevel)qos
             retain:(BOOL)retainFlag {
-    OwnTracksLogInfo("[Connection] sendData(%ld):%@ %@ q%d r%d",
+    OwnTracksLogDebug("[Connection] sendData(%ld):%@ %@ q%d r%d",
               data.length,
               topic,
               [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding],
@@ -406,7 +406,7 @@ willPerformHTTPRedirection:(NSHTTPURLResponse *)redirectResponse
                                     userProperties:nil
                                        contentType:nil
                                     publishHandler:nil];
-        OwnTracksLogInfo("[Connection] sendData mid=%u", msgId);
+        OwnTracksLogDebug("[Connection] sendData mid=%u", msgId);
         return msgId;
     }
 }
@@ -417,7 +417,7 @@ willPerformHTTPRedirection:(NSHTTPURLResponse *)redirectResponse
 
 - (void)sendHTTP:(NSString *)topic data:(NSData *)data {
     NSString *postLength = [NSString stringWithFormat:@"%ld",(unsigned long)data.length];
-    OwnTracksLogInfo("[Connection] sendtHTTP %@(%@):%@",
+    OwnTracksLogDebug("[Connection] sendtHTTP %@(%@):%@",
                  topic, postLength, [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
 
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
@@ -460,7 +460,7 @@ willPerformHTTPRedirection:(NSHTTPURLResponse *)redirectResponse
     NSString *contentType = [NSString stringWithFormat:@"application/json"];
     [request setValue:contentType forHTTPHeaderField: @"Content-Type"];
     
-    OwnTracksLogInfo("[Connection] NSMutableURLRequest %@://%@%@%@%@ (%@)",
+    OwnTracksLogDebug("[Connection] NSMutableURLRequest %@://%@%@%@%@ (%@)",
               request.URL.scheme,
               request.URL.user ? request.URL.password ?
               [NSString stringWithFormat:@"%@:<password>@", request.URL.user] :
@@ -481,7 +481,7 @@ willPerformHTTPRedirection:(NSHTTPURLResponse *)redirectResponse
     [self.urlSession dataTaskWithRequest:request completionHandler:
      ^(NSData *data, NSURLResponse *response, NSError *error) {
 
-         OwnTracksLogDebug("[Connection] dataTaskWithRequest %@ %@ %@", data, response, error);
+        OwnTracksLogDebug("[Connection] dataTaskWithRequest %@ %@ %@", data, response, error);
          if (!error) {
              
              if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
@@ -505,7 +505,7 @@ willPerformHTTPRedirection:(NSHTTPURLResponse *)redirectResponse
                          }
                          
                          NSData *incomingData = data;
-                         OwnTracksLogInfo("[Connection] HTTP %ld incomingData %@",
+                         OwnTracksLogDebug("[Connection] HTTP %ld incomingData %@",
                                    (long)httpResponse.statusCode,
                                    [[NSString alloc] initWithData:incomingData encoding:NSUTF8StringEncoding]);
                          if (self.key && self.key.length) {
@@ -542,7 +542,7 @@ willPerformHTTPRedirection:(NSHTTPURLResponse *)redirectResponse
                                               (long)httpResponse.statusCode,
                                               [[NSString alloc] initWithData:request.HTTPBody encoding:NSUTF8StringEncoding]
                                               ];
-                         OwnTracksLogDefault("[Connection] HTTP Response %@", message);
+                         OwnTracksLogDebug("[Connection] HTTP Response %@", message);
 
                          [self performSelectorOnMainThread:@selector(HTTPerror:)
                                                 withObject:message
@@ -582,7 +582,7 @@ willPerformHTTPRedirection:(NSHTTPURLResponse *)redirectResponse
 }
 
 - (void)oneMessage:(NSDictionary *)message {
-    OwnTracksLogInfo("[Connection] oneMessage %@", message.description);
+    OwnTracksLogDebug("[Connection] oneMessage %@", message.description);
 
     if (message && [message isKindOfClass:[NSDictionary class]]) {
         NSString *topic = @"owntracks/http/??";
@@ -665,7 +665,7 @@ willPerformHTTPRedirection:(NSHTTPURLResponse *)redirectResponse
     if (self.clean || !self.reconnectFlag || !sessionPresent) {
         for (NSString *topicFilter in self.subscriptions) {
             if (topicFilter.length) {
-                OwnTracksLogInfo("[Connection] subscribe %@ qos=%d",
+                OwnTracksLogDebug("[Connection] subscribe %@ qos=%d",
                           topicFilter, self.subscriptionQos);
 
                 UInt16 mid = [self.session subscribeToTopicV5:topicFilter
@@ -677,7 +677,7 @@ willPerformHTTPRedirection:(NSHTTPURLResponse *)redirectResponse
                                        subscriptionIdentifier:0
                                                userProperties:nil
                                              subscribeHandler:nil];
-                OwnTracksLogInfo("[Connection] subscription mid=%d",
+                OwnTracksLogDebug("[Connection] subscription mid=%d",
                           mid);
             }
         }
@@ -748,7 +748,7 @@ willPerformHTTPRedirection:(NSHTTPURLResponse *)redirectResponse
             reasonString:(NSString *)reasonString
           userProperties:(NSArray<NSDictionary<NSString *,NSString *> *> *)userProperties
              reasonCodes:(NSArray<NSNumber *> *)reasonCodes {
-    OwnTracksLogInfo("[Connection] subAckReceived mid=%u reasonCodes=%@ userProperties=%@",
+    OwnTracksLogDebug("[Connection] subAckReceived mid=%u reasonCodes=%@ userProperties=%@",
               msgID,
               [reasonCodes componentsJoinedByString:@", "],
               userProperties);
@@ -759,7 +759,7 @@ willPerformHTTPRedirection:(NSHTTPURLResponse *)redirectResponse
               reasonString:(NSString *)reasonString
             userProperties:(NSArray<NSDictionary<NSString *,NSString *> *> *)userProperties
                reasonCodes:(NSArray<NSNumber *> *)reasonCodes {
-    OwnTracksLogInfo("[Connection] unsubAckReceived mid=%u rs=%@ rc=%@ up=%@",
+    OwnTracksLogDebug("[Connection] unsubAckReceived mid=%u rs=%@ rc=%@ up=%@",
               msgID,
               reasonString,
               reasonCodes,
@@ -779,7 +779,7 @@ willPerformHTTPRedirection:(NSHTTPURLResponse *)redirectResponse
            correlationData:(NSData *)correlationData
             userProperties:(NSArray<NSDictionary<NSString *,NSString *> *> *)userProperties
                contentType:(NSString *)contentType {
-    OwnTracksLogInfo("[Connection] messageDelivered mid=%u", msgID);
+    OwnTracksLogDebug("[Connection] messageDelivered mid=%u", msgID);
     [self.delegate messageDelivered:self msgID:msgID];
 }
 
@@ -804,7 +804,7 @@ willPerformHTTPRedirection:(NSHTTPURLResponse *)redirectResponse
 
 #define LEN2PRINT 2048
     NSString *dataString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    OwnTracksLogInfo("[Connection] received topic=%@ dataString(%lu)=%@",
+    OwnTracksLogDebug("[Connection] received topic=%@ dataString(%lu)=%@",
               topic,
               (unsigned long)dataString.length,
               dataString.length <= LEN2PRINT ?

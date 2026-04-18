@@ -12,7 +12,6 @@
 #import "LocationManager.h"
 #import "OwnTracksLog.h"
 
-
 @interface SettingsDefaults: NSObject
 @property (strong, nonatomic) NSDictionary *mqttDefaults;
 @property (strong, nonatomic) NSDictionary *httpDefaults;
@@ -216,6 +215,18 @@ static SettingsDefaults *defaults;
 
             object = dictionary[@"allowRemoteLocation"];
             if (object) [self setString:object forKey:@"allowremotelocation_preference" inMOC:context];
+            
+            object = dictionary[@"remoteConfiguration"];
+            if (object) [self setString:object forKey:@"allowremoteconfiguration_preference" inMOC:context];
+            
+            object = dictionary[@"uriConfiguration"];
+            if (object) [self setString:object forKey:@"allowruriconfiguration_preference" inMOC:context];
+            
+            object = dictionary[@"urlConfiguration"];
+            if (object) [self setString:object forKey:@"allowuriconfiguration_preference" inMOC:context];
+            
+            object = dictionary[@"allowIntents"];
+            if (object) [self setString:object forKey:@"allowintents_preference" inMOC:context];
             
             object = dictionary[@"extendedData"];
             if (object) [self setString:object forKey:@"extendeddata_preference" inMOC:context];
@@ -437,6 +448,10 @@ static SettingsDefaults *defaults;
     dict[@"deviceId"] =             [Settings stringOrZeroForKey:@"deviceid_preference" inMOC:context];
     dict[@"cmd"] =                  @([Settings boolForKey:@"cmd_preference" inMOC:context]);
     dict[@"allowRemoteLocation"] =  @([Settings boolForKey:@"allowremotelocation_preference" inMOC:context]);
+    dict[@"remoteConfiguration"] =  @([Settings boolForKey:@"allowremoteconfiguration_preference" inMOC:context]);
+    dict[@"uriConfiguration"] =     @([Settings boolForKey:@"allowuriconfiguration_preference" inMOC:context]);
+    dict[@"urlConfiguration"] =     @([Settings boolForKey:@"allowurlconfiguration_preference" inMOC:context]);
+    dict[@"allowIntents"] =         @([Settings boolForKey:@"allowintents_preference" inMOC:context]);
     dict[@"auth"] =                 @([Settings boolForKey:@"auth_preference" inMOC:context]);
     dict[@"usePassword"] =          @([Settings boolForKey:@"usepassword_preference" inMOC:context]);
     dict[@"encryptionKey"] =        [Settings stringOrZeroForKey:@"secret_preference" inMOC:context];
@@ -749,6 +764,26 @@ static SettingsDefaults *defaults;
 
 + (BOOL)theLockedInMOC:(NSManagedObjectContext *)context {
     return [self boolForKey:@"locked" inMOC:context];
+}
+
++ (BOOL)theAllowRemoteLocationInMOC:(NSManagedObjectContext *)context {
+    return [self boolForKey:@"allowremotelocation_preference" inMOC:context];
+}
+
++ (BOOL)theAllowRemoteConfigurationInMOC:(NSManagedObjectContext *)context {
+    return [self boolForKey:@"allowremoteconfiguration_preference" inMOC:context];
+}
+
++ (BOOL)theAllowURLConfigurationInMOC:(NSManagedObjectContext *)context {
+    return [self boolForKey:@"allowurlconfiguration_preference" inMOC:context];
+}
+
++ (BOOL)theAllowURIConfigurationInMOC:(NSManagedObjectContext *)context {
+    return [self boolForKey:@"allowuriconfiguration_preference" inMOC:context];
+}
+
++ (BOOL)theAllowIntentsInMOC:(NSManagedObjectContext *)context {
+    return [self boolForKey:@"allowintents_preference" inMOC:context];
 }
 
 + (BOOL)theMqttAuthInMOC:(NSManagedObjectContext *)context {

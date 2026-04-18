@@ -66,6 +66,11 @@ typedef NS_ENUM(int, ConnectionMode) {
 + (BOOL)theMqttUsePasswordInMOC:(NSManagedObjectContext * _Nonnull)context;
 + (BOOL)theMqttAuthInMOC:(NSManagedObjectContext * _Nonnull)context;
 + (BOOL)theLockedInMOC:(NSManagedObjectContext * _Nonnull)context;
++ (BOOL)theAllowRemoteLocationInMOC:(NSManagedObjectContext * _Nonnull)context;
++ (BOOL)theAllowRemoteConfigurationInMOC:(NSManagedObjectContext * _Nonnull)context;
++ (BOOL)theAllowURIConfigurationInMOC:(NSManagedObjectContext * _Nonnull)context;
++ (BOOL)theAllowIntentsInMOC:(NSManagedObjectContext * _Nonnull)context;
++ (BOOL)theAllowURLConfigurationInMOC:(NSManagedObjectContext * _Nonnull)context;
 + (BOOL)theWillRetainFlagInMOC:(NSManagedObjectContext * _Nonnull)context;
 
 + (int)theMaximumHistoryInMOC:(NSManagedObjectContext * _Nonnull)context;
