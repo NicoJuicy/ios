@@ -29,7 +29,9 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSData * _Nullable)imageDataOfPerson:(NSString *)contactId;
 
 + (void)deleteAllFriendsInManagedObjectContext:(NSManagedObjectContext *)context;
++ (NSFetchRequest<Friend *> *)fetchRequestAll;
 + (NSArray *)allFriendsInManagedObjectContext:(NSManagedObjectContext *)context;
++ (NSFetchRequest<Friend *> *)fetchRequestAllNonStale:(NSManagedObjectContext *)context;
 + (NSArray *)allNonStaleFriendsInManagedObjectContext:(NSManagedObjectContext *)context;
 
 - (Waypoint *)addWaypoint:(nonnull CLLocation *)location

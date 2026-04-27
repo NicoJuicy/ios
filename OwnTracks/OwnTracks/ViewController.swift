@@ -16,7 +16,7 @@ class ViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsContr
     @IBOutlet weak var privacyButton: UIBarButtonItem!;
     @IBOutlet weak var askForMapButton: UIBarButtonItem!;
     @IBOutlet weak var accuracyButton: UIBarButtonItem!;
-    
+        
     var trackingButton: MKUserTrackingButton? = nil;
     var modes: UISegmentedControl? = nil;
     var mapMode: UISegmentedControl? = nil;
@@ -39,7 +39,7 @@ class ViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsContr
         mapView.delegate = self;
         mapView.mapType = .standard;
         mapView.showsScale = false;
-        
+                
         setupModes();
         setupMapMode();
         setupScaleView();
@@ -268,15 +268,11 @@ class ViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsContr
     }
     
     func reloaded() {
+        mapView.removeAnnotations(mapView.annotations);
+        mapView.removeOverlays(mapView.overlays);
+
         let moc = CoreData.sharedInstance().mainMOC;
-        let frFriends = NSFetchRequest<Friend>(entityName: "Friend");
-        let ignoreStaleLocations = Settings.double(forKey: "ignorestalelocastions_preference",
-                                                   inMOC: moc);
-        if ignoreStaleLocations > 0 {
-            let stale = TimeInterval(floatLiteral: -ignoreStaleLocations * 24.0 * 3600.0);
-            frFriends.predicate = NSPredicate(format: "lastLocation > %@", NSDate(timeIntervalSinceNow: stale));
-        }
-        frFriends.sortDescriptors = [NSSortDescriptor(key: "topic", ascending: true)];
+        let frFriends = Friend.fetchRequestAllNonStale(moc);
         frcFriends = NSFetchedResultsController(fetchRequest: frFriends,
                                                 managedObjectContext: moc,
                                                 sectionNameKeyPath: nil,
@@ -286,6 +282,8 @@ class ViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsContr
             try frcFriends!.performFetch();
         } catch {
         }
+        
+        mapView.addAnnotations(frcFriends!.fetchedObjects!);
         
         let frRegions = NSFetchRequest<Region>(entityName: "Region");
         frRegions.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)];

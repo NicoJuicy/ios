@@ -127,15 +127,7 @@ class FriendsTVC: OwnTracksEditFetchTVC {
     
     private func reset() {
         let moc = CoreData.sharedInstance().mainMOC;
-        let fr = NSFetchRequest<Friend>();
-        let e = NSEntityDescription.entity(forEntityName: "Friend", in: moc);
-        fr.entity = e;
-        let ignoreStaleLocations = Settings.double(forKey: "ignorestalelocations_preference", inMOC: moc);
-        if ignoreStaleLocations > 0.0 {
-            let stale = -ignoreStaleLocations * 24.0 * 3600.0;
-            fr.predicate = NSPredicate(format: "lastLocattion > %@", NSDate(timeIntervalSinceNow: stale));
-        }
-        fr.sortDescriptors = [NSSortDescriptor(key: "topic", ascending: true)];
+        let fr = Friend.fetchRequestAllNonStale(moc);
         self.frc = NSFetchedResultsController(fetchRequest: fr,
                                               managedObjectContext: moc,
                                               sectionNameKeyPath: nil,
@@ -144,7 +136,6 @@ class FriendsTVC: OwnTracksEditFetchTVC {
         do {
             try self.frc?.performFetch();
         } catch {
-            print("fetch failed");
         }
         if tableView != nil {
             tableView.reloadData();

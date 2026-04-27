@@ -47,31 +47,32 @@
     }
 }
 
-+ (NSArray *)allFriendsInManagedObjectContext:(NSManagedObjectContext *)context {
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Friend"];
++ (NSFetchRequest<Friend *> *)fetchRequestAll {
+    NSFetchRequest *request = [Friend fetchRequest];
     request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"topic" ascending:YES]];
+    return request;
+}
 
++ (NSArray *)allFriendsInManagedObjectContext:(NSManagedObjectContext *)context {
     NSError *error = nil;
-
-    NSArray *matches = [context executeFetchRequest:request error:&error];
-
+    NSArray *matches = [context executeFetchRequest:[Friend fetchRequestAll] error:&error];
     return matches;
 }
 
-+ (NSArray *)allNonStaleFriendsInManagedObjectContext:(NSManagedObjectContext *)context {
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Friend"];
-    request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"topic" ascending:YES]];
++ (NSFetchRequest<Friend *> *)fetchRequestAllNonStale:(NSManagedObjectContext *)context {
+    NSFetchRequest *request = [Friend fetchRequestAll];
     double ignoreStaleLocations = [Settings doubleForKey:@"ignorestalelocations_preference" inMOC:context];
     if (ignoreStaleLocations) {
         NSTimeInterval stale = -ignoreStaleLocations * 24.0 * 3600.0;
         request.predicate = [NSPredicate predicateWithFormat:@"lastLocation > %@",
                              [NSDate dateWithTimeIntervalSinceNow:stale]];
     }
+    return request;
+}
 
++ (NSArray *)allNonStaleFriendsInManagedObjectContext:(NSManagedObjectContext *)context {
     NSError *error = nil;
-
-    NSArray *matches = [context executeFetchRequest:request error:&error];
-
+    NSArray *matches = [context executeFetchRequest:[Friend fetchRequestAllNonStale:context] error:&error];
     return matches;
 }
 
