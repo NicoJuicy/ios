@@ -509,34 +509,72 @@
 }
 
 - (void)configFromDictionary:(NSDictionary *)json {
-    [self terminateSession];
-    NSError *error = [Settings fromDictionary:json inMOC:CoreData.sharedInstance.mainMOC];
-    [CoreData.sharedInstance sync:CoreData.sharedInstance.mainMOC];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"reload" object:nil];
-    self.configLoad = [NSDate date];
-    [self reconnect];
+    NSError *error;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingSortedKeys | NSJSONWritingPrettyPrinted error:&error];
+    NSString *jsonString = [[NSString alloc] initWithData:jsonData
+                                                 encoding:NSUTF8StringEncoding];
 
-    if (error) {
-        [NavigationController alertWithTitle:@"processNSURL"
-                            message:
-             [NSString stringWithFormat:@"configFromDictionary %@ %@",
-              error,
-              json]
-        ];
-    }
+    jsonString = [Settings changesFromDictionary:json inMOC:CoreData.sharedInstance.mainMOC];
+
+    [NavigationController alertWithTitle:NSLocalizedString(@"Process Configuration?",
+                                                           @"Process Configuration?")
+                                 message:jsonString
+                               operation:^{
+        [self terminateSession];
+        NSError *error = [Settings fromDictionary:json inMOC:CoreData.sharedInstance.mainMOC];
+        [CoreData.sharedInstance sync:CoreData.sharedInstance.mainMOC];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"reload" object:nil];
+        self.configLoad = [NSDate date];
+        [self reconnect];
+        
+        if (error) {
+            [NavigationController alertWithTitle:@"processNSURL"
+                                         message:
+                 [NSString stringWithFormat:@"configFromDictionary %@ %@",
+                  error,
+                  json]
+            ];
+        } else {
+            self.processingMessage = [NSString stringWithFormat:@"%@ %@",
+                                      NSLocalizedString(@"File",
+                                                        @"Display when file processing succeeds (filename follows)"),
+                                      NSLocalizedString(@"successfully processed",
+                                                        @"Display when file processing succeeds")];
+            OwnTracksLogInfo("[OwnTracksAppDelegate] configFromDictionary ok");
+
+        }
+    }];
 }
 
 - (void)waypointsFromDictionary:(NSDictionary *)json {
-    NSError *error = [Settings waypointsFromDictionary:json inMOC:CoreData.sharedInstance.mainMOC];
-    [CoreData.sharedInstance sync:CoreData.sharedInstance.mainMOC];
-    if (error) {
-        [NavigationController alertWithTitle:@"processNSURL"
-                            message:
-             [NSString stringWithFormat:@"waypointsFromDictionary %@ %@",
-              error,
-              json]
-        ];
-    }
+    NSError *error;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingSortedKeys | NSJSONWritingPrettyPrinted error:&error];
+    NSString *jsonString = [[NSString alloc] initWithData:jsonData
+                                                 encoding:NSUTF8StringEncoding];
+
+    [NavigationController alertWithTitle:NSLocalizedString(@"Process Waypoints?",
+                                                           @"Process Waypoints?")
+                                 message:jsonString
+                               operation:^{
+        
+        NSError *error = [Settings waypointsFromDictionary:json inMOC:CoreData.sharedInstance.mainMOC];
+        [CoreData.sharedInstance sync:CoreData.sharedInstance.mainMOC];
+        if (error) {
+            [NavigationController alertWithTitle:@"processNSURL"
+                                         message:
+                 [NSString stringWithFormat:@"waypointsFromDictionary %@ %@",
+                  error,
+                  json]
+            ];
+        } else {
+            self.processingMessage = [NSString stringWithFormat:@"%@ %@",
+                                      NSLocalizedString(@"File",
+                                                        @"Display when file processing succeeds (filename follows)"),
+                                      NSLocalizedString(@"successfully processed",
+                                                        @"Display when file processing succeeds")];
+            OwnTracksLogInfo("[OwnTracksAppDelegate] waypointsFromDictionary ok");
+        }
+    }];
 }
 
 - (void)copyOTRPFile:(NSURL *)url {
@@ -554,54 +592,54 @@
 
 - (BOOL)processFile:(NSURL *)url {
     OwnTracksLogInfo("[OwnTracksAppDelegate] processFile %@", url);
-    NSInputStream *input = [NSInputStream inputStreamWithURL:url];
-    if (input.streamError) {
-        self.processingMessage = [NSString stringWithFormat:@"inputStreamWithURL %@ %@",
-                                  input.streamError,
-                                  url];
-        OwnTracksLogInfo("[OwnTracksAppDelegate] processFile problem %@", self.processingMessage);
-        return FALSE;
-    }
-    [input open];
-    if (input.streamError) {
-        self.processingMessage = [NSString stringWithFormat:@"%@ %@ %@",
-                                  NSLocalizedString(@"file open error",
-                                                    @"Display after trying to open a file"),
-                                  input.streamError,
-                                  url];
-        OwnTracksLogInfo("[OwnTracksAppDelegate] processFile problem %@", self.processingMessage);
-        return FALSE;
-    }
-    
-    OwnTracksLogInfo("[OwnTracksAppDelegate] URL pathExtension %@", url.pathExtension);
-    
     NSError *error;
     NSString *extension = url.pathExtension;
     if ([extension isEqualToString:@"otrc"] || [extension isEqualToString:@"mqtc"]) {
-        NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithStream:input
-                                                                     options:0
-                                                                       error:&error];
-        if (dictionary) {
-            [self configFromDictionary:dictionary];
+        NSData *data = [NSData dataWithContentsOfFile:[url path] options:0 error:&error];
+        [[NSFileManager defaultManager] removeItemAtURL:url error:nil];
+        if (data) {
+            NSDictionary *dict = nil;
+            id json = [[Validation sharedInstance] validateMessageData:data];
+            if (json &&
+                [json isKindOfClass:[NSDictionary class]]) {
+                dict = json;
+            }
+            if (dict) {
+                [self configFromDictionary:dict];
+            }
         }
     } else if ([extension isEqualToString:@"otrw"] || [extension isEqualToString:@"mqtw"]) {
-        NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithStream:input
-                                                                     options:0
-                                                                       error:&error];
-        if (dictionary) {
-            [self waypointsFromDictionary:dictionary];
+        NSData *data = [NSData dataWithContentsOfFile:[url path] options:0 error:&error];
+        [[NSFileManager defaultManager] removeItemAtURL:url error:nil];
+        if (data) {
+            NSDictionary *dict = nil;
+            id json = [[Validation sharedInstance] validateMessageData:data];
+            if (json &&
+                [json isKindOfClass:[NSDictionary class]]) {
+                dict = json;
+            }
+            if (dict) {
+                [self waypointsFromDictionary:dict];
+            }
         }
     } else if ([extension isEqualToString:@"otrp"]) {
         [self copyOTRPFile:url];
+        [[NSFileManager defaultManager] removeItemAtURL:url error:nil];
+        self.processingMessage = [NSString stringWithFormat:@"%@ %@ %@",
+                                  NSLocalizedString(@"File",
+                                                    @"Display when file processing succeeds (filename follows)"),
+                                  url.lastPathComponent,
+                                  NSLocalizedString(@"successfully processed",
+                                                    @"Display when file processing succeeds")];
+        OwnTracksLogInfo("[OwnTracksAppDelegate] processFile ok %@", url.lastPathComponent);
+
     } else {
+        [[NSFileManager defaultManager] removeItemAtURL:url error:nil];
         error = [NSError errorWithDomain:@"OwnTracks"
                                     code:2
                                 userInfo:@{@"extension":extension ? extension : @"(null)"}];
     }
     
-    [input close];
-    
-    [[NSFileManager defaultManager] removeItemAtURL:url error:nil];
     
     if (error) {
         self.processingMessage = [NSString stringWithFormat:@"%@ %@: %@ %@",
@@ -613,13 +651,6 @@
         OwnTracksLogInfo("[OwnTracksAppDelegate] processFile problem %@ %@", url.lastPathComponent, error);
         return FALSE;
     }
-    self.processingMessage = [NSString stringWithFormat:@"%@ %@ %@",
-                              NSLocalizedString(@"File",
-                                                @"Display when file processing succeeds (filename follows)"),
-                              url.lastPathComponent,
-                              NSLocalizedString(@"successfully processed",
-                                                @"Display when file processing succeeds")];
-    OwnTracksLogInfo("[OwnTracksAppDelegate] processFile ok %@", url.lastPathComponent);
     return TRUE;
 }
 

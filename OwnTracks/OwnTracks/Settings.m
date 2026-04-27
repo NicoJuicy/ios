@@ -55,6 +55,355 @@ static SettingsDefaults *defaults;
     return intentAuthKey;
 }
 
++ (NSString *)changesFromDictionary:(NSDictionary *)dictionary
+                             inMOC:(NSManagedObjectContext *)context {
+    NSString *changes = NSLocalizedString(@"Config changes:\n", @"Config changes:\n");
+
+    if (!dictionary && ![dictionary isKindOfClass:[NSDictionary class]]) {
+        return NSLocalizedString(@"Invalid config dictionary", @"Invalid config dictionary");
+    }
+
+    NSString *type = dictionary[@"_type"];
+    if (!type || ![type isKindOfClass:[NSString class]] || ![type isEqualToString:@"configuration"]) {
+        return NSLocalizedString(@"Invalid config _type", @"Invalid config _type");
+    }
+                
+    NSNumber *mode = dictionary[@"mode"];
+    if (mode) {
+        if ([mode isKindOfClass:[NSNumber class]] &&
+            (mode.intValue == CONNECTION_MODE_MQTT ||
+             mode.intValue == CONNECTION_MODE_HTTP)) {
+            if ([Settings theModeInMOC:context] != mode.intValue) {
+                changes = [changes stringByAppendingFormat:@"%@: %d\n",
+                           NSLocalizedString(@"New mode", @"New mode"),
+                           mode.intValue];
+            }
+        } else {
+            return NSLocalizedString(@"Invalid config mode", @"Invalid config mode");
+        }
+    }
+
+    NSObject *object;
+
+    object = dictionary[@"deviceId"];
+    if (object && ![[Settings stringForKey:@"deviceid_preference"inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New device id", @"New device id"),
+                   object];
+    }
+    
+    object = dictionary[@"tid"];
+    if (object && ![[self stringForKey:@"trackerid_preference" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New tid", @"New tid"),
+                   object];
+    }
+    
+    object = dictionary[@"clientId"];
+    if (object && ![[self stringForKey:@"clientid_preference" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New clientid", @"New clientid"),
+                   object];
+    }
+
+    object = dictionary[@"subTopic"];
+    if (object && ![[self stringForKey:@"subscription_preference" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New subTopic", @"New subTopic"),
+                   object];
+    }
+
+    object = dictionary[@"pubTopicBase"];
+    if (object && ![[self stringForKey:@"topic_preference" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New pubTopicBase", @"New pubTopicBase"),
+                   object];
+    }
+
+    object = dictionary[@"host"];
+    if (object && ![[self stringForKey:@"host_preference" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New host", @"New host"),
+                   object];
+    }
+
+    object = dictionary[@"url"];
+    if (object && ![[self stringForKey:@"url_preference" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New url", @"New url"),
+                   object];
+    }
+
+    object = dictionary[@"httpHeaders"];
+    if (object && ![[self stringForKey:@"httpheaders_preference" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New httpHeaders", @"New httpHeaders"),
+                   object];
+    }
+
+    object = dictionary[@"encryptionKey"];
+    if (object && ![[self stringForKey:@"secret_preference" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New encryptionKey", @"New encryptionKey"),
+                   object];
+    }
+
+    object = dictionary[@"osmTemplate"];
+    if (object && ![[self stringForKey:@"osmtemplate_preference" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New osmTemplate", @"New osmTemplate"),
+                   object];
+    }
+
+    object = dictionary[@"osmCopyright"];
+    if (object && ![[self stringForKey:@"osmcopyright_preference" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New osmCopyright", @"New osmCopyright"),
+                   object];
+    }
+
+    object = dictionary[@"username"];
+    if (object && ![[self stringForKey:@"user_preference" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New username", @"New username"),
+                   object];
+    }
+
+    object = dictionary[@"password"];
+    if (object && ![[self stringForKey:@"pass_preference" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New password", @"New password"),
+                   object];
+    }
+
+    object = dictionary[@"subQos"];
+    if (object && ![[self stringForKey:@"subscriptionqos_preference" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New subQos", @"New subQos"),
+                   object];
+    }
+
+    object = dictionary[@"pubQos"];
+    if (object && ![[self stringForKey:@"qos_preference" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New pubQos", @"New pubQos"),
+                   object];
+    }
+
+    object = dictionary[@"port"];
+    if (object && ![[self stringForKey:@"port_preference" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New port", @"New port"),
+                   object];
+    }
+
+    object = dictionary[@"mqttProtocolLevel"];
+    if (object && ![[self stringForKey:@"mqttProtocolLevel" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New mqttProtocolLevel", @"New mqttProtocolLevel"),
+                   object];
+    }
+
+    object = dictionary[@"ignoreStaleLocations"];
+    if (object && ![[self stringForKey:@"ignorestalelocations_preference" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New ignoreStaleLocations", @"New ignoreStaleLocations"),
+                   object];
+    }
+
+    object = dictionary[@"ignoreInaccurateLocations"];
+    if (object && ![[self stringForKey:@"ignoreinaccuratelocations_preference" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New ignoreInaccurateLocations", @"New ignoreInaccurateLocations"),
+                   object];
+    }
+
+    object = dictionary[@"keepalive"];
+    if (object && ![[self stringForKey:@"keepalive_preference" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New keepalive", @"New keepalive"),
+                   object];
+    }
+
+    object = dictionary[@"locatorDisplacement"];
+    if (object && ![[self stringForKey:@"mindist_preference" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New locatorDisplacement", @"New locatorDisplacement"),
+                   object];
+    }
+
+    
+    object = dictionary[@"locatorInterval"];
+    if (object && ![[self stringForKey:@"mintime_preference" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New locatorInterval", @"New locatorInterval"),
+                   object];
+    }
+
+    object = dictionary[@"monitoring"];
+    if (object && ![[self stringForKey:@"monitoring_preference" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New monitoring", @"New monitoring"),
+                   object];
+    }
+
+    object = dictionary[@"downgrade"];
+    if (object && ![[self stringForKey:@"downgrade_preference" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New downgrade", @"New downgrade"),
+                   object];
+    }
+
+    object = dictionary[@"adapt"];
+    if (object && ![[self stringForKey:@"adapt_preference" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New adapt", @"New adapt"),
+                   object];
+    }
+
+    object = dictionary[@"ranging"];
+    if (object && ![[self stringForKey:@"ranging_preference" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New ranging", @"New ranging"),
+                   object];
+    }
+
+    object = dictionary[@"cmd"];
+    if (object && ![[self stringForKey:@"cmd_preference" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New cmd", @"New cmd"),
+                   object];
+    }
+
+    object = dictionary[@"sub"];
+    if (object && ![[self stringForKey:@"sub_preference" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New sub", @"New sub"),
+                   object];
+    }
+
+    object = dictionary[@"pubRetain"];
+    if (object && ![[self stringForKey:@"retain_preference" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New pubRetain", @"New pubRetain"),
+                   object];
+    }
+
+    object = dictionary[@"tls"];
+    if (object && ![[self stringForKey:@"tls_preference" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New tls", @"New tls"),
+                   object];
+    }
+
+    object = dictionary[@"ws"];
+    if (object && ![[self stringForKey:@"ws_preference" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New ws", @"New ws"),
+                   object];
+    }
+
+    object = dictionary[@"auth"];
+    if (object && ![[self stringForKey:@"auth_preference" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New auth", @"New auth"),
+                   object];
+    }
+
+    object = dictionary[@"usePassword"];
+    if (object && ![[self stringForKey:@"usepassword_preference" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New usePassword", @"New usePassword"),
+                   object];
+    }
+
+    object = dictionary[@"cleanSession"];
+    if (object && ![[self stringForKey:@"clean_preference" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New cleanSession", @"New cleanSession"),
+                   object];
+    }
+
+    object = dictionary[@"positions"];
+    if (object && ![[self stringForKey:@"positions_preference" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New positions", @"New positions"),
+                   object];
+    }
+
+    object = dictionary[@"days"];
+    if (object && ![[self stringForKey:@"days_preference" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New days", @"New days"),
+                   object];
+    }
+
+    object = dictionary[@"maxHistory"];
+    if (object && ![[self stringForKey:@"maxhistory_preference" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New maxHistory", @"New maxHistory"),
+                   object];
+    }
+
+    object = dictionary[@"allowRemoteLocation"];
+    if (object && ![[self stringForKey:@"allowremotelocation_preference" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New allowRemoteLocation", @"New allowRemoteLocation"),
+                   object];
+    }
+
+    object = dictionary[@"remoteConfiguration"];
+    if (object && ![[self stringForKey:@"allowremoteconfiguration_preference" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New remoteConfiguration", @"New remoteConfiguration"),
+                   object];
+    }
+
+    object = dictionary[@"extendedData"];
+    if (object && ![[self stringForKey:@"extendeddata_preference" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New extendedData", @"New extendedData"),
+                   object];
+    }
+
+    object = dictionary[@"locked"];
+    if (object && ![[self stringForKey:@"locked" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New locked", @"New locked"),
+                   object];
+    }
+
+    object = dictionary[@"clientpkcs"];
+    if (object && ![[self stringForKey:@"clientpkcs" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New clientpkcs", @"New clientpkcs"),
+                   object];
+    }
+
+    object = dictionary[@"passphrase"];
+    if (object && ![[self stringForKey:@"passphrase" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New passphrase", @"New passphrase"),
+                   object];
+    }
+
+    object = dictionary[@"allowinvalidcerts"];
+    if (object && ![[self stringForKey:@"allowinvalidcerts" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New allowinvalidcerts", @"New allowinvalidcerts"),
+                   object];
+    }
+
+    NSArray *waypoints = dictionary[@"waypoints"];
+    if (waypoints && TRUE) { //TODO
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New waypoints", @"New waypoints"),
+                   waypoints];
+    }
+
+    return changes;
+}
+
 + (NSError *)fromDictionary:(NSDictionary *)dictionary
                       inMOC:(NSManagedObjectContext *)context {
     if (!dictionary && ![dictionary isKindOfClass:[NSDictionary class]]) {
@@ -62,10 +411,6 @@ static SettingsDefaults *defaults;
         return [NSError errorWithDomain:@"OwnTracks Settings"
                                    code:2
                                userInfo:@{}];
-    }
-    for (NSString *key in dictionary.allKeys) {
-        NSObject *object = dictionary[key];
-        OwnTracksLogDebug("Configuration %@:%@ (%@)", key, object, object.class);
     }
         
     NSString *type = dictionary[@"_type"];
