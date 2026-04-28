@@ -180,7 +180,7 @@
     BGAppRefreshTaskRequest *bgAppRefreshTaskRequest =
     [[BGAppRefreshTaskRequest alloc] initWithIdentifier:TASK_IDENTIFIER];
     BOOL success = [[BGTaskScheduler sharedScheduler] submitTaskRequest:bgAppRefreshTaskRequest error:&error];
-    OwnTracksLogInfo("[OwnTracksAppDelegate] submitTaskRequest %@ @ %@ %d, %@",
+    OwnTracksLogDebug("[OwnTracksAppDelegate] submitTaskRequest %@ @ %@ %d, %@",
                  bgAppRefreshTaskRequest.identifier,
                  bgAppRefreshTaskRequest.earliestBeginDate,
                  success,
@@ -413,16 +413,11 @@
 }
 
 - (void)configFromDictionary:(NSDictionary *)json {
-    NSError *error;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingSortedKeys | NSJSONWritingPrettyPrinted error:&error];
-    NSString *jsonString = [[NSString alloc] initWithData:jsonData
-                                                 encoding:NSUTF8StringEncoding];
-
-    jsonString = [Settings changesFromDictionary:json inMOC:CoreData.sharedInstance.mainMOC];
+    NSString *changes = [Settings changesFromDictionary:json inMOC:CoreData.sharedInstance.mainMOC];
 
     [NavigationController alertWithTitle:NSLocalizedString(@"Process Configuration?",
                                                            @"Process Configuration?")
-                                 message:jsonString
+                                 message:changes
                                operation:^{
         [self terminateSession];
         NSError *error = [Settings fromDictionary:json inMOC:CoreData.sharedInstance.mainMOC];
@@ -451,14 +446,11 @@
 }
 
 - (void)waypointsFromDictionary:(NSDictionary *)json {
-    NSError *error;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingSortedKeys | NSJSONWritingPrettyPrinted error:&error];
-    NSString *jsonString = [[NSString alloc] initWithData:jsonData
-                                                 encoding:NSUTF8StringEncoding];
+    NSString *changes = [Settings changesWaypointsFromDictionary:json inMOC:CoreData.sharedInstance.mainMOC];
 
     [NavigationController alertWithTitle:NSLocalizedString(@"Process Waypoints?",
                                                            @"Process Waypoints?")
-                                 message:jsonString
+                                 message:changes
                                operation:^{
         
         NSError *error = [Settings waypointsFromDictionary:json inMOC:CoreData.sharedInstance.mainMOC];

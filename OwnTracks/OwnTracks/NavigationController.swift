@@ -123,7 +123,7 @@ class NavigationController: UINavigationController {
 
                     let ok = UIAlertAction(title: NSLocalizedString("Continue",
                                                                     comment: "Continue button title"),
-                                           style: .default) { action in
+                                           style: operation == nil ? .default : .destructive) { action in
                         if operation != nil {
                             operation!();
                         }

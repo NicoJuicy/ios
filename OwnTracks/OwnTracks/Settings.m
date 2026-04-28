@@ -84,6 +84,76 @@ static SettingsDefaults *defaults;
     }
 
     NSObject *object;
+    
+    object = dictionary[@"host"];
+    if (object && ![[self stringForKey:@"host_preference" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New host", @"New host"),
+                   object];
+    }
+
+    object = dictionary[@"port"];
+    if (object && ![[self stringForKey:@"port_preference" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New port", @"New port"),
+                   object];
+    }
+
+    object = dictionary[@"url"];
+    if (object && ![[self stringForKey:@"url_preference" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New url", @"New url"),
+                   object];
+    }
+
+    object = dictionary[@"monitoring"];
+    if (object && ![[self stringForKey:@"monitoring_preference" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New monitoring", @"New monitoring"),
+                   object];
+    }
+
+    object = dictionary[@"cmd"];
+    if (object && ![[self stringForKey:@"cmd_preference" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New cmd", @"New cmd"),
+                   object];
+    }
+
+    object = dictionary[@"allowRemoteLocation"];
+    if (object && ![[self stringForKey:@"allowremotelocation_preference" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New allowRemoteLocation", @"New allowRemoteLocation"),
+                   object];
+    }
+
+    object = dictionary[@"remoteConfiguration"];
+    if (object && ![[self stringForKey:@"allowremoteconfiguration_preference" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New remoteConfiguration", @"New remoteConfiguration"),
+                   object];
+    }
+
+    object = dictionary[@"tls"];
+    if (object && ![[self stringForKey:@"tls_preference" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New tls", @"New tls"),
+                   object];
+    }
+
+    object = dictionary[@"allowinvalidcerts"];
+    if (object && ![[self stringForKey:@"allowinvalidcerts" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New allowinvalidcerts", @"New allowinvalidcerts"),
+                   object];
+    }
+
+    object = dictionary[@"locked"];
+    if (object && ![[self stringForKey:@"locked" inMOC:context] isEqualToString:object.description]) {
+        changes = [changes stringByAppendingFormat:@"%@: %@\n",
+                   NSLocalizedString(@"New locked", @"New locked"),
+                   object];
+    }
 
     object = dictionary[@"deviceId"];
     if (object && ![[Settings stringForKey:@"deviceid_preference"inMOC:context] isEqualToString:object.description]) {
@@ -117,20 +187,6 @@ static SettingsDefaults *defaults;
     if (object && ![[self stringForKey:@"topic_preference" inMOC:context] isEqualToString:object.description]) {
         changes = [changes stringByAppendingFormat:@"%@: %@\n",
                    NSLocalizedString(@"New pubTopicBase", @"New pubTopicBase"),
-                   object];
-    }
-
-    object = dictionary[@"host"];
-    if (object && ![[self stringForKey:@"host_preference" inMOC:context] isEqualToString:object.description]) {
-        changes = [changes stringByAppendingFormat:@"%@: %@\n",
-                   NSLocalizedString(@"New host", @"New host"),
-                   object];
-    }
-
-    object = dictionary[@"url"];
-    if (object && ![[self stringForKey:@"url_preference" inMOC:context] isEqualToString:object.description]) {
-        changes = [changes stringByAppendingFormat:@"%@: %@\n",
-                   NSLocalizedString(@"New url", @"New url"),
                    object];
     }
 
@@ -190,13 +246,6 @@ static SettingsDefaults *defaults;
                    object];
     }
 
-    object = dictionary[@"port"];
-    if (object && ![[self stringForKey:@"port_preference" inMOC:context] isEqualToString:object.description]) {
-        changes = [changes stringByAppendingFormat:@"%@: %@\n",
-                   NSLocalizedString(@"New port", @"New port"),
-                   object];
-    }
-
     object = dictionary[@"mqttProtocolLevel"];
     if (object && ![[self stringForKey:@"mqttProtocolLevel" inMOC:context] isEqualToString:object.description]) {
         changes = [changes stringByAppendingFormat:@"%@: %@\n",
@@ -232,18 +281,10 @@ static SettingsDefaults *defaults;
                    object];
     }
 
-    
     object = dictionary[@"locatorInterval"];
     if (object && ![[self stringForKey:@"mintime_preference" inMOC:context] isEqualToString:object.description]) {
         changes = [changes stringByAppendingFormat:@"%@: %@\n",
                    NSLocalizedString(@"New locatorInterval", @"New locatorInterval"),
-                   object];
-    }
-
-    object = dictionary[@"monitoring"];
-    if (object && ![[self stringForKey:@"monitoring_preference" inMOC:context] isEqualToString:object.description]) {
-        changes = [changes stringByAppendingFormat:@"%@: %@\n",
-                   NSLocalizedString(@"New monitoring", @"New monitoring"),
                    object];
     }
 
@@ -268,13 +309,6 @@ static SettingsDefaults *defaults;
                    object];
     }
 
-    object = dictionary[@"cmd"];
-    if (object && ![[self stringForKey:@"cmd_preference" inMOC:context] isEqualToString:object.description]) {
-        changes = [changes stringByAppendingFormat:@"%@: %@\n",
-                   NSLocalizedString(@"New cmd", @"New cmd"),
-                   object];
-    }
-
     object = dictionary[@"sub"];
     if (object && ![[self stringForKey:@"sub_preference" inMOC:context] isEqualToString:object.description]) {
         changes = [changes stringByAppendingFormat:@"%@: %@\n",
@@ -286,13 +320,6 @@ static SettingsDefaults *defaults;
     if (object && ![[self stringForKey:@"retain_preference" inMOC:context] isEqualToString:object.description]) {
         changes = [changes stringByAppendingFormat:@"%@: %@\n",
                    NSLocalizedString(@"New pubRetain", @"New pubRetain"),
-                   object];
-    }
-
-    object = dictionary[@"tls"];
-    if (object && ![[self stringForKey:@"tls_preference" inMOC:context] isEqualToString:object.description]) {
-        changes = [changes stringByAppendingFormat:@"%@: %@\n",
-                   NSLocalizedString(@"New tls", @"New tls"),
                    object];
     }
 
@@ -345,31 +372,10 @@ static SettingsDefaults *defaults;
                    object];
     }
 
-    object = dictionary[@"allowRemoteLocation"];
-    if (object && ![[self stringForKey:@"allowremotelocation_preference" inMOC:context] isEqualToString:object.description]) {
-        changes = [changes stringByAppendingFormat:@"%@: %@\n",
-                   NSLocalizedString(@"New allowRemoteLocation", @"New allowRemoteLocation"),
-                   object];
-    }
-
-    object = dictionary[@"remoteConfiguration"];
-    if (object && ![[self stringForKey:@"allowremoteconfiguration_preference" inMOC:context] isEqualToString:object.description]) {
-        changes = [changes stringByAppendingFormat:@"%@: %@\n",
-                   NSLocalizedString(@"New remoteConfiguration", @"New remoteConfiguration"),
-                   object];
-    }
-
     object = dictionary[@"extendedData"];
     if (object && ![[self stringForKey:@"extendeddata_preference" inMOC:context] isEqualToString:object.description]) {
         changes = [changes stringByAppendingFormat:@"%@: %@\n",
                    NSLocalizedString(@"New extendedData", @"New extendedData"),
-                   object];
-    }
-
-    object = dictionary[@"locked"];
-    if (object && ![[self stringForKey:@"locked" inMOC:context] isEqualToString:object.description]) {
-        changes = [changes stringByAppendingFormat:@"%@: %@\n",
-                   NSLocalizedString(@"New locked", @"New locked"),
                    object];
     }
 
@@ -387,20 +393,15 @@ static SettingsDefaults *defaults;
                    object];
     }
 
-    object = dictionary[@"allowinvalidcerts"];
-    if (object && ![[self stringForKey:@"allowinvalidcerts" inMOC:context] isEqualToString:object.description]) {
-        changes = [changes stringByAppendingFormat:@"%@: %@\n",
-                   NSLocalizedString(@"New allowinvalidcerts", @"New allowinvalidcerts"),
-                   object];
-    }
-
     NSArray *waypoints = dictionary[@"waypoints"];
-    if (waypoints && TRUE) { //TODO
-        changes = [changes stringByAppendingFormat:@"%@: %@\n",
-                   NSLocalizedString(@"New waypoints", @"New waypoints"),
-                   waypoints];
+    if (waypoints) {
+        if ([waypoints isKindOfClass:[NSArray class]]) {
+            changes = [changes stringByAppendingFormat:@"%@", [Settings changesSetWaypoints:waypoints inMOC:context]];
+        } else {
+            changes = [changes stringByAppendingFormat:@"waypoints are not an array"];
+        }
     }
-
+    
     return changes;
 }
 
@@ -586,9 +587,40 @@ static SettingsDefaults *defaults;
     if (object) [self setString:object forKey:@"allowinvalidcerts" inMOC:context];
     
     NSArray *waypoints = dictionary[@"waypoints"];
-    if (waypoints) [self setWaypoints:waypoints inMOC:context];
+    if (waypoints) {
+        if ([waypoints isKindOfClass:[NSArray class]]) {
+            [self setWaypoints:waypoints inMOC:context];
+        } else {
+            OwnTracksLogError("[Settings] fromDictionary invalid waypoints");
+            return [NSError errorWithDomain:@"OwnTracks Settings"
+                                       code:4
+                                   userInfo:@{@"waypoints": @"not an array"}];
+        }
+    }
             
     return nil;
+}
+
++ (NSString *)changesWaypointsFromDictionary:(NSDictionary *)dictionary
+                                       inMOC:(NSManagedObjectContext *)context {
+    NSString *changes = @"";
+    
+    if (!dictionary && ![dictionary isKindOfClass:[NSDictionary class]]) {
+        return NSLocalizedString(@"Invalid config dictionary", @"Invalid config dictionary");
+    }
+    
+    NSString *type = dictionary[@"_type"];
+    if (!type || ![type isKindOfClass:[NSString class]] || ![type isEqualToString:@"waypoints"]) {
+        return NSLocalizedString(@"Invalid config _type", @"Invalid config _type");
+    }
+    
+    NSArray *waypoints = dictionary[@"waypoints"];
+    if (!waypoints || ![waypoints isKindOfClass:[NSArray class]]) {
+        return NSLocalizedString(@"Invalid waypoints array", @"Invalid waypoints array");;
+    }
+    
+    changes = [Settings changesSetWaypoints:waypoints inMOC:context];
+    return changes;
 }
 
 + (NSError *)waypointsFromDictionary:(NSDictionary *)dictionary
@@ -608,6 +640,91 @@ static SettingsDefaults *defaults;
         }
     }
     return nil;
+}
+
++ (NSString *)changesSetWaypoints:(NSArray *)waypoints
+                            inMOC:(NSManagedObjectContext *)context {
+    NSString *changes = @"";
+    
+    for (NSDictionary *waypoint in waypoints) {
+        if (![waypoint isKindOfClass:[NSDictionary class]]) {
+            changes = [changes stringByAppendingFormat:@"waypoints array does not contain dictionary\n"];
+            continue;
+        }
+        
+        NSString *type = waypoint[@"_type"];
+        if (!type || ![type isKindOfClass:[NSString class]] || ![type isEqualToString:@"waypoint"]) {
+            changes = [changes stringByAppendingFormat:@"waypoint does not contain _type waypoint\n"];
+            continue;
+        }
+        
+        NSString *desc = waypoint[@"desc"];
+        if (!desc || ![desc isKindOfClass:[NSString class]]) {
+            changes = [changes stringByAppendingFormat:@"waypoint does not contain valid desc\n"];
+            continue;
+        }
+
+        NSArray *components = [desc componentsSeparatedByString:@":"];
+        NSString *name = components[0];
+        
+        NSNumber *tstNumber = waypoint[@"tst"];
+        if (!tstNumber || ![tstNumber isKindOfClass:[NSNumber class]]) {
+            changes = [changes stringByAppendingFormat:@"waypoint does not contain valid tst\n"];
+            continue;
+        }
+        
+        NSDate *tst = [NSDate dateWithTimeIntervalSince1970:
+                       [tstNumber doubleValue]];
+                        
+        NSString *rid = waypoint[@"rid"];
+        if (!rid || ![rid isKindOfClass:[NSString class]]) {
+            rid = [Region ridFromTst:tst andName:name];
+        }
+                        
+        Friend *friend = [Friend friendWithTopic:[self theGeneralTopicInMOC:context]
+                          inManagedObjectContext:context];
+                    
+        BOOL found = FALSE;
+        for (Region *region in friend.hasRegions) {
+            if ([region.getAndFillRid isEqualToString:rid]) {
+                changes = [changes stringByAppendingFormat:@"waypoint %@ will be removed/updated\n", name];
+                found = TRUE;
+                break;
+            }
+        }
+                        
+        CLLocationDegrees latDegrees = 0.0;
+        NSNumber *lat = waypoint[@"lat"];
+        if (lat && ![lat isKindOfClass:[NSNumber class]]) {
+            continue;
+        }
+        latDegrees = lat.doubleValue;
+
+        CLLocationDegrees lonDegrees = 0.0;
+        NSNumber *lon = waypoint[@"lon"];
+        if (lon && ![lon isKindOfClass:[NSNumber class]]) {
+            continue;
+        }
+        lonDegrees = lon.doubleValue;
+        
+        CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(latDegrees, lonDegrees);
+        if (!CLLocationCoordinate2DIsValid(coord)) {
+            continue;
+        }
+
+        CLLocationDistance radDistance = 0.0;
+        NSNumber *rad = waypoint[@"rad"];
+        if (rad && ![rad isKindOfClass:[NSNumber class]]) {
+            continue;
+        }
+        radDistance = rad.doubleValue;
+
+        if (!found) {
+            changes = [changes stringByAppendingFormat:@"waypoint %@ will be inserted\n", name];
+        }
+    }
+
+    return changes;
 }
 
 + (void)setWaypoints:(NSArray *)waypoints

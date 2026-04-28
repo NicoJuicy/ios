@@ -21,6 +21,10 @@ typedef NS_ENUM(int, ConnectionMode) {
                                 inMOC:(NSManagedObjectContext * _Nonnull)context;
 + (NSString * _Nonnull)changesFromDictionary:(NSDictionary * _Nonnull)dictionary
                                        inMOC:(NSManagedObjectContext * _Nonnull)context;
++ (NSString * _Nonnull)changesWaypointsFromDictionary:(NSDictionary * _Nonnull)dictionary
+                                                inMOC:(NSManagedObjectContext * _Nonnull)context;
++ (NSString * _Nonnull)changesSetWaypoints:(NSArray * _Nonnull)waypoints
+                                     inMOC:(NSManagedObjectContext * _Nonnull)context;
 + (NSError * _Nullable)waypointsFromDictionary:(NSDictionary * _Nonnull)dictionary
                                          inMOC:(NSManagedObjectContext * _Nonnull)context;
 + (NSError * _Nullable)clearWaypoints:(NSManagedObjectContext * _Nonnull)context;

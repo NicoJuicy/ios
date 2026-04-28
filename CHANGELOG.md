@@ -1,6 +1,17 @@
 OwnTracks iOS App Release Notes
 ===================================
 
+## OwnTracks 26.2.1 iOS/ipadOS
+* Release Date 2026-04-28
+
+** Bug Fixes and iOS 26 adpation
+
+    [NEW] UI in Swift
+    [FIX] Intents with authorization
+    [FIX] Enhance user control for remote configuration
+    [NEW] replace Cocoapods with swift packages
+    [NEW] replace Cocoalumberjack with os_logger
+
 ## OwnTracks 26.1.1 iOS/ipadOS
 * Release Date 2025-11-12
 
