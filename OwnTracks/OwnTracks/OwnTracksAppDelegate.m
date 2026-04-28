@@ -323,12 +323,8 @@
 }
 
 - (BOOL)processURIConfig:(NSDictionary *)queryStrings {
-    NSString *urlString = queryStrings[@"url"];
     NSString *base64String = queryStrings[@"inline"];
-    if (urlString) {
-        NSURL *urlFromString = [NSURL URLWithString:urlString];
-        return [self processNSURL:urlFromString];
-    } else if (base64String) {
+    if (base64String) {
         NSData *jsonData = [[NSData alloc] initWithBase64EncodedString:base64String options:0];
         if (jsonData) {
             NSDictionary *dict = nil;
@@ -413,98 +409,6 @@
         OwnTracksLogInfo("[OwnTracksAppDelegate] Beacon QR successfully processed");        
     }];
     
-    return TRUE;
-}
-
-- (BOOL)processNSURL:(NSURL *)url {
-    OwnTracksLogInfo("[OwnTracksAppDelegate] processNSURL %@", url);
-    
-    self.processingMessage = nil;
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    NSURLSessionDataTask *dataTask =
-    [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:
-     ^(NSData *data, NSURLResponse *response, NSError *error) {
-        
-        OwnTracksLogDebug("[OwnTracksAppDelegate] dataTaskWithRequest %@ %@ %@", data, response, error);
-        if (!error) {
-            
-            if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
-                NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
-                OwnTracksLogInfo("[OwnTracksAppDelegate] NSHTTPURLResponse %@", httpResponse);
-                if (httpResponse.statusCode >= 200 && httpResponse.statusCode <= 299) {
-                    OwnTracksLogInfo("[OwnTracksAppDelegate] URL pathExtension %@", url.pathExtension);
-                    NSError *error;
-                    NSString *extension = url.pathExtension;
-                    if ([extension isEqualToString:@"otrc"] || [extension isEqualToString:@"mqtc"]) {
-                        NSDictionary *dict = nil;
-                        id json = [[Validation sharedInstance] validateMessageData:data];
-                        if (json &&
-                            [json isKindOfClass:[NSDictionary class]]) {
-                            dict = json;
-                        }
-                        if (dict) {
-                            [self performSelectorOnMainThread:@selector(configFromDictionary:)
-                                                   withObject:dict
-                                                waitUntilDone:TRUE];
-                        }
-                    } else if ([extension isEqualToString:@"otrw"] || [extension isEqualToString:@"mqtw"]) {
-                        NSDictionary *dict = nil;
-                        id json = [[Validation sharedInstance] validateMessageData:data];
-                        if (json &&
-                            [json isKindOfClass:[NSDictionary class]]) {
-                            dict = json;
-                        }
-                        if (dict) {
-                            [self performSelectorOnMainThread:@selector(waypointsFromDictionary:)
-                                                   withObject:dict
-                                                waitUntilDone:TRUE];
-                        }
-                    } else if ([extension isEqualToString:@"otrp"]) {
-                        NSURL *directoryURL = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory
-                                                                                     inDomain:NSUserDomainMask
-                                                                            appropriateForURL:nil
-                                                                                       create:YES
-                                                                                        error:&error];
-                        NSString *fileName = url.lastPathComponent;
-                        NSURL *fileURL = [directoryURL URLByAppendingPathComponent:fileName];
-                        [[NSFileManager defaultManager] createFileAtPath:fileURL.path
-                                                                contents:data
-                                                              attributes:nil];
-                    } else {
-                        [NavigationController alertWithTitle:@"processNSURL"
-                                            message:
-                         [NSString stringWithFormat:@"OOPS %@ %@",
-                          [NSError errorWithDomain:@"OwnTracks"
-                                              code:2
-                                          userInfo:@{@"extension":extension ? extension : @"(null)"}],
-                          url]];
-                    }
-                } else {
-                    [NavigationController alertWithTitle:@"processNSURL"
-                                        message:
-                         [NSString stringWithFormat:@"httpResponse.statusCode %ld %@",
-                          (long)httpResponse.statusCode,
-                          url]
-                    ];
-                }
-            } else {
-                [NavigationController alertWithTitle:@"processNSURL"
-                                    message:
-                     [NSString stringWithFormat:@"response %@ %@",
-                      response,
-                      url]
-                ];
-            }
-        } else {
-            [NavigationController alertWithTitle:@"processNSURL"
-                                message:
-                 [NSString stringWithFormat:@"dataTaskWithRequest %@ %@",
-                  error,
-                  url]
-            ];
-        }
-    }];
-    [dataTask resume];
     return TRUE;
 }
 
