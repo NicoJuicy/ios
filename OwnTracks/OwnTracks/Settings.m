@@ -626,10 +626,6 @@ static SettingsDefaults *defaults;
 + (NSError *)waypointsFromDictionary:(NSDictionary *)dictionary
                                inMOC:(NSManagedObjectContext *)context {
     if (dictionary && [dictionary isKindOfClass:[NSDictionary class]]) {
-        for (NSString *key in dictionary.allKeys) {
-            OwnTracksLogDebug("Waypoints %@:%@", key, dictionary[key]);
-        }
-        
         if ([dictionary[@"_type"] isEqualToString:@"waypoints"]) {
             NSArray *waypoints = dictionary[@"waypoints"];
             [self setWaypoints:waypoints inMOC:context];
@@ -645,8 +641,12 @@ static SettingsDefaults *defaults;
 + (NSString *)changesSetWaypoints:(NSArray *)waypoints
                             inMOC:(NSManagedObjectContext *)context {
     NSString *changes = @"";
-    
+
     for (NSDictionary *waypoint in waypoints) {
+        BOOL found = FALSE;
+        BOOL equal = TRUE;
+        BOOL remove = FALSE;
+        
         if (![waypoint isKindOfClass:[NSDictionary class]]) {
             changes = [changes stringByAppendingFormat:@"waypoints array does not contain dictionary\n"];
             continue;
@@ -687,7 +687,7 @@ static SettingsDefaults *defaults;
         CLLocationDegrees latDegrees = 0.0;
         NSNumber *lat = waypoint[@"lat"];
         if (lat && ![lat isKindOfClass:[NSNumber class]]) {
-            changes = [changes stringByAppendingFormat:@"waypoint %@ will be removed\n", name];
+            remove = TRUE;
             continue;
         }
         latDegrees = lat.doubleValue;
@@ -695,21 +695,21 @@ static SettingsDefaults *defaults;
         CLLocationDegrees lonDegrees = 0.0;
         NSNumber *lon = waypoint[@"lon"];
         if (lon && ![lon isKindOfClass:[NSNumber class]]) {
-            changes = [changes stringByAppendingFormat:@"waypoint %@ will be removed\n", name];
+            remove = TRUE;
             continue;
         }
         lonDegrees = lon.doubleValue;
         
         CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(latDegrees, lonDegrees);
         if (!CLLocationCoordinate2DIsValid(coord)) {
-            changes = [changes stringByAppendingFormat:@"waypoint %@ will be removed\n", name];
+            remove = TRUE;
             continue;
         }
 
         CLLocationDistance radDistance = 0.0;
         NSNumber *rad = waypoint[@"rad"];
         if (rad && ![rad isKindOfClass:[NSNumber class]]) {
-            changes = [changes stringByAppendingFormat:@"waypoint %@ will be removed\n", name];
+            remove = TRUE;
             continue;
         }
         radDistance = rad.doubleValue;
@@ -717,8 +717,6 @@ static SettingsDefaults *defaults;
         Friend *friend = [Friend friendWithTopic:[self theGeneralTopicInMOC:context]
                           inManagedObjectContext:context];
                     
-        BOOL found = FALSE;
-        BOOL equal = TRUE;
         for (Region *region in friend.hasRegions) {
             if ([region.getAndFillRid isEqualToString:rid]) {
                 found = TRUE;
@@ -749,11 +747,15 @@ static SettingsDefaults *defaults;
         }
 
         if (found) {
-            if (!equal) {
-                changes = [changes stringByAppendingFormat:@"waypoint %@ will be updated\n", name];
+            if (remove) {
+                changes = [changes stringByAppendingFormat:@"Region %@ will be removed\n", name];
+            } else {
+                if (!equal) {
+                    changes = [changes stringByAppendingFormat:@"Region %@ will be updated\n", name];
+                }
             }
         } else {
-            changes = [changes stringByAppendingFormat:@"waypoint %@ will be inserted\n", name];
+            changes = [changes stringByAppendingFormat:@"Region %@ will be inserted\n", name];
         }
     }
 
