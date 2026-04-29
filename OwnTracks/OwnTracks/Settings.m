@@ -666,7 +666,10 @@ static SettingsDefaults *defaults;
 
         NSArray *components = [desc componentsSeparatedByString:@":"];
         NSString *name = components[0];
-        
+        NSString *uuid = components.count >= 2 ? components[1] : nil;
+        unsigned int major = components.count >= 3 ? [components[2] unsignedIntValue]: 0;
+        unsigned int minor = components.count >= 4 ? [components[3] unsignedIntValue]: 0;
+
         NSNumber *tstNumber = waypoint[@"tst"];
         if (!tstNumber || ![tstNumber isKindOfClass:[NSNumber class]]) {
             changes = [changes stringByAppendingFormat:@"waypoint does not contain valid tst\n"];
@@ -680,22 +683,11 @@ static SettingsDefaults *defaults;
         if (!rid || ![rid isKindOfClass:[NSString class]]) {
             rid = [Region ridFromTst:tst andName:name];
         }
-                        
-        Friend *friend = [Friend friendWithTopic:[self theGeneralTopicInMOC:context]
-                          inManagedObjectContext:context];
-                    
-        BOOL found = FALSE;
-        for (Region *region in friend.hasRegions) {
-            if ([region.getAndFillRid isEqualToString:rid]) {
-                changes = [changes stringByAppendingFormat:@"waypoint %@ will be removed/updated\n", name];
-                found = TRUE;
-                break;
-            }
-        }
-                        
+        
         CLLocationDegrees latDegrees = 0.0;
         NSNumber *lat = waypoint[@"lat"];
         if (lat && ![lat isKindOfClass:[NSNumber class]]) {
+            changes = [changes stringByAppendingFormat:@"waypoint %@ will be removed\n", name];
             continue;
         }
         latDegrees = lat.doubleValue;
@@ -703,23 +695,64 @@ static SettingsDefaults *defaults;
         CLLocationDegrees lonDegrees = 0.0;
         NSNumber *lon = waypoint[@"lon"];
         if (lon && ![lon isKindOfClass:[NSNumber class]]) {
+            changes = [changes stringByAppendingFormat:@"waypoint %@ will be removed\n", name];
             continue;
         }
         lonDegrees = lon.doubleValue;
         
         CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(latDegrees, lonDegrees);
         if (!CLLocationCoordinate2DIsValid(coord)) {
+            changes = [changes stringByAppendingFormat:@"waypoint %@ will be removed\n", name];
             continue;
         }
 
         CLLocationDistance radDistance = 0.0;
         NSNumber *rad = waypoint[@"rad"];
         if (rad && ![rad isKindOfClass:[NSNumber class]]) {
+            changes = [changes stringByAppendingFormat:@"waypoint %@ will be removed\n", name];
             continue;
         }
         radDistance = rad.doubleValue;
+                        
+        Friend *friend = [Friend friendWithTopic:[self theGeneralTopicInMOC:context]
+                          inManagedObjectContext:context];
+                    
+        BOOL found = FALSE;
+        BOOL equal = TRUE;
+        for (Region *region in friend.hasRegions) {
+            if ([region.getAndFillRid isEqualToString:rid]) {
+                found = TRUE;
+                if (![name isEqualToString:region.name]) {
+                    equal = FALSE;
+                }
+                if ((uuid == nil) != (region.uuid == nil) ||
+                    (uuid != nil && ![uuid isEqualToString:region.uuid])) {
+                    equal = FALSE;
+                }
+                if (major != region.major.unsignedIntValue) {
+                    equal = FALSE;
+                }
+                if (minor != region.minor.unsignedIntValue) {
+                    equal = FALSE;
+                }
+                if (latDegrees != region.lat.doubleValue) {
+                    equal = FALSE;
+                }
+                if (lonDegrees != region.lon.doubleValue) {
+                    equal = FALSE;
+                }
+                if (radDistance != region.radius.doubleValue) {
+                    equal = FALSE;
+                }
+                break;
+            }
+        }
 
-        if (!found) {
+        if (found) {
+            if (!equal) {
+                changes = [changes stringByAppendingFormat:@"waypoint %@ will be updated\n", name];
+            }
+        } else {
             changes = [changes stringByAppendingFormat:@"waypoint %@ will be inserted\n", name];
         }
     }
