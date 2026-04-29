@@ -193,7 +193,7 @@ allowUntrustedCertificates:(BOOL)allowUntrustedCertificates
         ws != self.ws ||
         tls != self.tls ||
         keepalive != self.keepalive ||
-        clean != self.clean ||
+        clean != self.clean || force ||
         auth != self.auth ||
         ![user isEqualToString:self.user] ||
         ![pass isEqualToString:self.pass] ||
