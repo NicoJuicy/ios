@@ -2,15 +2,31 @@ OwnTracks iOS App Release Notes
 ===================================
 
 ## OwnTracks 26.2.1 iOS/ipadOS
-* Release Date 2026-04-28
+* Release Date 2026-04-29
 
-** Bug Fixes and iOS 26 adpation
+### Security
 
-    [NEW] UI in Swift
-    [FIX] Intents with authorization
-    [FIX] Enhance user control for remote configuration
-    [NEW] replace Cocoapods with swift packages
-    [NEW] replace Cocoalumberjack with os_logger
+This release addresses a security advisory covering several intent-handling and remote configuration vulnerabilities.
+Users are strongly encouraged to upgrade. Thanks to [Noel Gomillion](https://github.com/engomillion) & [Pranati Majhi](https://github.com/pmajhi)
+at Texas A&M for working with us on this.
+
+- External configuration loading (via `owntracks://` URLs and config files) is now disabled by default and must be explicitly enabled in Settings → Advanced
+- A confirmation dialog is shown when enabling external configuration, wajrning that any config URL can fully reconfigure the app
+- All intents/shortcuts now require a shared secret (`Intent Auth Key`) in every intent, preventing unauthorised apps from triggering location publishes or ch
+anging monitoring mode
+- Security-related preferences (`allowConfigurationByURIAndConfigFile`, `allowIntentControl`, `intentAuthKey`) cannot be changed via imported config files or URLs
+
+### New features
+
+- New **Remote Control** preferences screen showing the intent auth key (with a copy-to-clipboard function) for use with shortcuts
+- A new setting `remoteConfguration` controls(defaults to `off`)
+- Config import screen now shows a structured diff of what is changing
+
+### Under the hood
+
+- [NEW] UI implemented in Swift
+- [NEW] replace Cocoapods with swift packages
+- [NEW] replace Cocoalumberjack with os_logger
 
 ## OwnTracks 26.1.1 iOS/ipadOS
 * Release Date 2025-11-12
