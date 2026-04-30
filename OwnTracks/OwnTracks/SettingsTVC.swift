@@ -481,8 +481,8 @@ class SettingsTVC: UITableViewController, UIDocumentInteractionControllerDelegat
         if UIclientPKCS != nil {
             UIclientPKCS.text = Settings.string(forKey: "clientpkcs", inMOC: moc) as String?;
             UIclientPKCS.isEnabled = !locked;
-            UIclientPKCS.isUserInteractionEnabled = !locked;
-            UIclientPKCSCell.accessoryType = !locked ? .disclosureIndicator : .none;
+            UIclientPKCSCell.isUserInteractionEnabled = !locked;
+            UIclientPKCSCell.accessoryType = !locked ? .detailDisclosureButton : .none;
         }
         
         if UIpassphrase != nil {
@@ -531,6 +531,15 @@ class SettingsTVC: UITableViewController, UIDocumentInteractionControllerDelegat
 
         if UIeffectiveSubTopic != nil {
             UIeffectiveSubTopic.text = Settings.theSubscriptions(inMOC: moc);
+        }
+        
+        if UIpubTopicBase != nil {
+            UIpubTopicBase.text = Settings.string(forKey: "topic_preference", inMOC: moc) as String?;
+            UIpubTopicBase.isEnabled = !locked;
+        }
+
+        if UIeffectivePubTopic != nil {
+            UIeffectivePubTopic.text = Settings.theGeneralTopic(inMOC: moc);
         }
         
         if UIUserID != nil {
@@ -918,7 +927,10 @@ class SettingsTVC: UITableViewController, UIDocumentInteractionControllerDelegat
                     };
                     ac.addAction(ok);
                     present(ac, animated: true);
-                }
+                    return;
+               }
+                Settings.setInt(Int32(proto!), forKey: "mqttProtocolLevel", inMOC: CoreData.sharedInstance().mainMOC);
+                updated();
             }
         }
     }
@@ -1014,7 +1026,7 @@ class SettingsTVC: UITableViewController, UIDocumentInteractionControllerDelegat
         changeWarning();
     }
     
-    @IBAction func subtopicChanged(_ sender: UITextField) {
+    @IBAction func subTopicChanged(_ sender: UITextField) {
         changeWarning();
     }
 
@@ -1194,7 +1206,7 @@ class SettingsTVC: UITableViewController, UIDocumentInteractionControllerDelegat
     func configWarning() {
         let ac = UIAlertController(title:NSLocalizedString("Allow external configuration?",
                                                            comment:"Alert header for external configuration change warning"),
-                                   message: NSLocalizedString("Any owntracks: URL or config file can completely reconfigure this app, including change the backend, credentials and tracking settings. Only enable this if you trust all sources that can send such URLs to this device.",
+                                   message: NSLocalizedString("Any owntracks: URL or config file can completely reconfigure this app, including change the backend, credentials, and tracking settings. Only enable this if you trust all sources that can send such URLs to this device.",
                                                               comment: "Alert content for external configuration change warning"),
                                    preferredStyle: .alert);
         let cancel = UIAlertAction(title: NSLocalizedString("Cancel",

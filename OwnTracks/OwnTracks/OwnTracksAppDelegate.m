@@ -415,62 +415,77 @@
 - (void)configFromDictionary:(NSDictionary *)json {
     NSString *changes = [Settings changesFromDictionary:json inMOC:CoreData.sharedInstance.mainMOC];
 
-    [NavigationController alertWithTitle:NSLocalizedString(@"Process Configuration?",
-                                                           @"Process Configuration?")
-                                 message:changes
-                               operation:^{
-        [self terminateSession];
-        NSError *error = [Settings fromDictionary:json inMOC:CoreData.sharedInstance.mainMOC];
-        [CoreData.sharedInstance sync:CoreData.sharedInstance.mainMOC];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"reload" object:nil];
-        self.configLoad = [NSDate date];
-        [self reconnect];
-        
-        if (error) {
-            [NavigationController alertWithTitle:@"processNSURL"
-                                         message:
-                 [NSString stringWithFormat:@"configFromDictionary %@ %@",
-                  error,
-                  json]
-            ];
-        } else {
-            self.processingMessage = [NSString stringWithFormat:@"%@ %@",
-                                      NSLocalizedString(@"File",
-                                                        @"Display when file processing succeeds (filename follows)"),
-                                      NSLocalizedString(@"successfully processed",
-                                                        @"Display when file processing succeeds")];
-            OwnTracksLogInfo("[OwnTracksAppDelegate] configFromDictionary ok");
-
-        }
-    }];
+    if (changes.length == 0) {
+        [NavigationController alertWithTitle:NSLocalizedString(@"Process Configuration",
+                                                               @"Process Configuration")
+                                     message:NSLocalizedString(@"No changes!", @"No changes!")];
+    } else {
+        [NavigationController alertWithTitle:NSLocalizedString(@"Process Configuration",
+                                                               @"Process Configuration")
+                                     message:[NSString stringWithFormat:@"%@%@",
+                                              NSLocalizedString(@"Configuration changes:\n", @"Configuration changes;\n"),
+                                              changes]
+                                   operation:^{
+            [self terminateSession];
+            NSError *error = [Settings fromDictionary:json inMOC:CoreData.sharedInstance.mainMOC];
+            [CoreData.sharedInstance sync:CoreData.sharedInstance.mainMOC];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"reload" object:nil];
+            self.configLoad = [NSDate date];
+            [self reconnect];
+            
+            if (error) {
+                [NavigationController alertWithTitle:@"processNSURL"
+                                             message:
+                     [NSString stringWithFormat:@"configFromDictionary %@ %@",
+                      error,
+                      json]
+                ];
+            } else {
+                self.processingMessage = [NSString stringWithFormat:@"%@ %@",
+                                          NSLocalizedString(@"File",
+                                                            @"Display when file processing succeeds (filename follows)"),
+                                          NSLocalizedString(@"successfully processed",
+                                                            @"Display when file processing succeeds")];
+                OwnTracksLogInfo("[OwnTracksAppDelegate] configFromDictionary ok");
+                
+            }
+        }];
+    }
 }
 
 - (void)waypointsFromDictionary:(NSDictionary *)json {
     NSString *changes = [Settings changesWaypointsFromDictionary:json inMOC:CoreData.sharedInstance.mainMOC];
-
-    [NavigationController alertWithTitle:NSLocalizedString(@"Process Waypoints?",
-                                                           @"Process Waypoints?")
-                                 message:changes
-                               operation:^{
-        
-        NSError *error = [Settings waypointsFromDictionary:json inMOC:CoreData.sharedInstance.mainMOC];
-        [CoreData.sharedInstance sync:CoreData.sharedInstance.mainMOC];
-        if (error) {
-            [NavigationController alertWithTitle:@"processNSURL"
-                                         message:
-                 [NSString stringWithFormat:@"waypointsFromDictionary %@ %@",
-                  error,
-                  json]
-            ];
-        } else {
-            self.processingMessage = [NSString stringWithFormat:@"%@ %@",
-                                      NSLocalizedString(@"File",
-                                                        @"Display when file processing succeeds (filename follows)"),
-                                      NSLocalizedString(@"successfully processed",
-                                                        @"Display when file processing succeeds")];
-            OwnTracksLogInfo("[OwnTracksAppDelegate] waypointsFromDictionary ok");
-        }
-    }];
+    if (changes.length == 0) {
+        [NavigationController alertWithTitle:NSLocalizedString(@"Process Waypoints",
+                                                               @"Process Waypoints")
+                                     message:NSLocalizedString(@"No changes!", @"No changes!")];
+    } else {
+        [NavigationController alertWithTitle:NSLocalizedString(@"Process Waypoints",
+                                                               @"Process Waypoints")
+                                     message:[NSString stringWithFormat:@"%@%@",
+                                              NSLocalizedString(@"Waypoint changes:\n", @"Waypoint changes;\n"),
+                                              changes]
+                                   operation:^{
+            
+            NSError *error = [Settings waypointsFromDictionary:json inMOC:CoreData.sharedInstance.mainMOC];
+            [CoreData.sharedInstance sync:CoreData.sharedInstance.mainMOC];
+            if (error) {
+                [NavigationController alertWithTitle:@"processNSURL"
+                                             message:
+                     [NSString stringWithFormat:@"waypointsFromDictionary %@ %@",
+                      error,
+                      json]
+                ];
+            } else {
+                self.processingMessage = [NSString stringWithFormat:@"%@ %@",
+                                          NSLocalizedString(@"File",
+                                                            @"Display when file processing succeeds (filename follows)"),
+                                          NSLocalizedString(@"successfully processed",
+                                                            @"Display when file processing succeeds")];
+                OwnTracksLogInfo("[OwnTracksAppDelegate] waypointsFromDictionary ok");
+            }
+        }];
+    }
 }
 
 - (void)copyOTRPFile:(NSURL *)url {

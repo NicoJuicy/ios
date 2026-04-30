@@ -350,7 +350,7 @@
 "L2M-p0-CtV.text" = "Aktivität";
 
 /* Class = "UITextField"; placeholder = "mode"; ObjectID = "LEn-Jc-PvC"; Note = "Placeholder. Do not translate"; */
-"LEn-Jc-PvC.placeholder" = "Meter";
+"LEn-Jc-PvC.placeholder" = "mode";
 
 /* Class = "UITextField"; placeholder = "latitude"; ObjectID = "Lmo-Kp-uCi"; */
 "Lmo-Kp-uCi.placeholder" = "latitude";

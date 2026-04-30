@@ -1,8 +1,8 @@
 OwnTracks iOS App Release Notes
 ===================================
 
-## OwnTracks 26.2.1 iOS/ipadOS
-* Release Date 2026-04-29
+## OwnTracks 26.2.2 iOS/ipadOS
+* Release Date 2026-04-30
 
 ### Security
 
@@ -13,7 +13,7 @@ at Texas A&M for working with us on this.
 - External configuration loading (via `owntracks://` URLs and config files) is now disabled by default and must be explicitly enabled in Settings → Advanced
 - A confirmation dialog is shown when enabling external configuration, wajrning that any config URL can fully reconfigure the app
 - All intents/shortcuts now require a shared secret (`Intent Auth Key`) in every intent, preventing unauthorised apps from triggering location publishes or ch
-anging monitoring mode
+anging monitoring mode. The `Intent Auth Key` is created once when the app is installed.
 - Security-related preferences (`allowConfigurationByURIAndConfigFile`, `allowIntentControl`, `intentAuthKey`) cannot be changed via imported config files or URLs
 
 ### New features
