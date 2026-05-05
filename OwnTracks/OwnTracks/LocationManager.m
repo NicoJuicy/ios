@@ -3,13 +3,14 @@
 //  OwnTracks
 //
 //  Created by Christoph Krey on 21.10.14.
-//  Copyright © 2014-2025  OwnTracks. All rights reserved.
+//  Copyright © 2014-2026  OwnTracks. All rights reserved.
 //
 
 #import "LocationManager.h"
 #import "OwnTracksAppDelegate.h"
 #import "CoreData.h"
-#import <CocoaLumberjack/CocoaLumberjack.h>
+#import "OwnTracksLog.h"
+#import "OwnTracks-Swift.h"
 
 @interface LocationManager()
 @property (strong, nonatomic) CLLocationManager *manager;
@@ -67,7 +68,6 @@ to:(id)to {
 @end
 
 @implementation LocationManager
-static const DDLogLevel ddLogLevel = DDLogLevelInfo;
 static LocationManager *theInstance = nil;
 
 + (LocationManager *)sharedInstance {
@@ -104,7 +104,7 @@ static LocationManager *theInstance = nil;
      object:nil
      queue:nil
      usingBlock:^(NSNotification *note){
-        DDLogVerbose(@"[LocationManager] UIApplicationWillEnterForegroundNotification");
+        OwnTracksLogDebug("[LocationManager] UIApplicationWillEnterForegroundNotification");
         //
     }];
     [[NSNotificationCenter defaultCenter]
@@ -112,7 +112,7 @@ static LocationManager *theInstance = nil;
      object:nil
      queue:nil
      usingBlock:^(NSNotification *note){
-        DDLogVerbose(@"[LocationManager] UIApplicationDidBecomeActiveNotification");
+        OwnTracksLogDebug("[LocationManager] UIApplicationDidBecomeActiveNotification");
         [self wakeup];
     }];
     [[NSNotificationCenter defaultCenter]
@@ -120,7 +120,7 @@ static LocationManager *theInstance = nil;
      object:nil
      queue:nil
      usingBlock:^(NSNotification *note){
-        DDLogVerbose(@"[LocationManager] UIApplicationWillResignActiveNotification");
+        OwnTracksLogDebug("[LocationManager] UIApplicationWillResignActiveNotification");
         [self sleep];
     }];
     [[NSNotificationCenter defaultCenter]
@@ -128,21 +128,21 @@ static LocationManager *theInstance = nil;
      object:nil
      queue:nil
      usingBlock:^(NSNotification *note){
-        DDLogVerbose(@"[LocationManager] UIApplicationWillTerminateNotification");
+        OwnTracksLogDebug("[LocationManager] UIApplicationWillTerminateNotification");
         [self stop];
     }];
     
     self.sharedUserDefaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.org.owntracks.Owntracks"];
-    [self.sharedUserDefaults addObserver:self forKeyPath:@"monitoring"
+    [self.sharedUserDefaults addObserver:self forKeyPath:@"monitoringWithAuthKey"
                                  options:NSKeyValueObservingOptionNew
                                  context:nil];
-    [self.sharedUserDefaults addObserver:self forKeyPath:@"sendNow"
+    [self.sharedUserDefaults addObserver:self forKeyPath:@"sendNowWithAuthKey"
                                  options:NSKeyValueObservingOptionNew
                                  context:nil];
-    [self.sharedUserDefaults addObserver:self forKeyPath:@"poi"
+    [self.sharedUserDefaults addObserver:self forKeyPath:@"poiWithAuthKey"
                                  options:NSKeyValueObservingOptionNew
                                  context:nil];
-    [self.sharedUserDefaults addObserver:self forKeyPath:@"tag"
+    [self.sharedUserDefaults addObserver:self forKeyPath:@"tagWithAuthKey"
                                  options:NSKeyValueObservingOptionNew
                                  context:nil];
 
@@ -153,78 +153,139 @@ static LocationManager *theInstance = nil;
                       ofObject:(id)object
                         change:(NSDictionary<NSKeyValueChangeKey,id> *)change
                        context:(void *)context {
-    if ([keyPath isEqualToString:@"monitoring"]) {
-        NSUserDefaults *shared = object;
-        NSInteger monitoring = [shared integerForKey:@"monitoring"];
-        if (monitoring != self.monitoring) {
-            self.monitoring = monitoring;
-            [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"downgraded"];
-            NSManagedObjectContext *moc = CoreData.sharedInstance.mainMOC;
-            [Settings setInt:(int)[LocationManager sharedInstance].monitoring
-                      forKey:@"monitoring_preference" inMOC:moc];
-            [CoreData.sharedInstance sync:moc];
+    OwnTracksLogError("[LocationManager] observeValueForKeyPath %@", keyPath);
 
-        }
-    } else if ([keyPath isEqualToString:@"sendNow"]) {
-        OwnTracksAppDelegate *ad = (OwnTracksAppDelegate *)[UIApplication sharedApplication].delegate;
-        [ad sendNow:self.location withPOI:nil withImage:nil withImageName:nil];
-    } else if ([keyPath isEqualToString:@"poi"]) {
-        NSUserDefaults *shared = object;
-        NSString *poi = [shared stringForKey:@"poi"];
-        OwnTracksAppDelegate *ad = (OwnTracksAppDelegate *)[UIApplication sharedApplication].delegate;
-        [ad sendNow:self.location withPOI:poi withImage:nil withImageName:nil];
-    } else if ([keyPath isEqualToString:@"tag"]) {
-        NSUserDefaults *shared = object;
-        NSString *tag = [shared stringForKey:@"tag"];
-        if (tag && tag.length) {
-            [[NSUserDefaults standardUserDefaults] setObject:tag forKey:@"tag"];
-        } else {
-            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"tag"];
+    if (![Settings theAllowIntentControlInMOC:CoreData.sharedInstance.mainMOC]) {
+        [NavigationController alertWithTitle:
+         NSLocalizedString(@"Intent Control",
+                           @"Header of an alert message regarding intent control")
+                            message:
+         NSLocalizedString(@"Intent control not allowed",
+                           @"content of an alert message regarding intent control")];
+        OwnTracksLogInfo("[LocationManager] Intents not allowed: %@", keyPath);
+    } else {
+        if ([keyPath isEqualToString:@"monitoringWithAuthKey"]) {
+            NSUserDefaults *shared = object;
+            NSDictionary *dict = [shared objectForKey:@"monitoringWithAuthKey"];
+            NSString *intentAuthKey = dict[@"intentAuthKey"];
+            NSNumber *monitoringNumber = dict[@"monitoring"];
+            NSInteger monitoring = monitoringNumber != nil ? monitoringNumber.integerValue : 0;
+            if (intentAuthKey == nil || ![intentAuthKey isEqualToString:[Settings theIntentAuthKey]]) {
+                [NavigationController alertWithTitle:
+                 NSLocalizedString(@"Intent Control",
+                                   @"Header of an alert message regarding intent control")
+                                             message:
+                 NSLocalizedString(@"Wrong intent auth key",
+                                   @"content of an alert message regarding intent auth key")];
+                OwnTracksLogError("[LocationManager] Wrong Intent Auth Key");
+            } else {
+                if (monitoring != self.monitoring) {
+                    self.monitoring = monitoring;
+                    [[NSUserDefaults standardUserDefaults] setBool:FALSE forKey:@"downgraded"];
+                    NSManagedObjectContext *moc = CoreData.sharedInstance.mainMOC;
+                    [Settings setInt:(int)[LocationManager sharedInstance].monitoring
+                              forKey:@"monitoring_preference" inMOC:moc];
+                    [CoreData.sharedInstance sync:moc];
+                }
+            }
+        } else if ([keyPath isEqualToString:@"sendNowWithAuthKey"]) {
+            NSUserDefaults *shared = object;
+            NSDictionary *dict = [shared objectForKey:@"sendNowWithAuthKey"];
+            NSString *intentAuthKey = dict[@"intentAuthKey"];
+            if (intentAuthKey == nil || ![intentAuthKey isEqualToString:[Settings theIntentAuthKey]]) {
+                [NavigationController alertWithTitle:
+                 NSLocalizedString(@"Intent Control",
+                                   @"Header of an alert message regarding intent control")
+                                             message:
+                 NSLocalizedString(@"Wrong intent auth key",
+                                   @"content of an alert message regarding intent auth key")];
+                OwnTracksLogError("[LocationManager] Wrong Intent Auth Key");
+            } else {
+                OwnTracksAppDelegate *ad = (OwnTracksAppDelegate *)[UIApplication sharedApplication].delegate;
+                [ad sendNow:self.location withPOI:nil withImage:nil withImageName:nil];
+            }
+        } else if ([keyPath isEqualToString:@"poiWithAuthKey"]) {
+            NSUserDefaults *shared = object;
+            NSDictionary *dict = [shared objectForKey:@"poiWithAuthKey"];
+            NSString *intentAuthKey = dict[@"intentAuthKey"];
+            NSString *poi = dict[@"poi"];
+            if (intentAuthKey == nil || ![intentAuthKey isEqualToString:[Settings theIntentAuthKey]]) {
+                [NavigationController alertWithTitle:
+                 NSLocalizedString(@"Intent Control",
+                                   @"Header of an alert message regarding intent control")
+                                             message:
+                 NSLocalizedString(@"Wrong intent auth key",
+                                   @"content of an alert message regarding intent auth key")];
+                OwnTracksLogError("[LocationManager] Wrong Intent Auth Key");
+            } else {
+                OwnTracksAppDelegate *ad = (OwnTracksAppDelegate *)[UIApplication sharedApplication].delegate;
+                [ad sendNow:self.location withPOI:poi withImage:nil withImageName:nil];
+            }
+        } else if ([keyPath isEqualToString:@"tagWithAuthKey"]) {
+            NSUserDefaults *shared = object;
+            NSDictionary *dict = [shared objectForKey:@"tagWithAuthKey"];
+            NSString *intentAuthKey = dict[@"intentAuthKey"];
+            NSString *tag = dict[@"tag"];
+            if (intentAuthKey == nil || ![intentAuthKey isEqualToString:[Settings theIntentAuthKey]]) {
+                [NavigationController alertWithTitle:
+                 NSLocalizedString(@"Intent Control",
+                                   @"Header of an alert message regarding intent control")
+                                             message:
+                 NSLocalizedString(@"Wrong intent auth key",
+                                   @"content of an alert message regarding intent auth key")];
+                OwnTracksLogError("[LocationManager] Wrong Intent Auth Key");
+            } else {
+                if (tag && tag.length) {
+                    [[NSUserDefaults standardUserDefaults] setObject:tag forKey:@"tag"];
+                } else {
+                    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"tag"];
+                }
+            }
         }
     }
 }
 
 - (void)start {
-    DDLogVerbose(@"[LocationManager] start");
+    OwnTracksLogDebug("[LocationManager] start");
     [self authorize];
     
     self.altimeterAuthorizationStatus = [CMAltimeter authorizationStatus];
     self.altimeterIsRelativeAltitudeAvailable = [CMAltimeter isRelativeAltitudeAvailable];
-    DDLogInfo(@"[LocationManager] CMAltimeter status=%ld, available=%d",
+    OwnTracksLogInfo("[LocationManager] CMAltimeter status=%ld, available=%d",
               (long)self.altimeterAuthorizationStatus,
               self.altimeterIsRelativeAltitudeAvailable);
     
     if (self.altimeterIsRelativeAltitudeAvailable &&
         (self.altimeterAuthorizationStatus == CMAuthorizationStatusNotDetermined ||
          self.altimeterAuthorizationStatus == CMAuthorizationStatusAuthorized)) {
-        DDLogVerbose(@"[LocationManager] startRelativeAltitudeUpdatesToQueue");
+        OwnTracksLogDebug("[LocationManager] startRelativeAltitudeUpdatesToQueue");
         [self.altimeter startRelativeAltitudeUpdatesToQueue:[NSOperationQueue mainQueue]
                                                 withHandler:^(CMAltitudeData *altitudeData, NSError *error) {
-            DDLogVerbose(@"[LocationManager] altitudeData %@ error %@", altitudeData, error);
+            OwnTracksLogDebug("[LocationManager] altitudeData %@ error %@", altitudeData, error);
             self.altitudeData = altitudeData;
         }];
     }
     
     self.motionActivityManagerAuthorizationStatus = [CMMotionActivityManager authorizationStatus];
     self.motionActivityManagerIsActivityAvailable = [CMMotionActivityManager isActivityAvailable];
-    DDLogInfo(@"[LocationManager] CMMotionActivityManager status=%ld, available=%d",
+    OwnTracksLogInfo("[LocationManager] CMMotionActivityManager status=%ld, available=%d",
               (long)self.motionActivityManagerAuthorizationStatus,
               self.motionActivityManagerIsActivityAvailable);
     
     if (self.motionActivityManagerIsActivityAvailable &&
         (self.motionActivityManagerAuthorizationStatus == CMAuthorizationStatusNotDetermined ||
          self.motionActivityManagerAuthorizationStatus == CMAuthorizationStatusAuthorized)) {
-        DDLogVerbose(@"[LocationManager] startActivityUpdatesToQueue");
+        OwnTracksLogDebug("[LocationManager] startActivityUpdatesToQueue");
         [self.motionActivityManager startActivityUpdatesToQueue:[NSOperationQueue mainQueue]
                                                     withHandler:^(CMMotionActivity * _Nullable activity) {
-            DDLogVerbose(@"[LocationManager] activity %@", activity);
+            OwnTracksLogDebug("[LocationManager] activity %@", activity);
             self.motionActivity = activity;
         }];
     }
 }
 
 - (void)wakeup {
-    DDLogVerbose(@"[LocationManager] wakeup");
+    OwnTracksLogDebug("[LocationManager] wakeup");
     [self authorize];
     if (self.monitoring == LocationMonitoringMove) {
         [self.activityTimer invalidate];
@@ -237,7 +298,7 @@ static LocationManager *theInstance = nil;
                                      forMode:NSRunLoopCommonModes];
     }
     for (CLRegion *region in self.manager.monitoredRegions) {
-        DDLogVerbose(@"[LocationManager] requestStateForRegion %@", region.identifier);
+        OwnTracksLogDebug("[LocationManager] requestStateForRegion %@", region.identifier);
         [self.manager requestStateForRegion:region];
     }
     if (self.monitoring == LocationMonitoringSignificant) {
@@ -248,7 +309,7 @@ static LocationManager *theInstance = nil;
 
 - (void)authorize {
     self.locationManagerAuthorizationStatus = self.manager.authorizationStatus;
-    DDLogVerbose(@"[LocationManager] authorizationStatus=%d",
+    OwnTracksLogDebug("[LocationManager] authorizationStatus=%d",
                  self.locationManagerAuthorizationStatus);
     if (self.locationManagerAuthorizationStatus == kCLAuthorizationStatusNotDetermined) {
         [self.manager requestAlwaysAuthorization];
@@ -256,7 +317,7 @@ static LocationManager *theInstance = nil;
 }
 
 - (void)sleep {
-    DDLogVerbose(@"[LocationManager] sleep");
+    OwnTracksLogDebug("[LocationManager] sleep");
     for (CLBeaconIdentityConstraint *beaconIdentityConstraint in self.manager.rangedBeaconConstraints) {
         [self.manager stopRangingBeaconsSatisfyingConstraint:beaconIdentityConstraint];
     }
@@ -266,15 +327,15 @@ static LocationManager *theInstance = nil;
 }
 
 - (void)stop {
-    DDLogVerbose(@"[LocationManager] stop");
+    OwnTracksLogDebug("[LocationManager] stop");
     
     if ([CMAltimeter isRelativeAltitudeAvailable]) {
-        DDLogVerbose(@"[LocationManager] stopRelativeAltitudeUpdates");
+        OwnTracksLogDebug("[LocationManager] stopRelativeAltitudeUpdates");
         [self.altimeter stopRelativeAltitudeUpdates];
     }
     
     if ([CMMotionActivityManager isActivityAvailable]) {
-        DDLogVerbose(@"[LocationManager] stopActivityUpdates");
+        OwnTracksLogDebug("[LocationManager] stopActivityUpdates");
         [self.motionActivityManager stopActivityUpdates];
     }
 }
@@ -322,7 +383,7 @@ static LocationManager *theInstance = nil;
     if (self.manager.location) {
         _lastUsedLocation = self.manager.location;
     } else {
-        DDLogVerbose(@"[LocationManager] location == nil");
+        OwnTracksLogDebug("[LocationManager] location == nil");
     }
     return self.lastUsedLocation;
 }
@@ -338,13 +399,13 @@ static LocationManager *theInstance = nil;
 }
 
 - (void)setMonitoring:(LocationMonitoring)monitoring {
-    DDLogInfo(@"[LocationManager] set monitoring=%ld", (long)monitoring);
+    OwnTracksLogInfo("[LocationManager] set monitoring=%ld", (long)monitoring);
     if (monitoring != LocationMonitoringMove &&
         monitoring != LocationMonitoringManual &&
         monitoring != LocationMonitoringQuiet &&
         monitoring != LocationMonitoringSignificant) {
         monitoring = LocationMonitoringQuiet;
-        DDLogWarn(@"[LocationManager] monitoring set to %ld", (long)monitoring);
+        OwnTracksLogDefault("[LocationManager] monitoring set to %ld", (long)monitoring);
     }
     _monitoring = monitoring;
     self.manager.pausesLocationUpdatesAutomatically = NO;
@@ -391,12 +452,12 @@ static LocationManager *theInstance = nil;
 }
 
 - (void)setRanging:(BOOL)ranging {
-    DDLogVerbose(@"[LocationManager] set ranging=%d", ranging);
+    OwnTracksLogDebug("[LocationManager] set ranging=%d", ranging);
     _ranging = ranging;
     
     if (!ranging) {
         for (CLBeaconIdentityConstraint *beaconIdentityConstraint in self.manager.rangedBeaconConstraints) {
-            DDLogVerbose(@"[LocationManager] stopRangingBeaconsSatisfyingConstraint %@",
+            OwnTracksLogDebug("[LocationManager] stopRangingBeaconsSatisfyingConstraint %@",
                          [NSString stringWithFormat:@"%@:%@:%@",
                           beaconIdentityConstraint.UUID.UUIDString,
                           beaconIdentityConstraint.major,
@@ -405,19 +466,19 @@ static LocationManager *theInstance = nil;
         }
     }
     for (CLRegion *region in self.manager.monitoredRegions) {
-        DDLogVerbose(@"[LocationManager] requestStateForRegion %@", region.identifier);
+        OwnTracksLogDebug("[LocationManager] requestStateForRegion %@", region.identifier);
         [self.manager requestStateForRegion:region];
     }
 }
 
 - (void)activityTimer:(NSTimer *)timer {
-    DDLogInfo(@"[LocationManager] activityTimer fired after %f", self.minTime);
+    OwnTracksLogDebug("[LocationManager] activityTimer fired after %f", self.minTime);
     CLLocation *location = self.manager.location;
     if (location) {
         self.lastUsedLocation = location;
         [self.delegate timerLocation:location];
     } else {
-        DDLogWarn(@"[LocationManager] activityTimer found no location");
+        OwnTracksLogDefault("[LocationManager] activityTimer found no location");
     }
 }
 
@@ -428,7 +489,7 @@ static LocationManager *theInstance = nil;
  */
 
 - (void)locationManagerDidChangeAuthorization:(CLLocationManager *)manager {
-    DDLogInfo(@"[LocationManager] didChangeAuthorizationStatus to %d",
+    OwnTracksLogInfo("[LocationManager] didChangeAuthorizationStatus to %d",
               manager.authorizationStatus);
     self.locationManagerAuthorizationStatus = manager.authorizationStatus;
     if (manager.authorizationStatus != kCLAuthorizationStatusAuthorizedAlways) {
@@ -442,44 +503,44 @@ static LocationManager *theInstance = nil;
         case kCLAuthorizationStatusAuthorizedAlways:
             break;
         case kCLAuthorizationStatusAuthorizedWhenInUse:
-            [NavigationController alert:@"LocationManager"
-                                message:
+            [NavigationController alertWithTitle:@"LocationManager"
+                                         message:
                  NSLocalizedString(@"App is not allowed to use location services in background",
                                    @"Location Manager error message")
             ];
-            DDLogInfo(@"[LocationManager] %@", @"App is not allowed to use location services in background");
+            OwnTracksLogInfo("[LocationManager] %@", @"App is not allowed to use location services in background");
             break;
         case kCLAuthorizationStatusNotDetermined:
-            [NavigationController alert:@"LocationManager"
-                                message:
+            [NavigationController alertWithTitle:@"LocationManager"
+                                         message:
                  NSLocalizedString(@"App is not allowed to use location services yet",
                                    @"Location Manager error message")
             ];
-            DDLogInfo(@"[LocationManager] %@", @"App is not allowed to use location services yet");
+            OwnTracksLogInfo("[LocationManager] %@", @"App is not allowed to use location services yet");
             break;
         case kCLAuthorizationStatusDenied:
-            [NavigationController alert:@"LocationManager"
-                                message:
+            [NavigationController alertWithTitle:@"LocationManager"
+                                         message:
                  NSLocalizedString(@"App is not allowed to use location services",
                                    @"Location Manager error message")
             ];
-            DDLogInfo(@"[LocationManager] %@", @"App is not allowed to use location services");
+            OwnTracksLogInfo("[LocationManager] %@", @"App is not allowed to use location services");
             break;
         case kCLAuthorizationStatusRestricted:
-            [NavigationController alert:@"LocationManager"
-                                message:
+            [NavigationController alertWithTitle:@"LocationManager"
+                                         message:
                  NSLocalizedString(@"App use of location services is restricted",
                                    @"Location Manager error message")
             ];
-            DDLogInfo(@"[LocationManager] %@", @"App use of location services is restricted");
+            OwnTracksLogInfo("[LocationManager] %@", @"App use of location services is restricted");
             break;
         default:
-            [NavigationController alert:@"LocationManager"
-                                message:
+            [NavigationController alertWithTitle:@"LocationManager"
+                                         message:
                  NSLocalizedString(@"App use of location services is unclear",
                                    @"Location Manager error message")
             ];
-            DDLogInfo(@"[LocationManager] %@", @"App use of location services is unclear");
+            OwnTracksLogInfo("[LocationManager] %@", @"App use of location services is unclear");
             break;
     }
         
@@ -501,12 +562,12 @@ static LocationManager *theInstance = nil;
 
 - (void)locationManager:(CLLocationManager *)manager
      didUpdateLocations:(NSArray *)locations {
-    DDLogVerbose(@"[LocationManager] didUpdateLocations");
+    OwnTracksLogDebug("[LocationManager] didUpdateLocations");
     
     int count = 0;
     for (CLLocation *location in locations) {
         count++;
-        DDLogInfo(@"[LocationManager] Location#%d: Δs:%.0f/%.0f Δm:%.0f/%.0f Δs:%.0f %@ %@ %@",
+        OwnTracksLogDebug("[LocationManager] Location#%d: Δs:%.0f/%.0f Δm:%.0f/%.0f Δs:%.0f %@ %@ %@",
                   count,
                   self.lastUsedLocation ? [location.timestamp timeIntervalSinceDate:self.lastUsedLocation.timestamp] : 0,
                   self.minTime,
@@ -540,7 +601,7 @@ static LocationManager *theInstance = nil;
 
 - (void)locationManager:(CLLocationManager *)manager
        didFailWithError:(NSError *)error {
-    DDLogError(@"[LocationManager] didFailWithError %@ %@", error.localizedDescription, error.userInfo);
+    OwnTracksLogError("[LocationManager] didFailWithError %@ %@", error.localizedDescription, error.userInfo);
     // error
 }
 
@@ -552,7 +613,7 @@ static LocationManager *theInstance = nil;
 - (void)locationManager:(CLLocationManager *)manager
       didDetermineState:(CLRegionState)state
               forRegion:(CLRegion *)region {
-    DDLogVerbose(@"[LocationManager] didDetermineState %ld %@", (long)state, region);
+    OwnTracksLogDebug("[LocationManager] didDetermineState %ld %@", (long)state, region);
     
     if ([region isKindOfClass:[CLBeaconRegion class]]) {
         if (state == CLRegionStateInside) {
@@ -609,7 +670,7 @@ static LocationManager *theInstance = nil;
 
 - (void)locationManager:(CLLocationManager *)manager
          didEnterRegion:(CLRegion *)region {
-    DDLogInfo(@"[LocationManager] didEnterRegion %@", region);
+    OwnTracksLogDebug("[LocationManager] didEnterRegion %@", region);
     
     if (![self removeHoldDown:region]) {
         [self locationManager:manager didDetermineState:CLRegionStateInside forRegion:region];
@@ -619,7 +680,7 @@ static LocationManager *theInstance = nil;
 
 - (void)locationManager:(CLLocationManager *)manager
           didExitRegion:(CLRegion *)region {
-    DDLogInfo(@"[LocationManager] didExitRegion %@", region);
+    OwnTracksLogDebug("[LocationManager] didExitRegion %@", region);
     
     if ([region.identifier hasPrefix:@"-"]) {
         [self removeHoldDown:region];
@@ -631,11 +692,11 @@ static LocationManager *theInstance = nil;
 }
 
 - (BOOL)removeHoldDown:(CLRegion *)region {
-    DDLogInfo(@"[LocationManager] removeHoldDown %@ [%lu]", region.identifier, (unsigned long)self.pendingRegionEvents.count);
+    OwnTracksLogDebug("[LocationManager] removeHoldDown %@ [%lu]", region.identifier, (unsigned long)self.pendingRegionEvents.count);
     
     for (PendingRegionEvent *p in self.pendingRegionEvents) {
         if (p.region == region) {
-            DDLogVerbose(@"[LocationManager] holdDownInvalidated %@", region.identifier);
+            OwnTracksLogDebug("[LocationManager] holdDownInvalidated %@", region.identifier);
             [p.holdDownTimer invalidate];
             p.region = nil;
             [self.pendingRegionEvents removeObject:p];
@@ -646,24 +707,24 @@ static LocationManager *theInstance = nil;
 }
 
 - (void)holdDownExpired:(NSTimer *)timer {
-    DDLogInfo(@"[LocationManager] holdDownExpired %@", timer.userInfo);
+    OwnTracksLogDebug("[LocationManager] holdDownExpired %@", timer.userInfo);
     if ([timer.userInfo isKindOfClass:[PendingRegionEvent class]]) {
         PendingRegionEvent *p = (PendingRegionEvent *)timer.userInfo;
-        DDLogVerbose(@"[LocationManager] holdDownExpired %@", p.region.identifier);
+        OwnTracksLogDebug("[LocationManager] holdDownExpired %@", p.region.identifier);
         [self.delegate regionEvent:p.region enter:NO];
         [self removeHoldDown:p.region];
     }
 }
 
 - (void)locationManager:(CLLocationManager *)manager didStartMonitoringForRegion:(CLRegion *)region {
-    DDLogVerbose(@"[LocationManager] didStartMonitoringForRegion %@", region);
+    OwnTracksLogDebug("[LocationManager] didStartMonitoringForRegion %@", region);
     [self.manager requestStateForRegion:region];
 }
 
 - (void)locationManager:(CLLocationManager *)manager monitoringDidFailForRegion:(CLRegion *)region withError:(NSError *)error {
-    DDLogError(@"[LocationManager] monitoringDidFailForRegion %@ %@ %@", region, error.localizedDescription, error.userInfo);
+    OwnTracksLogError("[LocationManager] monitoringDidFailForRegion %@ %@ %@", region, error.localizedDescription, error.userInfo);
     for (CLRegion *monitoredRegion in manager.monitoredRegions) {
-        DDLogError(@"[LocationManager] monitoredRegion: %@", monitoredRegion);
+        OwnTracksLogError("[LocationManager] monitoredRegion: %@", monitoredRegion);
     }
     
     if ((error.domain != kCLErrorDomain || error.code != 5) && [manager.monitoredRegions containsObject:region]) {
@@ -680,7 +741,7 @@ static LocationManager *theInstance = nil;
 - (void)locationManager:(CLLocationManager *)manager
 didFailRangingBeaconsForConstraint:(CLBeaconIdentityConstraint *)beaconConstraint
                   error:(NSError *)error {
-    DDLogError(@"[LocationManager] didFailRangingBeaconsForConstraint %@ %@ %@",
+    OwnTracksLogError("[LocationManager] didFailRangingBeaconsForConstraint %@ %@ %@",
                  beaconConstraint, error.localizedDescription, error.userInfo);
     
 }
@@ -688,7 +749,7 @@ didFailRangingBeaconsForConstraint:(CLBeaconIdentityConstraint *)beaconConstrain
 - (void)locationManager:(CLLocationManager *)manager
         didRangeBeacons:(NSArray<CLBeacon *> *)beacons
    satisfyingConstraint:(CLBeaconIdentityConstraint *)beaconConstraint {
-    DDLogInfo(@"[LocationManager] didRangeBeacons %@ satisfyingContraint %@",
+    OwnTracksLogDebug("[LocationManager] didRangeBeacons %@ satisfyingContraint %@",
                  beacons, beaconConstraint);
     for (CLBeacon *beacon in beacons) {
         if (beacon.proximity != CLProximityUnknown) {
@@ -760,7 +821,7 @@ didFailRangingBeaconsForConstraint:(CLBeaconIdentityConstraint *)beaconConstrain
  *
  */
 - (void)locationManager:(CLLocationManager *)manager didVisit:(CLVisit *)visit {
-    DDLogInfo(@"[LocationManager] didVisit %g,%g ha=%g a=%@ d=%@",
+    OwnTracksLogDebug("[LocationManager] didVisit %g,%g ha=%g a=%@ d=%@",
                  visit.coordinate.latitude,
                  visit.coordinate.longitude,
                  visit.horizontalAccuracy,
@@ -774,7 +835,7 @@ didFailRangingBeaconsForConstraint:(CLBeaconIdentityConstraint *)beaconConstrain
 
 
 - (void)startBackgroundTimer {
-    DDLogInfo(@"[LocationManager] startBackgroundTimer");
+    OwnTracksLogInfo("[LocationManager] startBackgroundTimer");
     if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground) {
         if (!self.backgroundTimer || !self.backgroundTimer.isValid) {
             self.backgroundTimer = [NSTimer scheduledTimerWithTimeInterval:BACKGROUND_STOP_AFTER
@@ -786,7 +847,7 @@ didFailRangingBeaconsForConstraint:(CLBeaconIdentityConstraint *)beaconConstrain
 }
 
 - (void)stopInBackground {
-    DDLogInfo(@"[LocationManager] stopInBackground");
+    OwnTracksLogInfo("[LocationManager] stopInBackground");
     self.backgroundTimer = nil;
     [self sleep];
 }

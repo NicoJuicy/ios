@@ -3,11 +3,11 @@
 //  OwnTracks
 //
 //  Created by Christoph Krey on 29.09.13.
-//  Copyright © 2013-2025  Christoph Krey. All rights reserved.
+//  Copyright © 2013-2026  Christoph Krey. All rights reserved.
 //
 
 #import "CoreData.h"
-#import <CocoaLumberjack/CocoaLumberjack.h>
+#import "OwnTracksLog.h"
 
 @interface CoreData ()
 @property (strong, nonatomic) NSManagedObjectContext *mainMOC;
@@ -16,7 +16,6 @@
 @end
 
 @implementation CoreData
-static const DDLogLevel ddLogLevel = DDLogLevelInfo;
 
 + (CoreData *)sharedInstance {
     static dispatch_once_t once = 0;
@@ -45,7 +44,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
 }
 
 - (void)sync:(NSManagedObjectContext *)context {
-    DDLogVerbose(@"[CoreData] sync: %ld,%ld,%ld %@ %@",
+    OwnTracksLogDebug("[CoreData] sync: %ld,%ld,%ld %@ %@",
               context.insertedObjects.count,
               context.updatedObjects.count,
               context.deletedObjects.count,
@@ -54,7 +53,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
     if (context.hasChanges) {
         NSError *error = nil;
         if (![context save:&error]) {
-            DDLogError(@"[CoreData] save error: %@", error);
+            OwnTracksLogError("[CoreData] save error: %@", error);
         }
         if (context.parentContext) {
             [self performSelectorOnMainThread:@selector(sync:) withObject:context.parentContext waitUntilDone:YES];
@@ -66,11 +65,11 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
 - (NSPersistentStoreCoordinator *)createPersistentStoreCoordinator {
     NSURL *persistentStoreURLOld = [self.applicationDocumentsDirectory
                                  URLByAppendingPathComponent:@"OwnTracks/StoreContent/persistentStore"];
-    DDLogDebug(@"[MQTTPersistence] Persistent store old: %@", persistentStoreURLOld.path);
+    OwnTracksLogDebug("[MQTTPersistence] Persistent store old: %@", persistentStoreURLOld.path);
 
     NSURL *persistentStoreURLNew = [self.applicationDocumentsDirectory
                                  URLByAppendingPathComponent:@"OwnTracks"];
-    DDLogDebug(@"[MQTTPersistence] Persistent store new: %@", persistentStoreURLNew.path);
+    OwnTracksLogDebug("[MQTTPersistence] Persistent store new: %@", persistentStoreURLNew.path);
 
     NSError *error = nil;
     NSPersistentStoreCoordinator *persistentStoreCoordinator =
@@ -88,14 +87,14 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
                                                             URL:persistentStoreURLOld
                                                         options:options
                                                           error:&error]) {
-        DDLogDebug(@"[MQTTPersistence] managedObjectContext save old: %@", error);
+        OwnTracksLogDebug("[MQTTPersistence] managedObjectContext save old: %@", error);
         if (error) {
             if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType
                                                           configuration:nil
                                                                     URL:persistentStoreURLNew
                                                                 options:options
                                                                   error:&error]) {
-                DDLogError(@"[MQTTPersistence] managedObjectContext save new: %@", error);
+                OwnTracksLogError("[MQTTPersistence] managedObjectContext save new: %@", error);
                 persistentStoreCoordinator = nil;
             }
         }

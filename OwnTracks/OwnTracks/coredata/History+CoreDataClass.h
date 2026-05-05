@@ -3,7 +3,7 @@
 //  OwnTracks
 //
 //  Created by Christoph Krey on 26.08.19.
-//  Copyright © 2019-2025 OwnTracks. All rights reserved.
+//  Copyright © 2019-2026 OwnTracks. All rights reserved.
 //
 //
 
@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSString *)timestampText;
 
-+ (NSArray *)allHistoriesInManagedObjectContext:(NSManagedObjectContext *)context;
++ (NSArray<History *> *)allHistoriesInManagedObjectContext:(NSManagedObjectContext *)context;
 
 @end
 

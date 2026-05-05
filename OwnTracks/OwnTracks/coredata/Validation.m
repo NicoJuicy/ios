@@ -3,15 +3,14 @@
 //  OwnTracks
 //
 //  Created by Christoph Krey on 13.11.23.
-//  Copyright © 2023-2025 OwnTracks. All rights reserved.
+//  Copyright © 2023-2026 OwnTracks. All rights reserved.
 //
 
 #import "Validation.h"
-#import <CocoaLumberjack/CocoaLumberjack.h>
-#import <DSJSONSchemaValidation/DSJSONSchema.h>
+#import "OwnTracksLog.h"
+#import "DSJSONSchema.h"
 
 @implementation Validation
-static const DDLogLevel ddLogLevel = DDLogLevelInfo;
 static Validation *theInstance = nil;
 
 static DSJSONSchema *messageSchema = nil;
@@ -39,7 +38,7 @@ static DSJSONSchema *encryptionSchema = nil;
                                          options:nil
                                            error:&messageSchemaError];
     if (!messageSchema) {
-        DDLogError(@"Validation message schema creation error: %@",
+        OwnTracksLogError("Validation message schema creation error: %@",
                    messageSchemaError);
     }
     
@@ -55,7 +54,7 @@ static DSJSONSchema *encryptionSchema = nil;
                                           options:nil
                                             error:&messagesSchemaError];
     if (!messagesSchema) {
-        DDLogError(@"Validation messages schema creation error: %@",
+        OwnTracksLogError("Validation messages schema creation error: %@",
                    messagesSchemaError);
     }
     
@@ -71,7 +70,7 @@ static DSJSONSchema *encryptionSchema = nil;
                                             options:nil
                                               error:&encryptionSchemaError];
     if (!encryptionSchema) {
-        DDLogError(@"Validation encryption schema creation error: %@",
+        OwnTracksLogError("Validation encryption schema creation error: %@",
                    encryptionSchemaError);
     }
     
@@ -100,13 +99,13 @@ static DSJSONSchema *encryptionSchema = nil;
                 json = [NSJSONSerialization JSONObjectWithData:data
                                                        options:0
                                                          error:nil];
-                DDLogDebug(@"Validation JSON: %@",
+                OwnTracksLogDebug("Validation JSON: %@",
                            [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
             } else {
                 json = [NSJSONSerialization JSONObjectWithData:data
                                                        options:0
                                                          error:nil];
-                DDLogError(@"Validation error: %@ with %@",
+                OwnTracksLogError("Validation error: %@ with %@",
                            validationError,
                            [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
             }
@@ -114,7 +113,7 @@ static DSJSONSchema *encryptionSchema = nil;
             json = [NSJSONSerialization JSONObjectWithData:data
                                                    options:0
                                                      error:nil];
-            DDLogVerbose(@"Not validated: %@",
+            OwnTracksLogDebug("Not validated: %@",
                          [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
         }
     }

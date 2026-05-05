@@ -3,18 +3,18 @@
 //  OwnTracks
 //
 //  Created by Christoph Krey on 11.09.13.
-//  Copyright © 2013-2025  Christoph Krey. All rights reserved.
+//  Copyright © 2013-2026  Christoph Krey. All rights reserved.
 //
 
 #import "SettingsTVC.h"
-#import "CertificatesTVC.h"
 #import "TabBarController.h"
 #import "OwnTracksAppDelegate.h"
 #import "Settings.h"
 #import "Friend+CoreDataClass.h"
 #import "CoreData.h"
 #import "OwnTracking.h"
-#import <CocoaLumberjack/CocoaLumberjack.h>
+#import "OwnTracksLog.h"
+#import "Owntracks-Swift.h"
 
 @interface SettingsTVC ()
 
@@ -83,8 +83,6 @@
 @end
 
 @implementation SettingsTVC
-
-static const DDLogLevel ddLogLevel = DDLogLevelInfo;
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -385,7 +383,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
                 [Settings setInt:CONNECTION_MODE_HTTP
                           forKey:@"mode"
                            inMOC:CoreData.sharedInstance.mainMOC];
-                DDLogVerbose(@"[Settings] mode set to %d", CONNECTION_MODE_HTTP);
+                OwnTracksLogDebug("[Settings] mode set to %d", CONNECTION_MODE_HTTP);
 
                 break;
             case 0:
@@ -393,7 +391,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
                 [Settings setInt:CONNECTION_MODE_MQTT
                           forKey:@"mode"
                            inMOC:CoreData.sharedInstance.mainMOC];
-                DDLogVerbose(@"[Settings] mode set to %d", CONNECTION_MODE_MQTT);
+                OwnTracksLogDebug("[Settings] mode set to %d", CONNECTION_MODE_MQTT);
                 break;
         }
     }
@@ -405,7 +403,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
                       ofObject:(id)object
                         change:(NSDictionary *)change
                        context:(void *)context {
-    DDLogVerbose(@"observeValueForKeyPath %@", keyPath);
+    OwnTracksLogDebug("observeValueForKeyPath %@", keyPath);
 
     if ([keyPath isEqualToString:@"configLoad"]) {
         [self performSelectorOnMainThread:@selector(updated) withObject:nil waitUntilDone:NO];
@@ -542,9 +540,6 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
     }
 
     if (self.UIPassword) {
-    }
-
-    if (self.UIPassword) {
         self.UIPassword.text =
         [Settings stringForKey:@"pass_preference"
                          inMOC:CoreData.sharedInstance.mainMOC];
@@ -565,7 +560,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
         int mode =
         [Settings intForKey:@"mode"
                       inMOC:CoreData.sharedInstance.mainMOC];
-        DDLogVerbose(@"[Settings] mode is %d", mode);
+        OwnTracksLogDebug("[Settings] mode is %d", mode);
         switch (mode) {
             case CONNECTION_MODE_HTTP:
                 self.UImodeSwitch.selectedSegmentIndex = 1;
@@ -697,16 +692,16 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
                        inMOC:CoreData.sharedInstance.mainMOC];
         self.UIextendedData.enabled = !locked;
     }
-    if (self.self.UIlocked) {
-        self.self.UIlocked.on =
+    if (self.UIlocked) {
+        self.UIlocked.on =
         [Settings theLockedInMOC:CoreData.sharedInstance.mainMOC];
-        self.self.UIlocked.enabled = false;
+        self.UIlocked.enabled = false;
     }
-    if (self.self.UIsub) {
-        self.self.UIsub.on =
+    if (self.UIsub) {
+        self.UIsub.on =
         [Settings boolForKey:@"sub_preference"
                        inMOC:CoreData.sharedInstance.mainMOC];
-        self.self.UIsub.enabled = !locked;
+        self.UIsub.enabled = !locked;
     }
     if (self.UIcmd) {
         self.UIcmd.on =
@@ -714,11 +709,11 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
                        inMOC:CoreData.sharedInstance.mainMOC];
         self.UIcmd.enabled = !locked;
     }
-    if (self.self.UIpubRetain) {
-        self.self.UIpubRetain.on =
+    if (self.UIpubRetain) {
+        self.UIpubRetain.on =
         [Settings boolForKey:@"retain_preference"
                        inMOC:CoreData.sharedInstance.mainMOC];
-        self.self.UIpubRetain.enabled = !locked;
+        self.UIpubRetain.enabled = !locked;
     }
 
     if (self.UIcleanSession) {
@@ -1105,10 +1100,6 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
     [self updateValues];
     [self updated];
 }
-- (IBAction)willTopicChanged:(UITextField *)sender {
-    [self updateValues];
-    [self updated];
-}
 - (IBAction)ignoreStaleLocationsChanged:(UITextField *)sender {
     [self updateValues];
     [self updated];
@@ -1145,10 +1136,6 @@ static const DDLogLevel ddLogLevel = DDLogLevelInfo;
     [self updated];
 }
 - (IBAction)pubQosChanged:(UITextField *)sender {
-    [self updateValues];
-    [self updated];
-}
-- (IBAction)willQosChanged:(UITextField *)sender {
     [self updateValues];
     [self updated];
 }

@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSString *message;
 @property (strong, nonatomic) NSNumber *activity;
 
-+ (Tours *)sharedInstance;
++ (nonnull Tours *) sharedInstance;
 - (void)refresh;
 - (NSInteger)count;
 - (nullable Tour *)tourAtIndex:(NSInteger)index;

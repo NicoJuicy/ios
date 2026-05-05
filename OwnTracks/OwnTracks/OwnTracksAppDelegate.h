@@ -3,7 +3,7 @@
 //  OwnTracks
 //
 //  Created by Christoph Krey on 03.02.14.
-//  Copyright © 2014-2025  OwnTracks. All rights reserved.
+//  Copyright © 2014-2026  OwnTracks. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
@@ -19,9 +19,7 @@
 #import "Friend+CoreDataClass.h"
 #import "Region+CoreDataClass.h"
 
-#import "NavigationController.h"
-
-#import <CocoaLumberjack/CocoaLumberjack.h>
+#import "OwnTracksLog.h"
 
 @interface OwnTracksAppDelegate : UIResponder <UIApplicationDelegate, ConnectionDelegate, LocationManagerDelegate, UNUserNotificationCenterDelegate>
 
@@ -37,8 +35,6 @@
 @property (strong, nonatomic) NSString * _Nullable action;
 @property (nonatomic) BOOL inRefresh;
 
-#define MAXIMUM_NUMBER_OF_LOG_FILES 5
-@property (strong, nonatomic) DDFileLogger * _Nullable fl;
 @property (strong, nonatomic) NSNumber * _Nonnull inQueue;
 
 - (BOOL)sendNow:(CLLocation *_Nonnull)location

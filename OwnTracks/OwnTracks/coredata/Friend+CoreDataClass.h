@@ -3,7 +3,7 @@
 //  OwnTracks
 //
 //  Created by Christoph Krey on 08.12.16.
-//  Copyright © 2016-2025  OwnTracks. All rights reserved.
+//  Copyright © 2016-2026  OwnTracks. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -29,7 +29,9 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSData * _Nullable)imageDataOfPerson:(NSString *)contactId;
 
 + (void)deleteAllFriendsInManagedObjectContext:(NSManagedObjectContext *)context;
++ (NSFetchRequest<Friend *> *)fetchRequestAll;
 + (NSArray *)allFriendsInManagedObjectContext:(NSManagedObjectContext *)context;
++ (NSFetchRequest<Friend *> *)fetchRequestAllNonStale:(NSManagedObjectContext *)context;
 + (NSArray *)allNonStaleFriendsInManagedObjectContext:(NSManagedObjectContext *)context;
 
 - (Waypoint *)addWaypoint:(nonnull CLLocation *)location
@@ -55,9 +57,9 @@ motionActivities:(nullable NSArray <NSString *> *)motionActivities;
 
 - (void)trackToGPX:(NSOutputStream *)output;
 
-@property (NS_NONATOMIC_IOSONLY, readonly, copy) NSString * _Nonnull name;
+@property (NS_NONATOMIC_IOSONLY, readonly, copy) NSString * _Nullable name;
 @property (NS_NONATOMIC_IOSONLY, readonly, copy) NSString * _Nonnull nameOrTopic;
-@property (NS_NONATOMIC_IOSONLY, readonly, copy) NSData * _Nonnull image;
+@property (NS_NONATOMIC_IOSONLY, readonly, copy) NSData * _Nullable image;
 
 + (NSString *)effectiveTid:(NSString *)tid device:(NSString *)device;
 @property (NS_NONATOMIC_IOSONLY, getter=getEffectiveTid, readonly, copy) NSString * _Nonnull effectiveTid;

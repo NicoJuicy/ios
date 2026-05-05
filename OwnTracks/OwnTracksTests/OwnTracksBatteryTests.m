@@ -3,7 +3,7 @@
 //  OwnTracksTests
 //
 //  Created by Christoph Krey on 21.06.25.
-//  Copyright © 2025 OwnTracks. All rights reserved.
+//  Copyright © 2025-2026 OwnTracks. All rights reserved.
 //
 
 #import <XCTest/XCTest.h>

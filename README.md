@@ -7,14 +7,12 @@ ios
 OwnTracks initially was __MQTTitude__.
 
 # Prepare to Compile and Run 
- ## CocoaPods
-OwnTracks uses [COCOAPODS](https://cocoapods.org).
 
  ## Xcode
  Staying in the `OwnTracks/` directory,
  launch `xcode`:
 
-         % open OwnTracks.xcworkspace
+         % open OwnTracks.xcodeproj
 
  Next, click on the `OwnTacks` project and you will see two targets, `OwnTracks` and `OwnTracksToday`.
  For each project, go to the `General` tab.
@@ -23,10 +21,6 @@ OwnTracks uses [COCOAPODS](https://cocoapods.org).
 
          com.example.OwnTracks
 
- For the `OwnTracksToday` target, set the Bundle Identifier accordingly:
-
-         com.example.OwnTracks.OwnTracksToday
-
  For the `OwnTracks` project, go to the `Signing and Capabilities` tab and set the appropriate team.
  Then scroll down to `App Groups`,
  uncheck `group.org.owntracks.OwnTracks`,
@@ -34,8 +28,6 @@ OwnTracks uses [COCOAPODS](https://cocoapods.org).
 
          group.com.example.OwnTracks
 
- Finally, for the `OwnTracksToday` project, go to the `Signing and Capabilities` tab,
- set the appropriate team.
  Then scroll down to `App Groups`,
  uncheck `group.org.owntracks.OwnTracks`,
  and check the group you create for the `OwnTracks` project.

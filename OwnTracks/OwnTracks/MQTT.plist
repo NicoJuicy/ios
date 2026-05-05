@@ -48,6 +48,12 @@
 	<false/>
 	<key>allowremotelocation_preference</key>
 	<true/>
+	<key>allowremoteconfiguration_preference</key>
+	<false/>
+	<key>allowConfigurationByURIAndConfigFile</key>
+	<false/>
+	<key>allowIntentControl</key>
+	<false/>
 	<key>extendeddata_preference</key>
 	<true/>
 	<key>trackerid_preference</key>

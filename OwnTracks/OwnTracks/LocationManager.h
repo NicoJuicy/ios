@@ -3,7 +3,7 @@
 //  OwnTracks
 //
 //  Created by Christoph Krey on 21.10.14.
-//  Copyright © 2014-2025  OwnTracks. All rights reserved.
+//  Copyright © 2014-2026  OwnTracks. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -13,12 +13,12 @@
 
 @protocol LocationManagerDelegate <NSObject>
 
-- (void)newLocation:(CLLocation *)location;
-- (void)timerLocation:(CLLocation *)location;
-- (void)visitLocation:(CLLocation *)location;
-- (void)regionEvent:(CLRegion *)region enter:(BOOL)enter;
-- (void)regionState:(CLRegion *)region inside:(BOOL)inside;
-- (void)beaconInRange:(CLBeacon *)beacon beaconConstraint:(CLBeaconIdentityConstraint *)beaconConstraint;
+- (void)newLocation:(CLLocation * _Nonnull)location;
+- (void)timerLocation:(CLLocation * _Nonnull)location;
+- (void)visitLocation:(CLLocation * _Nonnull)location;
+- (void)regionEvent:(CLRegion * _Nonnull)region enter:(BOOL)enter;
+- (void)regionState:(CLRegion * _Nonnull)region inside:(BOOL)inside;
+- (void)beaconInRange:(CLBeacon * _Nonnull)beacon beaconConstraint:(CLBeaconIdentityConstraint * _Nonnull)beaconConstraint;
 
 @end
 
@@ -35,25 +35,25 @@ typedef NS_ENUM(NSInteger, LocationMonitoring) {
 };
 
 
-+ (LocationManager *)sharedInstance;
++ (LocationManager * _Nonnull) sharedInstance;
 @property (weak, nonatomic) id<LocationManagerDelegate> delegate;
 @property (nonatomic) LocationMonitoring monitoring;
 @property (nonatomic) BOOL ranging;
 @property (nonatomic) double minDist;
 @property (nonatomic) double minTime;
-@property (readonly, nonatomic) CLLocation *location;
-@property (readonly, nonatomic) CLLocation *lastUsedLocation;
-@property (readonly, nonatomic) CLLocation *lastLocationWithMovement;
+@property (readonly, nonatomic) CLLocation * _Nonnull location;
+@property (readonly, nonatomic) CLLocation * _Nonnull lastUsedLocation;
+@property (readonly, nonatomic) CLLocation * _Nonnull lastLocationWithMovement;
 
 @property (readonly, nonatomic) CLAuthorizationStatus locationManagerAuthorizationStatus;
 
 @property (readonly, nonatomic) CMAuthorizationStatus altimeterAuthorizationStatus;
 @property (readonly, nonatomic) BOOL altimeterIsRelativeAltitudeAvailable;
-@property (readonly, nonatomic) CMAltitudeData *altitudeData;
+@property (readonly, nonatomic) CMAltitudeData * _Nullable altitudeData;
 
 @property (readonly, nonatomic) CMAuthorizationStatus motionActivityManagerAuthorizationStatus;
 @property (readonly, nonatomic) BOOL motionActivityManagerIsActivityAvailable;
-@property (readonly, nonatomic) CMMotionActivity *motionActivity;
+@property (readonly, nonatomic) CMMotionActivity * _Nullable motionActivity;
 
 
 
@@ -62,15 +62,15 @@ typedef NS_ENUM(NSInteger, LocationMonitoring) {
 - (void)sleep;
 - (void)stop;
 
-- (void)startRegion:(CLRegion *)region;
-- (void)stopRegion:(CLRegion *)region;
+- (void)startRegion:(CLRegion * _Nonnull)region;
+- (void)stopRegion:(CLRegion *_Nonnull)region;
 - (void)resetRegions;
 @property (NS_NONATOMIC_IOSONLY, readonly) BOOL insideBeaconRegion;
-- (BOOL)insideBeaconRegion:(NSString *)identifier;
+- (BOOL)insideBeaconRegion:(NSString * _Nonnull)identifier;
 @property (NS_NONATOMIC_IOSONLY, readonly) BOOL insideCircularRegion;
-- (BOOL)insideCircularRegion:(NSString *)identifier;
-@property (readonly, strong, nonatomic) NSMutableDictionary *insideBeaconRegions;
-@property (readonly, strong, nonatomic) NSMutableDictionary *insideCircularRegions;
+- (BOOL)insideCircularRegion:(NSString * _Nonnull)identifier;
+@property (readonly, strong, nonatomic) NSMutableDictionary * _Nonnull insideBeaconRegions;
+@property (readonly, strong, nonatomic) NSMutableDictionary * _Nonnull insideCircularRegions;
 
 @end
 

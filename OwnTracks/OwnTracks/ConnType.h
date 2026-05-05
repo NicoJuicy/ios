@@ -3,10 +3,11 @@
 //  OwnTracks
 //
 //  Created by Christoph Krey on 05.10.16.
-//  Copyright © 2016-2025  OwnTracks. All rights reserved.
+//  Copyright © 2016-2026  OwnTracks. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
+#import <NetworkExtension/NEHotspotNetwork.h>
 
 /**
  Enumeration of MQTTSession states
@@ -19,7 +20,9 @@ typedef NS_ENUM(NSInteger, ConnectionType) {
 };
 
 @interface ConnType : NSObject
-+ (NSString *)SSID;
-+ (NSString *)BSSID;
-+ (ConnectionType)connectionType:(NSString *)host;
+@property (nonatomic, readonly) ConnectionType connectionType;
+@property (strong, nonatomic, readonly, nullable) NSString* ssid;
+@property (strong, nonatomic, readonly, nullable) NSString* bssid;
+@property (nonatomic, readonly) NEHotspotNetworkSecurityType securityType;
+
 @end

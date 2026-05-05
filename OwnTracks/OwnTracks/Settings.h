@@ -3,13 +3,12 @@
 //  OwnTracks
 //
 //  Created by Christoph Krey on 31.01.14.
-//  Copyright © 2014-2025  Christoph Krey. All rights reserved.
+//  Copyright © 2014-2026  Christoph Krey. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import "Setting+CoreDataClass.h"
-
-#define SETTINGS_PROTOCOL @"mqttProtocolLevel"
+#import "MQTTMessage.h"
 
 typedef NS_ENUM(int, ConnectionMode) {
     CONNECTION_MODE_MQTT = 0,
@@ -18,11 +17,13 @@ typedef NS_ENUM(int, ConnectionMode) {
 
 @interface Settings : NSObject
 
-+ (NSError * _Nullable)fromStream:(NSInputStream * _Nonnull)input
-                            inMOC:(NSManagedObjectContext * _Nonnull)context;
 + (NSError * _Nullable)fromDictionary:(NSDictionary * _Nonnull)dictionary
                                 inMOC:(NSManagedObjectContext * _Nonnull)context;
-+ (NSError * _Nullable)waypointsFromStream:(NSInputStream * _Nonnull)input
++ (NSString * _Nonnull)changesFromDictionary:(NSDictionary * _Nonnull)dictionary
+                                       inMOC:(NSManagedObjectContext * _Nonnull)context;
++ (NSString * _Nonnull)changesWaypointsFromDictionary:(NSDictionary * _Nonnull)dictionary
+                                                inMOC:(NSManagedObjectContext * _Nonnull)context;
++ (NSString * _Nonnull)changesSetWaypoints:(NSArray * _Nonnull)waypoints
                                      inMOC:(NSManagedObjectContext * _Nonnull)context;
 + (NSError * _Nullable)waypointsFromDictionary:(NSDictionary * _Nonnull)dictionary
                                          inMOC:(NSManagedObjectContext * _Nonnull)context;
@@ -54,6 +55,8 @@ typedef NS_ENUM(int, ConnectionMode) {
          forKey:(NSString *_Nonnull)key 
           inMOC:(NSManagedObjectContext *_Nonnull)context;
 
++ (NSString * _Nonnull)theIntentAuthKey;
+
 + (NSString * _Nonnull)theHostInMOC:(NSManagedObjectContext * _Nonnull)context;
 + (NSString * _Nonnull)theGeneralTopicInMOC:(NSManagedObjectContext * _Nonnull)context;
 + (NSString * _Nonnull)theWillTopicInMOC:(NSManagedObjectContext * _Nonnull)context;
@@ -67,10 +70,20 @@ typedef NS_ENUM(int, ConnectionMode) {
 + (BOOL)theMqttUsePasswordInMOC:(NSManagedObjectContext * _Nonnull)context;
 + (BOOL)theMqttAuthInMOC:(NSManagedObjectContext * _Nonnull)context;
 + (BOOL)theLockedInMOC:(NSManagedObjectContext * _Nonnull)context;
-+ (NSInteger)theWillQosInMOC:(NSManagedObjectContext * _Nonnull)context;
++ (BOOL)theAllowRemoteLocationInMOC:(NSManagedObjectContext * _Nonnull)context;
++ (BOOL)theAllowRemoteConfigurationInMOC:(NSManagedObjectContext * _Nonnull)context;
++ (BOOL)theallowConfigurationByURIAndConfigFileInMOC:(NSManagedObjectContext * _Nonnull)context;
++ (BOOL)theAllowIntentControlInMOC:(NSManagedObjectContext * _Nonnull)context;
 + (BOOL)theWillRetainFlagInMOC:(NSManagedObjectContext * _Nonnull)context;
 
 + (int)theMaximumHistoryInMOC:(NSManagedObjectContext * _Nonnull)context;
+
++ (ConnectionMode)theModeInMOC:(NSManagedObjectContext * _Nonnull)context;
++ (void)setMode:(ConnectionMode)mode inMOC:(NSManagedObjectContext * _Nonnull)context;
+
++ (MQTTQosLevel)theQosInMOC:(NSManagedObjectContext * _Nonnull)context;
++ (void)setQos:(MQTTQosLevel)qos inMOC:(NSManagedObjectContext * _Nonnull)context;
++ (MQTTQosLevel)theWillQosInMOC:(NSManagedObjectContext * _Nonnull)context;
 
 + (NSString * _Nullable)theOSMTemplate:(NSManagedObjectContext * _Nonnull)context;
 + (void)setOSMTemplate:(NSString * _Nullable)osmTemplate inMOC:(NSManagedObjectContext * _Nonnull)context;

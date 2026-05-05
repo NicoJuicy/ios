@@ -3,7 +3,7 @@
 //  OwnTracks
 //
 //  Created by Christoph Krey on 26.08.19.
-//  Copyright © 2019-2025 OwnTracks. All rights reserved.
+//  Copyright © 2019-2026 OwnTracks. All rights reserved.
 //
 //
 
@@ -48,7 +48,7 @@
                                           timeStyle:NSDateFormatterMediumStyle];
 }
 
-+ (NSArray *)allHistoriesInManagedObjectContext:(NSManagedObjectContext *)context {
++ (NSArray<History *> *)allHistoriesInManagedObjectContext:(NSManagedObjectContext *)context {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"History"];
     request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:YES]];
 

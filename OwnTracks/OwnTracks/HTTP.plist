@@ -24,6 +24,16 @@
 	<integer>1</integer>
 	<key>ranging_preference</key>
 	<false/>
+	<key>cmd_preference</key>
+	<false/>
+	<key>allowremotelocation_preference</key>
+	<true/>
+	<key>allowremoteconfiguration_preference</key>
+	<false/>
+	<key>allowConfigurationByURIAndConfigFile</key>
+	<false/>
+	<key>allowIntentControl</key>
+	<false/>
 	<key>extendeddata_preference</key>
 	<true/>
 	<key>trackerid_preference</key>
@@ -32,8 +42,6 @@
 	<integer>50</integer>
 	<key>days_preference</key>
 	<integer>-1</integer>
-	<key>sub_preference</key>
-	<true/>
 	<key>maxhistory_preference</key>
 	<integer>0</integer>
 	<key>downgrade_preference</key>

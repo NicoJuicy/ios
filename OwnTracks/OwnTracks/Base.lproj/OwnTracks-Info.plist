@@ -66,24 +66,6 @@
 				<string>org.owntracks.otrp</string>
 			</array>
 		</dict>
-		<dict>
-			<key>CFBundleTypeIconFiles</key>
-			<array>
-				<string>OwnTracks-320</string>
-				<string>OwnTracks-29</string>
-				<string>OwnTracks-64</string>
-			</array>
-			<key>CFBundleTypeName</key>
-			<string>OwnTracks CER file</string>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>LSHandlerRank</key>
-			<string>Owner</string>
-			<key>LSItemContentTypes</key>
-			<array>
-				<string>org.owntracks.otre</string>
-			</array>
-		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
@@ -131,7 +113,7 @@
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
-		<true/>
+		<false/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>OwnTracks uses your camera on request to create a Card</string>
@@ -155,7 +137,6 @@ No information of your address book will be uploaded to any server.</string>
 		<string>OwnTracksPointOfInterestIntent</string>
 		<string>OwnTracksSendNowIntent</string>
 		<string>OwnTracksTagIntent</string>
-		<string>org.mqttitude.MQTTitude.sendNow</string>
 	</array>
 	<key>UIAppFonts</key>
 	<array>
@@ -165,7 +146,6 @@ No information of your address book will be uploaded to any server.</string>
 	<array>
 		<string>fetch</string>
 		<string>location</string>
-		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>Launch Screen</string>
@@ -276,34 +256,6 @@ No information of your address book will be uploaded to any server.</string>
 				<string>application/binary</string>
 			</dict>
 		</dict>
-		<dict>
-			<key>UTTypeConformsTo</key>
-			<array>
-				<string>public.text</string>
-				<string>public.content</string>
-			</array>
-			<key>UTTypeDescription</key>
-			<string>OwnTracks CER File</string>
-			<key>UTTypeIconFile</key>
-			<string>OwnTracks-29</string>
-			<key>UTTypeIdentifier</key>
-			<string>org.owntracks.otre</string>
-			<key>UTTypeReferenceURL</key>
-			<string>https://www.owntracks.org</string>
-			<key>UTTypeSize320IconFile</key>
-			<string>OwnTracks-320</string>
-			<key>UTTypeSize64IconFile</key>
-			<string>OwnTracks-64</string>
-			<key>UTTypeTagSpecification</key>
-			<dict>
-				<key>public.filename-extension</key>
-				<array>
-					<string>otre</string>
-				</array>
-				<key>public.mime-type</key>
-				<string>application/binary</string>
-			</dict>
-		</dict>
 	</array>
 	<key>UTImportedTypeDeclarations</key>
 	<array>
@@ -390,34 +342,6 @@ No information of your address book will be uploaded to any server.</string>
 				<key>public.filename-extension</key>
 				<array>
 					<string>otrp</string>
-				</array>
-				<key>public.mime-type</key>
-				<string>application/binary</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>UTTypeConformsTo</key>
-			<array>
-				<string>public.text</string>
-				<string>public.content</string>
-			</array>
-			<key>UTTypeDescription</key>
-			<string>OwnTracks CER File</string>
-			<key>UTTypeIconFile</key>
-			<string>OwnTracks-29</string>
-			<key>UTTypeIdentifier</key>
-			<string>org.owntracks.otre</string>
-			<key>UTTypeReferenceURL</key>
-			<string>https://www.owntracks.org</string>
-			<key>UTTypeSize320IconFile</key>
-			<string>OwnTracks-320</string>
-			<key>UTTypeSize64IconFile</key>
-			<string>OwnTracks-64</string>
-			<key>UTTypeTagSpecification</key>
-			<dict>
-				<key>public.filename-extension</key>
-				<array>
-					<string>otre</string>
 				</array>
 				<key>public.mime-type</key>
 				<string>application/binary</string>
