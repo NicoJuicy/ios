@@ -536,13 +536,13 @@ willPerformHTTPRedirection:(NSHTTPURLResponse *)redirectResponse
                      self.lastErrorCode = [NSError errorWithDomain:@"HTTP Response"
                                                               code:httpResponse.statusCode userInfo:nil];
                      self.state = state_error;
+                     OwnTracksLogInfo("[Connection] %@", self.lastErrorCode);
 
                      if (httpResponse.statusCode >= 400 && httpResponse.statusCode <= 499) {
                          NSString *message = [NSString stringWithFormat:@"Status Code %ld\n%@",
                                               (long)httpResponse.statusCode,
                                               [[NSString alloc] initWithData:request.HTTPBody encoding:NSUTF8StringEncoding]
                                               ];
-                         OwnTracksLogDebug("[Connection] HTTP Response %@", message);
 
                          [self performSelectorOnMainThread:@selector(HTTPerror:)
                                                 withObject:message
