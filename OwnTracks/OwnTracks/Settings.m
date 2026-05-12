@@ -696,7 +696,6 @@ static SettingsDefaults *defaults;
         CLLocationDegrees latDegrees = 0.0;
         NSNumber *lat = waypoint[@"lat"];
         if (lat && ![lat isKindOfClass:[NSNumber class]]) {
-            remove = TRUE;
             OwnTracksLogError("[Settings][setWaypoints] json does not contain valid lat: not processed");
             continue;
         }
@@ -705,28 +704,25 @@ static SettingsDefaults *defaults;
         CLLocationDegrees lonDegrees = 0.0;
         NSNumber *lon = waypoint[@"lon"];
         if (lon && ![lon isKindOfClass:[NSNumber class]]) {
-            remove = TRUE;
             OwnTracksLogError("[Settings][setWaypoints] json does not contain valid lon: not processed");
             continue;
         }
         lonDegrees = lon.doubleValue;
-        
-        CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(latDegrees, lonDegrees);
-        if (!CLLocationCoordinate2DIsValid(coord)) {
-            remove = TRUE;
-            OwnTracksLogError("[Settings][setWaypoints] coord is no valid: not processed");
-            continue;
-        }
 
         CLLocationDistance radDistance = 0.0;
         NSNumber *rad = waypoint[@"rad"];
         if (rad && ![rad isKindOfClass:[NSNumber class]]) {
-            remove = TRUE;
             OwnTracksLogError("[Settings][setWaypoints] json does not contain valid rad: not processed");
             continue;
         }
         radDistance = rad.doubleValue;
-                        
+
+        CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(latDegrees, lonDegrees);
+        if (!CLLocationCoordinate2DIsValid(coord)) {
+            remove = TRUE;
+            OwnTracksLogError("[Settings][setWaypoints] coord is no valid: not processed");
+        }
+
         Friend *friend = [Friend friendWithTopic:[self theGeneralTopicInMOC:context]
                           inManagedObjectContext:context];
                     
