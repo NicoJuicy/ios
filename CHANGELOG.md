@@ -1,8 +1,8 @@
 OwnTracks iOS App Release Notes
 ===================================
 
-## OwnTracks 26.2.2 iOS/ipadOS
-* Release Date 2026-04-30
+## OwnTracks 26.2.3 iOS/ipadOS
+* Release Date 2026-05-15
 
 ### Security
 
