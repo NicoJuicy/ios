@@ -30,7 +30,9 @@ class StatusTVC: UITableViewController, UIDocumentInteractionControllerDelegate 
     @IBOutlet weak var status: UITextView!
     @IBOutlet weak var version: UITextField!
     @IBOutlet weak var coordinates: UITextField!
+    @IBOutlet weak var locationAge: UILabel!
     @IBOutlet weak var pressure: UITextField!
+    @IBOutlet weak var altitude: UILabel!
     @IBOutlet weak var motionActivities: UITextField!
     @IBOutlet weak var trackPoints: UITextField!
     @IBOutlet weak var exportLogsActivity: UIActivityIndicatorView!
@@ -106,6 +108,13 @@ class StatusTVC: UITableViewController, UIDocumentInteractionControllerDelegate 
         let location = LocationManager.sharedInstance().location;
         self.coordinates?.text = Waypoint.clLocationCoordinateText(location);
         
+        let thisMorning = NSCalendar.current.startOfDay(for: Date());
+        if location.timestamp.timeIntervalSince(thisMorning) > 0 {
+            self.locationAge?.text = DateFormatter.localizedString(from: location.timestamp, dateStyle: .none, timeStyle: .long);
+        } else {
+            self.locationAge?.text = DateFormatter.localizedString(from: location.timestamp, dateStyle: .short, timeStyle: .none);
+        }
+    
         let altitudeData = LocationManager.sharedInstance().altitudeData
         if altitudeData != nil {
             let m = Measurement(value: altitudeData!.pressure.doubleValue, unit: UnitPressure.kilopascals);
@@ -116,6 +125,8 @@ class StatusTVC: UITableViewController, UIDocumentInteractionControllerDelegate 
             self.pressure?.text = NSLocalizedString("No pressure available",  comment: "No pressure available");
         }
 
+        self.altitude?.text = Waypoint.clLocationAltitudeText(location);
+        
         self.parameters?.text = "\(connection?.parameters ?? "")";
         
         var ma = "()";

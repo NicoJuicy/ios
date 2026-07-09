@@ -24,11 +24,13 @@ NS_ASSUME_NONNULL_BEGIN
 @property (NS_NONATOMIC_IOSONLY, readonly, copy) NSString * _Nonnull shortCoordinateText;
 + (NSString *)CLLocationAccuracyText:(CLLocation *)location;
 + (NSString *)CLLocationCoordinateText:(CLLocation *)location;
++ (NSString *)CLLocationAltitudeText:(CLLocation *)location;
 
 @property (NS_NONATOMIC_IOSONLY, readonly, copy) NSString * _Nonnull coordinateText;
 @property (NS_NONATOMIC_IOSONLY, readonly, copy) NSString * _Nonnull timestampText;
 @property (NS_NONATOMIC_IOSONLY, readonly, copy) NSString * _Nonnull createdAtText;
 @property (NS_NONATOMIC_IOSONLY, readonly, copy) NSDate * _Nonnull effectiveTimestamp;
+@property (NS_NONATOMIC_IOSONLY, readonly, copy) NSString * _Nonnull altitudeText;
 @property (NS_NONATOMIC_IOSONLY, readonly, copy) NSString * _Nonnull infoText;
 @property (NS_NONATOMIC_IOSONLY, readonly, copy) NSString * _Nonnull triggerText;
 @property (NS_NONATOMIC_IOSONLY, readonly, copy) NSString * _Nonnull monitoringText;

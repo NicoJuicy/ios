@@ -88,6 +88,31 @@
     }
 }
 
++ (NSString *)CLLocationAltitudeText:(CLLocation *)location {
+    if (location != nil) {
+        NSMeasurement *mAlt = [[NSMeasurement alloc] initWithDoubleValue:location.altitude
+                                                                    unit:[NSUnitLength meters]];
+        NSMeasurement *mVac = [[NSMeasurement alloc] initWithDoubleValue:location.verticalAccuracy
+                                                                    unit:[NSUnitLength meters]];
+        NSMeasurementFormatter *mf = [[NSMeasurementFormatter alloc] init];
+        mf.unitOptions = NSMeasurementFormatterUnitOptionsNaturalScale;
+        mf.numberFormatter.maximumFractionDigits = 0;
+
+        return [NSString stringWithFormat:@"%@ (%@)",
+                location.verticalAccuracy > 0.0 ?
+                [NSString stringWithFormat:@"✈︎%@",
+                 [mf stringFromMeasurement:mAlt]] :
+                    @"-",
+                location.verticalAccuracy > 0.0 ?
+                [NSString stringWithFormat:@"±%@",
+                 [mf stringFromMeasurement:mVac]] :
+                    @"-"
+                ];
+    } else {
+        return @"-";
+    }
+}
+
 - (NSString *)coordinateText {
     CLLocation *location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake((self.lat).doubleValue,
                                                                                              (self.lon).doubleValue)
@@ -118,11 +143,18 @@
     return self.tst;
 }
 
+
+- (NSString *)altitudeText {
+    CLLocation *location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake((self.lat).doubleValue,
+                                                                                             (self.lon).doubleValue)
+                                                         altitude:(self.alt).doubleValue
+                                               horizontalAccuracy:(self.acc).doubleValue
+                                                 verticalAccuracy:(self.vac).doubleValue
+                                                        timestamp:self.tst];
+    return [Waypoint CLLocationAltitudeText:location];
+}
+
 - (NSString *)infoText {
-    NSMeasurement *mAlt = [[NSMeasurement alloc] initWithDoubleValue:(self.alt).doubleValue
-                                                                unit:[NSUnitLength meters]];
-    NSMeasurement *mVac = [[NSMeasurement alloc] initWithDoubleValue:(self.vac).doubleValue
-                                                                unit:[NSUnitLength meters]];
     NSMeasurement *mVel = [[NSMeasurement alloc] initWithDoubleValue:(self.vel).doubleValue
                                                                 unit:[NSUnitSpeed kilometersPerHour]];
     NSMeasurement *mCog = [[NSMeasurement alloc] initWithDoubleValue:(self.cog).doubleValue
@@ -132,16 +164,9 @@
     mf.unitOptions = NSMeasurementFormatterUnitOptionsNaturalScale;
     mf.numberFormatter.maximumFractionDigits = 0;
 
-    return [NSString stringWithFormat:@"%@ (%@) %@ %@",
-            (self.vac).doubleValue > 0.0 ?
-            [NSString stringWithFormat:@"✈︎%@",
-             [mf stringFromMeasurement:mAlt]] :
-                @"-",
-            (self.vac).doubleValue > 0.0 ?
-            [NSString stringWithFormat:@"±%@",
-             [mf stringFromMeasurement:mVac]] :
-                @"-",
-            (self.vel).doubleValue >= 0.0 ? 
+    return [NSString stringWithFormat:@"%@ %@ %@",
+            self.altitudeText,
+            (self.vel).doubleValue >= 0.0 ?
             [mf stringFromMeasurement:mVel] :
                 @"-",
             (self.cog).doubleValue >= 0.0 ?

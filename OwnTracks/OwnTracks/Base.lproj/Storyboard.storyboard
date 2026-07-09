@@ -3339,13 +3339,28 @@
                                                         <fragment content="Placeholder. Don't translate."/>
                                                     </attributedString>
                                                 </textField>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="location age" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZNv-LD-4RO">
+                                                    <rect key="frame" x="20" y="30" width="335" height="14"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="14" id="JHa-VB-iOg"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="italicSystem" pointSize="10"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <attributedString key="userComments">
+                                                        <fragment content="Don't translate, technical term"/>
+                                                    </attributedString>
+                                                </label>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="RfS-uy-gRR" firstAttribute="centerY" secondItem="Zwt-Rr-wqY" secondAttribute="centerY" id="CeA-4N-Uht"/>
                                                 <constraint firstItem="Ym9-bx-HAr" firstAttribute="centerY" secondItem="Zwt-Rr-wqY" secondAttribute="centerY" id="CvY-cT-54w"/>
                                                 <constraint firstItem="Ym9-bx-HAr" firstAttribute="leading" secondItem="Zwt-Rr-wqY" secondAttribute="leading" constant="20" symbolic="YES" id="DTS-uV-j9f"/>
+                                                <constraint firstItem="ZNv-LD-4RO" firstAttribute="leading" secondItem="Zwt-Rr-wqY" secondAttribute="leading" constant="20" symbolic="YES" id="LBh-M0-3fl"/>
                                                 <constraint firstItem="RfS-uy-gRR" firstAttribute="leading" secondItem="Ym9-bx-HAr" secondAttribute="trailing" constant="8" symbolic="YES" id="NBz-Vr-oS5"/>
                                                 <constraint firstAttribute="trailing" secondItem="RfS-uy-gRR" secondAttribute="trailing" constant="20" symbolic="YES" id="WbL-TB-D7A"/>
+                                                <constraint firstAttribute="bottom" secondItem="ZNv-LD-4RO" secondAttribute="bottom" id="XuT-RS-scw"/>
+                                                <constraint firstAttribute="trailing" secondItem="ZNv-LD-4RO" secondAttribute="trailing" constant="20" symbolic="YES" id="trs-EV-B71"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -3376,10 +3391,25 @@
                                                         <fragment content="Placeholder. Don't translate."/>
                                                     </attributedString>
                                                 </textField>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="altitude" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Oso-8Y-If5">
+                                                    <rect key="frame" x="20" y="30" width="335" height="14"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="14" id="9y4-lz-yOX"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="italicSystem" pointSize="10"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <attributedString key="userComments">
+                                                        <fragment content="Don't translate, technical term"/>
+                                                    </attributedString>
+                                                </label>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="MLp-t9-oef" firstAttribute="centerY" secondItem="Nvz-as-7cY" secondAttribute="centerY" id="8Tb-g3-DNX"/>
+                                                <constraint firstAttribute="bottom" secondItem="Oso-8Y-If5" secondAttribute="bottom" id="UFJ-hs-4d5"/>
+                                                <constraint firstItem="Oso-8Y-If5" firstAttribute="leading" secondItem="Nvz-as-7cY" secondAttribute="leading" constant="20" symbolic="YES" id="Zgt-KA-NLm"/>
                                                 <constraint firstItem="7pX-Ha-So4" firstAttribute="leading" secondItem="MLp-t9-oef" secondAttribute="trailing" constant="8" symbolic="YES" id="eKz-C0-wQo"/>
+                                                <constraint firstAttribute="trailing" secondItem="Oso-8Y-If5" secondAttribute="trailing" constant="20" symbolic="YES" id="eX9-PZ-407"/>
                                                 <constraint firstItem="MLp-t9-oef" firstAttribute="leading" secondItem="Nvz-as-7cY" secondAttribute="leading" constant="20" symbolic="YES" id="fvX-eQ-Ace"/>
                                                 <constraint firstAttribute="trailing" secondItem="7pX-Ha-So4" secondAttribute="trailing" constant="20" symbolic="YES" id="mDk-vk-h0G"/>
                                                 <constraint firstItem="7pX-Ha-So4" firstAttribute="centerY" secondItem="Nvz-as-7cY" secondAttribute="centerY" id="uWN-BI-YF3"/>
@@ -3493,10 +3523,12 @@
                     <navigationItem key="navigationItem" title="Status Info" id="hFq-9F-EAc"/>
                     <size key="freeformSize" width="375" height="1200"/>
                     <connections>
+                        <outlet property="altitude" destination="Oso-8Y-If5" id="kS3-5N-wiw"/>
                         <outlet property="coordinates" destination="RfS-uy-gRR" id="Gtr-hu-z6U"/>
                         <outlet property="exportLogsActivity" destination="YK3-2R-9wa" id="PmN-yr-5Yv"/>
                         <outlet property="exportTrackActivity" destination="5WX-bu-cLG" id="Z8k-oX-Kfx"/>
                         <outlet property="exportTrackButton" destination="Cex-Jr-Uiu" id="rqc-p7-dz9"/>
+                        <outlet property="locationAge" destination="ZNv-LD-4RO" id="T1J-x0-b2K"/>
                         <outlet property="motionActivities" destination="XWR-N3-qLa" id="niq-M1-Tag"/>
                         <outlet property="parameters" destination="HQZ-wy-aC5" id="E4r-kc-73d"/>
                         <outlet property="pressure" destination="7pX-Ha-So4" id="6eZ-nX-PgR"/>
