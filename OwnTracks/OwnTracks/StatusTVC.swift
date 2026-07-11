@@ -109,12 +109,17 @@ class StatusTVC: UITableViewController, UIDocumentInteractionControllerDelegate 
         self.coordinates?.text = Waypoint.clLocationCoordinateText(location);
         
         let thisMorning = NSCalendar.current.startOfDay(for: Date());
+        let relativeFormatter = RelativeDateTimeFormatter()
+        relativeFormatter.unitsStyle = .full;
+        relativeFormatter.dateTimeStyle = .numeric;
+        let relative = " (" + RelativeDateTimeFormatter().localizedString(for: location.timestamp, relativeTo: Date.now.addingTimeInterval(1)) + ")";
+        
         if location.timestamp.timeIntervalSince(thisMorning) > 0 {
-            self.locationAge?.text = DateFormatter.localizedString(from: location.timestamp, dateStyle: .none, timeStyle: .long);
+            self.locationAge?.text = DateFormatter.localizedString(from: location.timestamp, dateStyle: .none, timeStyle: .medium) + relative;
         } else {
-            self.locationAge?.text = DateFormatter.localizedString(from: location.timestamp, dateStyle: .short, timeStyle: .none);
+            self.locationAge?.text = DateFormatter.localizedString(from: location.timestamp, dateStyle: .short, timeStyle: .none) + relative;
         }
-    
+        
         let altitudeData = LocationManager.sharedInstance().altitudeData
         if altitudeData != nil {
             let m = Measurement(value: altitudeData!.pressure.doubleValue, unit: UnitPressure.kilopascals);
