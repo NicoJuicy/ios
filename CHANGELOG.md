@@ -25,7 +25,7 @@ at Texas A&M for working with us on this.
 ### New features
 
 - New **Remote Control** preferences screen showing the intent auth key (with a copy-to-clipboard function) for use with shortcuts. The `Intent Auth Key` is created once when the app is installed.
-- A new setting `remoteConfguration` controls (defaults to `off`)
+- A new setting `remoteConfiguration` controls (defaults to `off`)
 - Config import screen now shows a structured diff of what is changing
 
 ### Under the hood
