@@ -20,10 +20,9 @@
 #import "NSNumber+decimals.h"
 #import "Validation.h"
 
-#import "OwnTracksSendNowIntent.h"
-#import "OwnTracksChangeMonitoringIntent.h"
-#import "OwnTracksTagIntent.h"
-#import "OwnTracksPointOfInterestIntent.h"
+//#import "OwnTracksChangeMonitoringIntent.h"
+//#import "OwnTracksTagIntent.h"
+//#import "OwnTracksPointOfInterestIntent.h"
 #import "OwnTracks-Swift.h"
 
 @interface OwnTracksAppDelegate()

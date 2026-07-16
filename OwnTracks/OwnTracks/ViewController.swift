@@ -260,7 +260,7 @@ class ViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsContr
     func updateAccuracyButton() {
         let location = mapView.userLocation.location;
         if location != nil {
-            accuracyButton.title = Waypoint.clLocationAccuracyText(location!);
+            accuracyButton.title = OwnTracksFormatter.accuracy(from: location!.horizontalAccuracy);
         } else {
             accuracyButton.title = "-";
         }

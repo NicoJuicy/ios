@@ -278,7 +278,7 @@
     if (waypoint) {
         return [NSDateFormatter localizedStringFromDate:waypoint.tst
                                               dateStyle:NSDateFormatterShortStyle
-                                              timeStyle:NSDateFormatterShortStyle];
+                                              timeStyle:NSDateFormatterMediumStyle];
     } else {
         return @"";
     }

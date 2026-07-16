@@ -106,7 +106,7 @@ class StatusTVC: UITableViewController, UIDocumentInteractionControllerDelegate 
                     """);
         
         let location = LocationManager.sharedInstance().location;
-        self.coordinates?.text = Waypoint.clLocationCoordinateText(location);
+        self.coordinates?.text = OwnTracksFormatter.coordinate(from: location);
         
         let thisMorning = NSCalendar.current.startOfDay(for: Date());
         let relativeFormatter = RelativeDateTimeFormatter()
@@ -122,16 +122,12 @@ class StatusTVC: UITableViewController, UIDocumentInteractionControllerDelegate 
         
         let altitudeData = LocationManager.sharedInstance().altitudeData
         if altitudeData != nil {
-            let m = Measurement(value: altitudeData!.pressure.doubleValue, unit: UnitPressure.kilopascals);
-            let mf = MeasurementFormatter();
-            mf.numberFormatter.maximumFractionDigits = 3;
-            self.pressure?.text = mf.string(from: m);
+            self.pressure?.text = OwnTracksFormatter.pressure(from: altitudeData!.pressure.doubleValue);
         } else {
             self.pressure?.text = NSLocalizedString("No pressure available",  comment: "No pressure available");
         }
 
-        self.altitude?.text = Waypoint.clLocationAltitudeText(location);
-        
+        self.altitude?.text = OwnTracksFormatter.altitude(from: location);
         self.parameters?.text = "\(connection?.parameters ?? "")";
         
         var ma = "()";

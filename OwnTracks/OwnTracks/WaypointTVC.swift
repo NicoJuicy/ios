@@ -83,10 +83,9 @@ class WaypointTVC: UITableViewController {
     
     private func setup() {
         if waypoint != nil {
-            UIcoordinate.text = waypoint!.coordinateText;
-            
+            UIcoordinate.text = OwnTracksFormatter.coordinate(from: waypoint!.location);
             let distance = waypoint!.getDistanceFrom(LocationManager.sharedInstance().location);
-            UIdistance.text = Waypoint.distanceText(distance);
+            UIdistance.text = OwnTracksFormatter.distance(from: distance);
             
             UItrigger.text = waypoint!.triggerText;
             UImonitoring.text = waypoint!.monitoringText;
@@ -123,19 +122,19 @@ class WaypointTVC: UITableViewController {
             }
              
             if waypoint!.pressure != nil {
-                let m = Measurement(value: waypoint!.pressure!.doubleValue, unit: UnitPressure.kilopascals);
-                let mf = MeasurementFormatter();
-                mf.unitOptions = .naturalScale;
-                mf.numberFormatter.maximumFractionDigits = 3;
-                UIpressure.text = "\(mf.string(from: m))";
+                UIpressure.text = OwnTracksFormatter.pressure(from: waypoint!.pressure!.doubleValue);
             } else {
                 UIpressure.text = NSLocalizedString("No pressure available",
                                                     comment: "No pressure available");
             }
             
-            UItimestamp.text = waypoint!.timestampText;
-            UIcreatedAt.text = waypoint!.createdAtText;
-            UIinfo.text = waypoint!.infoText;
+            UItimestamp.text = OwnTracksFormatter.timestamp(from: waypoint!.tst);
+            UIcreatedAt.text = OwnTracksFormatter.timestamp(from: waypoint!.createdAt); 
+            let location = waypoint!.location;
+            UIinfo.text =
+                OwnTracksFormatter.altitude(from: location) + " " +
+                OwnTracksFormatter.speed(from: location) + " " +
+                OwnTracksFormatter.cog(from: location);
             UIbatterystatus.text = waypoint!.batteryStatusText;
             UIbatterylevel.text = waypoint!.batteryLevelText;
             UItopic.text = waypoint!.belongsTo?.topic;
@@ -168,8 +167,8 @@ class WaypointTVC: UITableViewController {
         if waypoint == nil {
             
             if indexPath.section == 0 && indexPath.row == 0 {
-                let locationString = waypoint!.shortCoordinateText;
-                UIPasteboard.general.string = locationString;
+                let coordinate = waypoint!.coordinate;
+                UIPasteboard.general.string = ("\(coordinate.latitude),\(coordinate.longitude)");
                 NavigationController.alert(title: NSLocalizedString("Clipboard",
                                                                     comment: "Clipboard"),
                                            message: NSLocalizedString("Location copied to clipboard",

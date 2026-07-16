@@ -19,8 +19,6 @@ NS_ASSUME_NONNULL_BEGIN
                  inMOC:(nonnull NSManagedObjectContext *)context
                maximum:(int)maximum;
 
-- (NSString *)timestampText;
-
 + (NSArray<History *> *)allHistoriesInManagedObjectContext:(NSManagedObjectContext *)context;
 
 @end

@@ -42,12 +42,6 @@
 
 }
 
-- (NSString *)timestampText {
-    return [NSDateFormatter localizedStringFromDate:self.timestamp
-                                          dateStyle:NSDateFormatterShortStyle
-                                          timeStyle:NSDateFormatterMediumStyle];
-}
-
 + (NSArray<History *> *)allHistoriesInManagedObjectContext:(NSManagedObjectContext *)context {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"History"];
     request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:YES]];

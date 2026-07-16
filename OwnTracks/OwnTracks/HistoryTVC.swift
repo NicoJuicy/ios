@@ -78,7 +78,7 @@ class HistoryTVC: OwnTracksEditFetchTVC {
         let history = frc?.object(at: indexPath);
         if history != nil {
             cell.textLabel?.text = "\(history!.seen?.boolValue ?? true ? " " : "*")\(history!.text ?? "no text")";
-            cell.detailTextLabel?.text = history!.timestampText();
+            cell.detailTextLabel?.text = OwnTracksFormatter.timestamp(from: history!.timestamp);
         } else {
             cell.textLabel?.text = "no history";
         }
