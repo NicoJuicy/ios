@@ -164,9 +164,9 @@ class WaypointTVC: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-        if waypoint == nil {
-            
-            if indexPath.section == 0 && indexPath.row == 0 {
+        if waypoint != nil {
+            let tableViewCell = tableView.cellForRow(at: indexPath);
+            if tableViewCell?.tag == 81 {
                 let coordinate = waypoint!.coordinate;
                 UIPasteboard.general.string = ("\(coordinate.latitude),\(coordinate.longitude)");
                 NavigationController.alert(title: NSLocalizedString("Clipboard",
@@ -174,7 +174,7 @@ class WaypointTVC: UITableViewController {
                                            message: NSLocalizedString("Location copied to clipboard",
                                                                       comment:"Location copied to clipboard"),
                                            dismissAfter: 1.0);
-            } else if indexPath.section == 1 && indexPath.row == 6 {
+            } else if tableViewCell?.tag == 82 {
                 UIPasteboard.general.string = waypoint!.belongsTo?.topic;
                 NavigationController.alert(title: NSLocalizedString("Clipboard",
                                                                     comment: "Clipboard"),
