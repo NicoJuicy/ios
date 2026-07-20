@@ -22,47 +22,49 @@
 - (id)handlerForIntent:(INIntent *)intent {
     // This is the default implementation.  If you want different objects to handle different intents,
     // you can override this and return the handler you want for that particular intent.
-    
     return self;
 }
 
 - (void)handleSendNow:(nonnull OwnTracksSendNowIntent *)intent
            completion:(nonnull void (^)(OwnTracksSendNowIntentResponse * _Nonnull))completion {
-    NSUserDefaults *shared = [[NSUserDefaults alloc] initWithSuiteName:@"group.org.owntracks.Owntracks"];
-    [shared setObject:@{@"sendNow": [NSDate date] , @"intentAuthKey": intent.IntentAuthKey} forKey:@"sendNowWithAuthKey"];
-    [shared synchronize];
-    
-    OwnTracksSendNowIntentResponse *response = [[OwnTracksSendNowIntentResponse alloc] initWithCode:OwnTracksSendNowIntentResponseCodeSuccess userActivity:nil];
+    OwnTracksSendNowIntentResponse *response = [[OwnTracksSendNowIntentResponse alloc] initWithCode:OwnTracksSendNowIntentResponseCodeFailure userActivity:nil];
+
+    if (intent.IntentAuthKey != nil) {
+        NSUserDefaults *shared = [[NSUserDefaults alloc] initWithSuiteName:@"group.org.owntracks.Owntracks"];
+        [shared setObject:@{@"sendNow": [NSDate date] , @"intentAuthKey": intent.IntentAuthKey} forKey:@"sendNowWithAuthKey"];
+        [shared synchronize];
+        response = [[OwnTracksSendNowIntentResponse alloc] initWithCode:OwnTracksSendNowIntentResponseCodeSuccess userActivity:nil];
+    }
     completion(response);
 }
 
 - (void)handleChangeMonitoring:(nonnull OwnTracksChangeMonitoringIntent *)intent
                     completion:(nonnull void (^)(OwnTracksChangeMonitoringIntentResponse * _Nonnull))completion {
-    NSUserDefaults *shared = [[NSUserDefaults alloc] initWithSuiteName:@"group.org.owntracks.Owntracks"];
-     NSInteger monitoring = [shared integerForKey:@"monitoring"];
-     switch (intent.monitoring) {
-         case OwnTracksEnumQuiet:
-             monitoring = -1;
-             break;
-         case OwnTracksEnumManual:
-             monitoring = 0;
-             break;
-         case OwnTracksEnumSignificant:
-             monitoring = 1;
-             break;
-         case OwnTracksEnumMove:
-             monitoring = 2;
-             break;
-         default:
-             break;
-     }
-    [shared setObject:@{@"monitoring": @(monitoring), @"intentAuthKey": intent.IntentAuthKey} forKey:@"monitoringWithAuthKey"];
-
-     [shared synchronize];
-
-     OwnTracksChangeMonitoringIntentResponse *response = [[OwnTracksChangeMonitoringIntentResponse alloc] initWithCode:OwnTracksChangeMonitoringIntentResponseCodeSuccess userActivity:nil];
-     completion(response);
-
+    OwnTracksChangeMonitoringIntentResponse *response = [[OwnTracksChangeMonitoringIntentResponse alloc] initWithCode:OwnTracksChangeMonitoringIntentResponseCodeFailure userActivity:nil];
+    if (intent.IntentAuthKey != nil) {
+        NSUserDefaults *shared = [[NSUserDefaults alloc] initWithSuiteName:@"group.org.owntracks.Owntracks"];
+        NSInteger monitoring = [shared integerForKey:@"monitoring"];
+        [shared setObject:@{@"monitoring": @(monitoring), @"intentAuthKey": intent.IntentAuthKey} forKey:@"monitoringWithAuthKey"];
+        switch (intent.monitoring) {
+            case OwnTracksEnumQuiet:
+                monitoring = -1;
+                break;
+            case OwnTracksEnumManual:
+                monitoring = 0;
+                break;
+            case OwnTracksEnumSignificant:
+                monitoring = 1;
+                break;
+            case OwnTracksEnumMove:
+                monitoring = 2;
+                break;
+            default:
+                break;
+        }
+        [shared synchronize];
+        response = [[OwnTracksChangeMonitoringIntentResponse alloc] initWithCode:OwnTracksChangeMonitoringIntentResponseCodeSuccess userActivity:nil];
+    }
+    completion(response);
 }
 
 - (void)resolveMonitoringForChangeMonitoring:(nonnull OwnTracksChangeMonitoringIntent *)intent
@@ -81,11 +83,13 @@
 
 - (void)handleTag:(OwnTracksTagIntent *)intent
        completion:(void (^)(OwnTracksTagIntentResponse * _Nonnull))completion {
-    NSUserDefaults *shared = [[NSUserDefaults alloc] initWithSuiteName:@"group.org.owntracks.Owntracks"];
-    [shared setObject:@{@"tag": intent.tag, @"intentAuthKey": intent.IntentAuthKey} forKey:@"tagWithAuthKey"];
-    [shared synchronize];
-    
-    OwnTracksTagIntentResponse *response = [[OwnTracksTagIntentResponse alloc] initWithCode:OwnTracksTagIntentResponseCodeSuccess userActivity:nil];
+    OwnTracksTagIntentResponse *response = [[OwnTracksTagIntentResponse alloc] initWithCode:OwnTracksTagIntentResponseCodeFailure userActivity:nil];
+    if (intent.IntentAuthKey != nil) {
+        NSUserDefaults *shared = [[NSUserDefaults alloc] initWithSuiteName:@"group.org.owntracks.Owntracks"];
+        [shared setObject:@{@"tag": intent.tag, @"intentAuthKey": intent.IntentAuthKey} forKey:@"tagWithAuthKey"];
+        [shared synchronize];
+        response = [[OwnTracksTagIntentResponse alloc] initWithCode:OwnTracksTagIntentResponseCodeSuccess userActivity:nil];
+    }
     completion(response);
 }
 
@@ -95,11 +99,13 @@
 }
 
 - (void)handlePointOfInterest:(OwnTracksPointOfInterestIntent *)intent completion:(void (^)(OwnTracksPointOfInterestIntentResponse * _Nonnull))completion {
-    NSUserDefaults *shared = [[NSUserDefaults alloc] initWithSuiteName:@"group.org.owntracks.Owntracks"];
-    [shared setObject:@{@"poi": intent.name, @"intentAuthKey": intent.IntentAuthKey} forKey:@"poiWithAuthKey"];
-    [shared synchronize];
-
-    OwnTracksPointOfInterestIntentResponse *response = [[OwnTracksPointOfInterestIntentResponse alloc] initWithCode:OwnTracksPointOfInterestIntentResponseCodeSuccess userActivity:nil];
+    OwnTracksPointOfInterestIntentResponse *response = [[OwnTracksPointOfInterestIntentResponse alloc] initWithCode:OwnTracksPointOfInterestIntentResponseCodeFailure userActivity:nil];
+    if (intent.IntentAuthKey != nil) {
+        NSUserDefaults *shared = [[NSUserDefaults alloc] initWithSuiteName:@"group.org.owntracks.Owntracks"];
+        [shared setObject:@{@"poi": intent.name, @"intentAuthKey": intent.IntentAuthKey} forKey:@"poiWithAuthKey"];
+        [shared synchronize];
+        response = [[OwnTracksPointOfInterestIntentResponse alloc] initWithCode:OwnTracksPointOfInterestIntentResponseCodeSuccess userActivity:nil];
+    }
     completion(response);
 }
 

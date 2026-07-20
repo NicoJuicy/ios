@@ -4,10 +4,11 @@ OwnTracks iOS App Release Notes
 ## OwnTracks 26.3.0 iOS/ipadOS
 * Release Date 2026-07-09
 
-### UI enhancements
+### UI enhancements and fixes
 
 - [NEW] Status info page enhancements #899
 - [NEW] date and number formatting according to system settings (Region, Language, Number Format, Date Format, Measurement System) #901
+- [FIX] avoid crash when using intents w/o auth keys
 
 ## OwnTracks 26.2.3 iOS/ipadOS
 * Release Date 2026-05-15
