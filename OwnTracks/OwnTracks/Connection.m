@@ -79,7 +79,7 @@
     if (sodium_init() == -1) {
         OwnTracksLogError("[Connection] sodium_init failed");
     } else {
-        OwnTracksLogInfo("[Connection] sodium_init succeeded");
+        OwnTracksLogDefault("[Connection] sodium_init succeeded");
     }
 
     self.state = state_starting;
@@ -165,7 +165,7 @@
      withClientId:(NSString *)clientId
 allowUntrustedCertificates:(BOOL)allowUntrustedCertificates
      certificates:(NSArray *)certificates {
-    OwnTracksLogInfo("[Connection] %@ connectTo: %@:%@@%@:%ld v%d %@ %@ (%ld) c%d / %@ %@ q%ld r%d as %@ %d %@",
+    OwnTracksLogDefault("[Connection] %@ connectTo: %@:%@@%@:%ld v%d %{public}@ %{public}@ (%ld) c%d / %@ %@ q%ld r%d as %@ %d %@",
                  self.clientId,
                  auth ? user : @"",
                  auth ? @"<passwd>" : @"",
@@ -229,7 +229,7 @@ allowUntrustedCertificates:(BOOL)allowUntrustedCertificates
 }
 
 - (MQTTSession *)newMQTTSession:(BOOL)force {
-    OwnTracksLogInfo("[Connection] newMQTTSession");
+    OwnTracksLogDefault("[Connection] newMQTTSession");
     MQTTSession *session;
     MQTTTransport *mqttTransport;
 
@@ -341,7 +341,7 @@ willPerformHTTPRedirection:(NSHTTPURLResponse *)redirectResponse
         topicAlias:(NSNumber *)topicAlias
                qos:(MQTTQosLevel)qos
             retain:(BOOL)retainFlag {
-    OwnTracksLogDebug("[Connection] sendData(%ld):%@ %@ q%d r%d",
+    OwnTracksLogDefault("[Connection] sendData(%ld):%@ %@ q%d r%d",
               data.length,
               topic,
               [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding],
@@ -505,9 +505,10 @@ willPerformHTTPRedirection:(NSHTTPURLResponse *)redirectResponse
                          }
                          
                          NSData *incomingData = data;
-                         OwnTracksLogDebug("[Connection] HTTP %ld incomingData %@",
-                                   (long)httpResponse.statusCode,
-                                   [[NSString alloc] initWithData:incomingData encoding:NSUTF8StringEncoding]);
+                         OwnTracksLogDebug("[Connection] HTTP %ld incomingData(%lu): %@",
+                                           (long)httpResponse.statusCode,
+                                           (unsigned long)incomingData.length,
+                                           [[NSString alloc] initWithData:incomingData encoding:NSUTF8StringEncoding]);
                          if (self.key && self.key.length) {
                              incomingData = [self decrypt:incomingData];
                          }
@@ -536,7 +537,7 @@ willPerformHTTPRedirection:(NSHTTPURLResponse *)redirectResponse
                      self.lastErrorCode = [NSError errorWithDomain:@"HTTP Response"
                                                               code:httpResponse.statusCode userInfo:nil];
                      self.state = state_error;
-                     OwnTracksLogInfo("[Connection] %@", self.lastErrorCode);
+                     OwnTracksLogDefault("[Connection] %@", self.lastErrorCode);
 
                      if (httpResponse.statusCode >= 400 && httpResponse.statusCode <= 499) {
                          NSString *message = [NSString stringWithFormat:@"Status Code %ld\n%@",
@@ -604,7 +605,7 @@ willPerformHTTPRedirection:(NSHTTPURLResponse *)redirectResponse
 }
 
 - (void)disconnect {
-    OwnTracksLogInfo("[Connection] disconnect");
+    OwnTracksLogDefault("[Connection] disconnect");
     if (!self.url) {
         self.intendedDisconnect = TRUE;
         self.state = state_closing;
@@ -624,7 +625,7 @@ willPerformHTTPRedirection:(NSHTTPURLResponse *)redirectResponse
 }
 
 - (void)reset {
-    OwnTracksLogInfo("[Connection] reset");
+    OwnTracksLogDefault("[Connection] reset");
     [self performSelectorOnMainThread:@selector(resetQueue)
                            withObject:nil
                         waitUntilDone:TRUE];
@@ -650,7 +651,7 @@ willPerformHTTPRedirection:(NSHTTPURLResponse *)redirectResponse
 
 - (void)connected:(MQTTSession *)session sessionPresent:(BOOL)sessionPresent {
 
-    OwnTracksLogInfo("[Connection] connected sessionPresent %d",
+    OwnTracksLogDefault("[Connection] connected sessionPresent %d",
               sessionPresent);
 
     self.lastErrorCode = nil;
@@ -686,7 +687,7 @@ willPerformHTTPRedirection:(NSHTTPURLResponse *)redirectResponse
 }
 
 - (void)handleEvent:(MQTTSession *)session event:(MQTTSessionEvent)eventCode error:(NSError *)error {
-    OwnTracksLogInfo("[Connection] %@ MQTT eventCode: (%ld) %@",
+    OwnTracksLogDefault("[Connection] %@ MQTT eventCode: (%ld) %@",
                  @{@(MQTTSessionEventConnected): @"connected",
                    @(MQTTSessionEventConnectionRefused): @"connection refused",
                    @(MQTTSessionEventConnectionClosed): @"connection closed",
@@ -779,7 +780,7 @@ willPerformHTTPRedirection:(NSHTTPURLResponse *)redirectResponse
            correlationData:(NSData *)correlationData
             userProperties:(NSArray<NSDictionary<NSString *,NSString *> *> *)userProperties
                contentType:(NSString *)contentType {
-    OwnTracksLogDebug("[Connection] messageDelivered mid=%u", msgID);
+    OwnTracksLogDefault("[Connection] messageDelivered mid=%u", msgID);
     [self.delegate messageDelivered:self msgID:msgID];
 }
 
@@ -802,9 +803,9 @@ willPerformHTTPRedirection:(NSHTTPURLResponse *)redirectResponse
         data = [self decrypt:data];
     }
 
-#define LEN2PRINT 2048
+#define LEN2PRINT 128
     NSString *dataString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    OwnTracksLogDebug("[Connection] received topic=%@ dataString(%lu)=%@",
+    OwnTracksLogDefault("[Connection] received topic=%@ dataString(%lu)=%@",
               topic,
               (unsigned long)dataString.length,
               dataString.length <= LEN2PRINT ?
@@ -840,7 +841,7 @@ willPerformHTTPRedirection:(NSHTTPURLResponse *)redirectResponse
             // reset cleanSession flag which might have forced to TRUE
             self.session.cleanSessionFlag = self.clean;
         } else {
-            OwnTracksLogInfo("[Connection] not starting (%ld), can't connect", (long)self.state);
+            OwnTracksLogDefault("[Connection] not starting (%ld), can't connect", (long)self.state);
         }
     }
 }
@@ -864,7 +865,7 @@ willPerformHTTPRedirection:(NSHTTPURLResponse *)redirectResponse
 
 - (void)setState:(NSInteger)state {
     _state = state;
-    OwnTracksLogInfo("[Connection] state %@ (%ld)",
+    OwnTracksLogDefault("[Connection] state %@ (%ld)",
                  @{@(state_starting): @"starting",
                    @(state_connecting): @"connecting",
                    @(state_error): @"error",
@@ -877,7 +878,7 @@ willPerformHTTPRedirection:(NSHTTPURLResponse *)redirectResponse
 }
 
 - (void)reconnect {
-    OwnTracksLogInfo("[Connection] reconnect");
+    OwnTracksLogDefault("[Connection] reconnect");
 
     if (self.reconnectTimer) {
         if (self.reconnectTimer.isValid) {
@@ -900,7 +901,7 @@ willPerformHTTPRedirection:(NSHTTPURLResponse *)redirectResponse
 }
 
 - (void)connectToLast {
-    OwnTracksLogInfo("[Connection] connectToLast");
+    OwnTracksLogDefault("[Connection] connectToLast");
     
     self.reconnectTime = RECONNECT_TIMER;
     
@@ -908,7 +909,7 @@ willPerformHTTPRedirection:(NSHTTPURLResponse *)redirectResponse
 }
 
 - (void)startReconnectTimer:(NSRunLoop *)runLoop {
-    OwnTracksLogInfo("[Connection] set reconnectTimer %f", self.reconnectTime);
+    OwnTracksLogDefault("[Connection] set reconnectTimer %f", self.reconnectTime);
     self.reconnectTimer = [NSTimer timerWithTimeInterval:self.reconnectTime
                                                   target:self
                                                 selector:@selector(reconnect)

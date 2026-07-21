@@ -109,10 +109,10 @@
 - (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     
-    OwnTracksLogInfo("[OwnTracksAppDelegate] OwnTracks starting %@/%@ %@",
-              [NSBundle mainBundle].infoDictionary[@"CFBundleVersion"],
-              [NSLocale currentLocale].localeIdentifier,
-              launchOptions);
+    OwnTracksLogDefault("[OwnTracksAppDelegate] OwnTracks starting %@/%@ %@",
+                        [NSBundle mainBundle].infoDictionary[@"CFBundleVersion"],
+                        [NSLocale currentLocale].localeIdentifier,
+                        launchOptions);
     
     [CoreData.sharedInstance sync:CoreData.sharedInstance.mainMOC];
     
@@ -139,8 +139,8 @@
                             waitUntilDone:TRUE];
         [self scheduleRefreshTask];
     }];
-    OwnTracksLogInfo("[OwnTracksAppDelegate] registerForTaskWithIdentifier %@ %d",
-                 TASK_IDENTIFIER, success);
+    OwnTracksLogDefault("[OwnTracksAppDelegate] registerForTaskWithIdentifier %@ %d",
+                        TASK_IDENTIFIER, success);
     
     [self scheduleRefreshTask];
     self.backgroundTask = UIBackgroundTaskInvalid;
@@ -148,7 +148,7 @@
     UIBackgroundRefreshStatus status = [UIApplication sharedApplication].backgroundRefreshStatus;
     switch (status) {
         case UIBackgroundRefreshStatusAvailable:
-            OwnTracksLogInfo("[OwnTracksAppDelegate] UIBackgroundRefreshStatusAvailable");
+            OwnTracksLogDefault("[OwnTracksAppDelegate] UIBackgroundRefreshStatusAvailable");
             break;
         case UIBackgroundRefreshStatusDenied:
             OwnTracksLogDefault("[OwnTracksAppDelegate] UIBackgroundRefreshStatusDenied");
@@ -167,7 +167,8 @@
     UNAuthorizationOptionBadge;
     [center requestAuthorizationWithOptions:options
                           completionHandler:^(BOOL granted, NSError * _Nullable error) {
-        OwnTracksLogInfo("[OwnTracksAppDelegate] UNUserNotificationCenter requestAuthorizationWithOptions granted:%d error:%@", granted, error);
+        OwnTracksLogDefault("[OwnTracksAppDelegate] UNUserNotificationCenter requestAuthorizationWithOptions granted:%d error:%@",
+                            granted, error);
     }];
     center.delegate = self;
         
@@ -225,11 +226,11 @@
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
-    OwnTracksLogInfo("[OwnTracksAppDelegate] applicationWillResignActive");
+    OwnTracksLogDefault("[OwnTracksAppDelegate] applicationWillResignActive");
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-    OwnTracksLogInfo("[OwnTracksAppDelegate] applicationDidEnterBackground");
+    OwnTracksLogDefault("[OwnTracksAppDelegate] applicationDidEnterBackground");
     [self background];
     if ([LocationManager sharedInstance].monitoring != LocationMonitoringMove) {
         [self.connection disconnect];
@@ -238,7 +239,7 @@
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
-    OwnTracksLogInfo("[OwnTracksAppDelegate] applicationWillTerminate");
+    OwnTracksLogDefault("[OwnTracksAppDelegate] applicationWillTerminate");
     [self background];
     [self.connection disconnect];
     
@@ -266,7 +267,7 @@
 -(BOOL)application:(UIApplication *)app
            openURL:(NSURL *)url
            options:(NSDictionary<NSString *,id> *)options {
-    OwnTracksLogInfo("[OwnTracksAppDelegate] openURL %@ options %@", url, options);
+    OwnTracksLogDefault("[OwnTracksAppDelegate] openURL %@ options %@", url, options);
     if (url) {
         OwnTracksLogDebug("[OwnTracksAppDelegate] URL scheme %@", url.scheme);
         
@@ -275,7 +276,7 @@
             if (![Settings theallowConfigurationByURIAndConfigFileInMOC:CoreData.sharedInstance.mainMOC]) {
                 self.processingMessage = NSLocalizedString(@"URI or file configuration not allowed",
                                                            @"URI or file configuration not allowed");
-                OwnTracksLogInfo("[OwnTracksAppDelegate] URI or file configuration not allowed");
+                OwnTracksLogError("[OwnTracksAppDelegate] URI or file configuration not allowed");
                 return FALSE;
             }
             NSURLComponents *components = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:TRUE];
@@ -292,14 +293,14 @@
             } else {
                 self.processingMessage = NSLocalizedString(@"unknown url path",
                                                            @"Display for unknown url path");
-                OwnTracksLogInfo("[OwnTracksAppDelegate] unknown url path %@", url.path);
+                OwnTracksLogError("[OwnTracksAppDelegate] unknown url path %@", url.path);
                 return FALSE;
             }
         } else if ([url.scheme isEqualToString:@"file"]) {
             if (![Settings theallowConfigurationByURIAndConfigFileInMOC:CoreData.sharedInstance.mainMOC]) {
                 self.processingMessage = NSLocalizedString(@"URI or file configuration not allowed",
                                                            @"URI or file configuration not allowed");
-                OwnTracksLogInfo("[OwnTracksAppDelegate] URI or file configuration not allowed");
+                OwnTracksLogError("[OwnTracksAppDelegate] URI or file configuration not allowed");
                 return FALSE;
             }
             [self processFile:url];
@@ -310,13 +311,13 @@
                                       NSLocalizedString(@"unknown scheme in url",
                                                         @"Display after entering an unknown scheme in url"),
                                       url.scheme];
-            OwnTracksLogInfo("[OwnTracksAppDelegate] unkonwn scheme in URL %@", url.scheme);
+            OwnTracksLogError("[OwnTracksAppDelegate] unkonwn scheme in URL %@", url.scheme);
             return FALSE;
         }
     } else {
         self.processingMessage = NSLocalizedString(@"no url specified",
                                                    @"Display after trying to process a file");
-        OwnTracksLogInfo("[OwnTracksAppDelegate] ono url specified");
+        OwnTracksLogError("[OwnTracksAppDelegate] no url specified");
         return FALSE;
     }
 }
@@ -339,24 +340,24 @@
                 
                 self.processingMessage = NSLocalizedString(@"Configuration successfully processed",
                                                            @"Display after processing config");
-                OwnTracksLogInfo("[OwnTracksAppDelegate] Configuration successfully processed");
+                OwnTracksLogDefault("[OwnTracksAppDelegate] Configuration successfully processed");
                 return TRUE;
             } else {
                 self.processingMessage = NSLocalizedString(@"Configuration incorrect",
                                                            @"Display for incorrect config");
-                OwnTracksLogInfo("[OwnTracksAppDelegate] Configuration incorrect");
+                OwnTracksLogError("[OwnTracksAppDelegate] Configuration incorrect");
                 return FALSE;
             }
         } else {
             self.processingMessage = NSLocalizedString(@"Inline Configuration incorrect",
                                                        @"Display for incorrect inline config");
-            OwnTracksLogInfo("[OwnTracksAppDelegate] Inline Configuration incorrect");
+            OwnTracksLogError("[OwnTracksAppDelegate] Inline Configuration incorrect");
             return FALSE;
         }
     } else {
         self.processingMessage = NSLocalizedString(@"missing config components",
                                                    @"Display for missing components");
-        OwnTracksLogInfo("[OwnTracksAppDelegate] missing config components %@", queryStrings);
+        OwnTracksLogError("[OwnTracksAppDelegate] missing config components %@", queryStrings);
         return FALSE;
     }
 }
@@ -371,7 +372,7 @@
     if (name == nil || uuid == nil) {
         self.processingMessage = NSLocalizedString(@"Beacon QR incomplete",
                                                    @"Beacon QR code incomplete");
-        OwnTracksLogInfo("[OwnTracksAppDelegate] Beacon QR incomplete");
+        OwnTracksLogError("[OwnTracksAppDelegate] Beacon QR incomplete");
         return FALSE;
     }
     
@@ -405,7 +406,7 @@
         [CoreData.sharedInstance sync:CoreData.sharedInstance.mainMOC];
         self.processingMessage = NSLocalizedString(@"Beacon QR successfully processed",
                                                    @"Display after processing beacon QR code");
-        OwnTracksLogInfo("[OwnTracksAppDelegate] Beacon QR successfully processed");        
+        OwnTracksLogDefault("[OwnTracksAppDelegate] Beacon QR successfully processed");        
     }];
     
     return TRUE;
@@ -445,7 +446,7 @@
                                                             @"Display when file processing succeeds (filename follows)"),
                                           NSLocalizedString(@"successfully processed",
                                                             @"Display when file processing succeeds")];
-                OwnTracksLogInfo("[OwnTracksAppDelegate] configFromDictionary ok");
+                OwnTracksLogDefault("[OwnTracksAppDelegate] configFromDictionary ok");
                 
             }
         }];
@@ -481,7 +482,7 @@
                                                             @"Display when file processing succeeds (filename follows)"),
                                           NSLocalizedString(@"successfully processed",
                                                             @"Display when file processing succeeds")];
-                OwnTracksLogInfo("[OwnTracksAppDelegate] waypointsFromDictionary ok");
+                OwnTracksLogDefault("[OwnTracksAppDelegate] waypointsFromDictionary ok");
             }
         }];
     }
@@ -501,7 +502,7 @@
 }
 
 - (BOOL)processFile:(NSURL *)url {
-    OwnTracksLogInfo("[OwnTracksAppDelegate] processFile %@", url);
+    OwnTracksLogDefault("[OwnTracksAppDelegate] processFile %@", url);
     NSError *error;
     NSString *extension = url.pathExtension;
     if ([extension isEqualToString:@"otrc"] || [extension isEqualToString:@"mqtc"]) {
@@ -541,7 +542,7 @@
                                   url.lastPathComponent,
                                   NSLocalizedString(@"successfully processed",
                                                     @"Display when file processing succeeds")];
-        OwnTracksLogInfo("[OwnTracksAppDelegate] processFile ok %@", url.lastPathComponent);
+        OwnTracksLogDefault("[OwnTracksAppDelegate] processFile ok %@", url.lastPathComponent);
 
     } else {
         [[NSFileManager defaultManager] removeItemAtURL:url error:nil];
@@ -558,14 +559,14 @@
                                   url.lastPathComponent,
                                   error.localizedDescription,
                                   error.userInfo];
-        OwnTracksLogInfo("[OwnTracksAppDelegate] processFile problem %@ %@", url.lastPathComponent, error);
+        OwnTracksLogError("[OwnTracksAppDelegate] processFile problem %@ %{public}@", url.lastPathComponent, error);
         return FALSE;
     }
     return TRUE;
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-    OwnTracksLogInfo("[OwnTracksAppDelegate] applicationDidBecomeActive");
+    OwnTracksLogDefault("[OwnTracksAppDelegate] applicationDidBecomeActive");
     
     [self.connection connectToLast];
     
@@ -597,7 +598,7 @@
 }
 
 - (void)doRefresh {
-    OwnTracksLogInfo("[OwnTracksAppDelegate] doRefresh");
+    OwnTracksLogDefault("[OwnTracksAppDelegate] doRefresh");
     self.inRefresh = TRUE;
     [self background];
     
@@ -608,7 +609,7 @@
 - (void)background {
 #ifdef VERBOSE
     NSTimeInterval backgroundTimeRemaining = [UIApplication sharedApplication].backgroundTimeRemaining;
-    OwnTracksLogInfo("[OwnTracksAppDelegate] background backgroundTimeRemaining: %@",
+    OwnTracksLogDefault("[OwnTracksAppDelegate] background backgroundTimeRemaining: %@",
                  backgroundTimeRemaining > 24 * 3600 ? @"∞": @(floor(backgroundTimeRemaining)).stringValue);
 #endif
     
@@ -678,13 +679,13 @@
 }
 
 - (void)disconnectInBackground {
-    OwnTracksLogInfo("[OwnTracksAppDelegate] disconnectInBackground");
+    OwnTracksLogDefault("[OwnTracksAppDelegate] disconnectInBackground");
     [self.connection disconnect];
 }
 
 - (void)application:(UIApplication *)application
 performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void (^)(BOOL))completionHandler {
-    OwnTracksLogInfo("[OwnTracksAppDelegate] performActionForShortcutItem %@", shortcutItem.type);
+    OwnTracksLogDefault("[OwnTracksAppDelegate] performActionForShortcutItem %{public}@", shortcutItem.type);
     if ([shortcutItem.type isEqualToString:@"org.mqttitude.MQTTitude.movemode"]) {
         LocationMonitoring monitoring = LocationMonitoringMove;
         [LocationManager sharedInstance].monitoring = monitoring;
@@ -989,13 +990,13 @@ performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completio
                 self.disconnectTimer = nil;
             }
             
-            OwnTracksLogInfo("[OwnTracksAppDelegate] endBackGroundTask %lu",
+            OwnTracksLogDefault("[OwnTracksAppDelegate] endBackGroundTask %lu",
                          (unsigned long)self.backgroundTask);
             [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTask];
             self.backgroundTask = UIBackgroundTaskInvalid;
         }
         if (self.bgTask) {
-            OwnTracksLogInfo("[OwnTracksAppDelegate] setTaskCompletedWithSuccess");
+            OwnTracksLogDefault("[OwnTracksAppDelegate] setTaskCompletedWithSuccess");
             [self.bgTask setTaskCompletedWithSuccess:TRUE];
             self.bgTask = nil;
         }
@@ -1079,7 +1080,7 @@ performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completio
                                                                withObject:nil
                                                             waitUntilDone:NO];
                                     } else {
-                                        OwnTracksLogDefault("[OwnTracksAppDelegate] remote location not allowed");
+                                        OwnTracksLogError("[OwnTracksAppDelegate] remote location not allowed");
                                     }
 
                                 } else if ([action isEqualToString:@"reportSteps"]) {
@@ -1089,7 +1090,7 @@ performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completio
                                         (!to || [to isKindOfClass:[NSNumber class]])) {
                                         [self stepsFrom:from to:to];
                                     } else {
-                                        OwnTracksLogDefault("[OwnTracksAppDelegate] from and to must be numbers");
+                                        OwnTracksLogError("[OwnTracksAppDelegate] from and to must be numbers");
                                     }
                                     
                                 } else if ([action isEqualToString:@"waypoints"]) {
@@ -1103,7 +1104,7 @@ performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completio
                                                                withObject:dictionary
                                                             waitUntilDone:NO];
                                     } else {
-                                        OwnTracksLogDefault("[OwnTracksAppDelegate] remote configuration not allowed");
+                                        OwnTracksLogError("[OwnTracksAppDelegate] remote configuration not allowed");
                                     }
 
                                 } else if ([action isEqualToString:@"clearWaypoints"]) {
@@ -1112,7 +1113,7 @@ performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completio
                                                                withObject:dictionary
                                                             waitUntilDone:NO];
                                     } else {
-                                        OwnTracksLogDefault("[OwnTracksAppDelegate] remote configuration not allowed");
+                                        OwnTracksLogError("[OwnTracksAppDelegate] remote configuration not allowed");
                                     }
 
                                 } else if ([action isEqualToString:@"setConfiguration"]) {
@@ -1121,7 +1122,7 @@ performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completio
                                                                withObject:dictionary
                                                             waitUntilDone:NO];
                                     } else {
-                                        OwnTracksLogDefault("[OwnTracksAppDelegate] remote configuration not allowed");
+                                        OwnTracksLogError("[OwnTracksAppDelegate] remote configuration not allowed");
                                     }
                                     
                                 } else if ([action isEqualToString:@"response"]) {
@@ -1130,22 +1131,22 @@ performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completio
                                                         waitUntilDone:NO];
                                     
                                 } else {
-                                    OwnTracksLogDefault("[OwnTracksAppDelegate] unknown action %@", action);
+                                    OwnTracksLogError("[OwnTracksAppDelegate] unknown action %{public}@", action);
                                 }
                             } else {
-                                OwnTracksLogDefault("[OwnTracksAppDelegate] no action in JSON");
+                                OwnTracksLogError("[OwnTracksAppDelegate] no action in JSON");
                             }
                         } else {
-                            OwnTracksLogDefault("[OwnTracksAppDelegate] remote cmd not allowed");
+                            OwnTracksLogError("[OwnTracksAppDelegate] remote cmd not allowed");
                         }
                     } else {
-                        OwnTracksLogDebug("[OwnTracksAppDelegate] unhandled _type (%@) in JSON", type);
+                        OwnTracksLogError("[OwnTracksAppDelegate] unhandled _type (%{public}@) in JSON", type);
                     }
                 } else {
-                    OwnTracksLogDefault("[OwnTracksAppDelegate] no _type in JSON");
+                    OwnTracksLogError("[OwnTracksAppDelegate] no _type in JSON");
                 }
             } else {
-                OwnTracksLogDefault("[OwnTracksAppDelegate] JSON is not an object");
+                OwnTracksLogError("[OwnTracksAppDelegate] JSON is not an object");
             }
         }
         @synchronized (self.inQueue) {
@@ -1329,7 +1330,7 @@ performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completio
             OwnTracksLogError("[OwnTracksAppDelegate performSetConfiguration] error %@", error);
         }
     } else {
-        OwnTracksLogDefault("[OwnTracksAppDelegate performSetConfiguration] no valid configuration");
+        OwnTracksLogError("[OwnTracksAppDelegate performSetConfiguration] no valid configuration");
     }
     [CoreData.sharedInstance sync:CoreData.sharedInstance.mainMOC];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"reload" object:nil];
@@ -1343,7 +1344,7 @@ performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completio
         [Settings waypointsFromDictionary:waypoints
                                     inMOC:CoreData.sharedInstance.mainMOC];
     } else {
-        OwnTracksLogDefault("[OwnTracksAppDelegate performSetWaypoints] no valid waypoints");
+        OwnTracksLogError("[OwnTracksAppDelegate performSetWaypoints] no valid waypoints");
     }
 }
 
@@ -1439,7 +1440,6 @@ performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completio
       withImage:(nullable NSData *)image
   withImageName:(nullable NSString *)imageName {
     OwnTracksLogDebug("[OwnTracksAppDelegate] sendNow %@ withPOI %@ %@ %@", location, poi, image, imageName);
-    OwnTracksLogInfo("[OwnTracksAppDelegate] sendNow");
     return [self publishLocation:location trigger:@"u"
                          withPOI:poi
                        withImage:image
@@ -1447,18 +1447,18 @@ performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completio
 }
 
 - (void)reportLocation {
-    OwnTracksLogInfo("[OwnTracksAppDelegate] reportLocation");
+    OwnTracksLogDefault("[OwnTracksAppDelegate] reportLocation");
     CLLocation *location = [LocationManager sharedInstance].location;
     [self publishLocation:location trigger:@"r" withPOI:nil withImage:nil withImageName:nil];
 }
 
 - (void)connectionOff {
-    OwnTracksLogInfo("[OwnTracksAppDelegate] connectionOff");
+    OwnTracksLogDefault("[OwnTracksAppDelegate] connectionOff");
     [self.connection disconnect];
 }
 
 - (void)terminateSession {
-    OwnTracksLogInfo("[OwnTracksAppDelegate] terminateSession");
+    OwnTracksLogDefault("[OwnTracksAppDelegate] terminateSession");
     
     [self connectionOff];
     [self syncProcessing];
@@ -1469,7 +1469,7 @@ performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completio
 }
 
 - (void)reconnect {
-    OwnTracksLogInfo("[OwnTracksAppDelegate] reconnect");
+    OwnTracksLogDefault("[OwnTracksAppDelegate] reconnect");
     [self.connection disconnect];
     [self connectForcingCleanSession:TRUE];
 }

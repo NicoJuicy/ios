@@ -820,10 +820,10 @@ static SettingsDefaults *defaults;
 
     while (friend.hasRegions.count) {
         Region *region = friend.hasRegions.anyObject;
-        OwnTracksLogInfo("[Settings][clearWaypoints] removeRegion %@", region.rid);
+        OwnTracksLogDefault("[Settings][clearWaypoints] removeRegion %@", region.rid);
         [[OwnTracking sharedInstance] removeRegion:region context:context];
     }
-    OwnTracksLogInfo("[Settings][clearWaypoints] clearWaypoints");
+    OwnTracksLogDefault("[Settings][clearWaypoints] clearWaypoints");
     return nil;
 }
 

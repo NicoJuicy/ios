@@ -151,7 +151,7 @@
             self.ssid = currentNetwork.SSID;
             self.securityType = currentNetwork.securityType;
         } else {
-            OwnTracksLogInfo("[ConnType] currentNetwork is NULL");
+            OwnTracksLogDefault("[ConnType] currentNetwork is NULL");
             self.bssid = nil;
             self.ssid = nil;
             self.securityType = NEHotspotNetworkSecurityTypeUnknown;
